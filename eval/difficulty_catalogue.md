@@ -259,6 +259,33 @@ a sentence with no personal vocabulary, `--profile off`. This is the majority of
 real utterances and it was 2 of 29 cases.
 → **`formatted == memory_aware`, byte for byte.**
 
+**D19. Teaching a name in a short sentence context-locks it.** Measured, and it
+is the cause of the only two failures in the current suite
+(`kivi eval --profiles off,exact,phonetic` → `exact 26/28`, `phonetic 26/28`).
+
+Every `correction` stores cues, and a short teach line stores almost none:
+
+| Teach line | Canonical | Cues stored |
+| --- | --- | --- |
+| `Gautam will lead.` | `Gautham` | `{lead}` |
+| `Ananya approved.` | `Ananyaa` | `{approved}` |
+| `we use the kiwi app daily` | `Kivi` | `{use, app, daily}` |
+
+Then the next real utterance has a completely different neighbourhood — the
+window around `Gautam` in *"Ask Gautam and Ananya to join the sprint demo."* is
+`{ask, ananya, join}` — so the intersection is empty and the decider returns
+`context_mismatch`. The user taught the spelling of a colleague's name and it
+silently stopped working one sentence later.
+
+For a homograph (`kiwi`) that gate is exactly right. For a person's name it is
+exactly wrong: a name's spelling belongs to the person, not to the sentence. The
+mechanism is attached to the wrong axis — **teach source** (`correction` gets
+cues, `dictionary_add` gets none) instead of **homograph risk**. The two current
+failures and case 32 are the same bug seen from opposite ends: corrections
+over-restrict, dictionary adds under-restrict.
+→ **See §5 Q3.** This one is worth fixing before generating cases, because it
+changes the expected value of every correction-taught APPLY in §3.
+
 ---
 
 ## 3. The case list
@@ -420,7 +447,7 @@ used once.
 
 ---
 
-## 5. Decisions I need from you (they change 3 cases)
+## 5. Decisions I need from you
 
 **Q1 — D16/D17 are measured false APPLYs. Bug or documented limitation?**
 - `Sanjay → Sanjeev` gets learned as a spelling correction (grapheme gate cannot
@@ -441,7 +468,28 @@ rewrite "the plants will grow faster". The README says this is intentional
 ("Empty cues → no gate. That word applies anywhere."). Keep as documented, or add
 an optional `--context "…"` to `observe --dictionary-add`?
 
-**Q3 — where do D14's out-of-reach cases live?** They pass trivially (everything
+**Q3 — D19: should the cue gate key off homograph risk instead of teach source?**
+This is the one I'd fix first; it is currently failing 2 of 29 cases and it
+breaks the "teach once, works later" demo journey for names.
+
+The signal is already in the data: **was the surface the formatter handed us
+capitalized mid-sentence?**
+
+| Teach line | Formatted surface | Formatter's read | Gate |
+| --- | --- | --- | --- |
+| `Gautam will lead.` | `Gautam` | proper noun | **no cue gate** — a name applies everywhere |
+| `we use the kiwi app daily` | `kiwi` (lowercase, mid-sentence) | common noun | **keep cue gate** — homograph risk is real |
+
+So: store cues as today, but have `decide` consult them only when the memory was
+created from a surface the formatter did *not* treat as a proper noun. That is a
+one-boolean column on `memories` plus one clause in `decide_token`, it keeps
+case 30/31 (`Tumblr`/`tumbler`) passing, and it makes cases 02 and 20 pass for
+the right reason instead of being deleted. Alternatives: require ≥2 cue overlap
+only for lowercase surfaces; or add `observe --scope word|context` and make the
+user say. **Recommendation: the capitalization signal**, with `--scope` as the
+manual override.
+
+**Q4 — where do D14's out-of-reach cases live?** They pass trivially (everything
 ABSTAINs on `no_memory`), so they measure nothing about *this* system, but they
 are the honest record of what a word notebook cannot do. Keep all 4 in the main
 set, or move them to a separate `eval/cases/out_of_scope/` folder that the
