@@ -507,13 +507,14 @@ Paste §1–§4 with this. Nothing else — no architecture questions, no
 You are writing JSON fixtures for an existing, frozen system. You are not
 designing it. Read sections 1-4 of difficulty_catalogue.md as binding.
 
-For each case in section 3 emit exactly one file eval/cases/<id>.json with:
+For each case in section 3 emit exactly one file `eval/cases/case_<NN>_<id>.json`
+(the `case_` prefix is mandatory — the loader globs `case_*.json`) with:
 
 {
-  "id": "<id from the table>",
+  "id": "<must equal the filename stem>",
   "family": "<one of the families in eval/cases/manifest.json>",
-  "difficulty": "<D1..D18 ids this case exercises>",
-  "wall": "<W1..W6 ids this case exercises, or [] >",
+  "difficulty": ["<D1..D19 ids this case exercises>"],
+  "wall": ["<W1..W6 ids this case exercises>"],
   "title": "<one line, names the phenomenon, not the entity>",
   "why_real": "<one sentence: what really happens to a real user. No IPA.>",
   "setup": { "observations": [ ... ] },
@@ -521,18 +522,40 @@ For each case in section 3 emit exactly one file eval/cases/<id>.json with:
   "expected": {
     "decision": "APPLY" | "ABSTAIN",
     "memory_aware": "...",
-    "reason": "<exact reason string from decide/conservative.py or
-                learner/align.py: ok | no_memory | low_confidence |
-                already_canonical | context_mismatch |
-                conflicting_canonicals | not_grapheme_similar |
-                refused_homophone | case_only | both_function_words>",
-    "affected_tokens": [ {"from": "...", "to": "..."} ],
+    "reason": "<free-text one-liner, documentation only>",
+    "memory_row_count": <int>,          // ASSERTED: rows after setup
     "expected_profile_results": {
       "off":      {"decision": "ABSTAIN", "memory_aware": "<formatted verbatim>"},
-      "exact":    {...}, "phonetic": {...}, "llm": {...}
+      "exact":    {"decision": ..., "memory_aware": ...,
+                   "reasons": [...],            // ASSERTED
+                   "affected_tokens": [...]},   // ASSERTED
+      "phonetic": {... same shape ...},
+      "llm":      {"decision": ..., "memory_aware": ...}
     }
   }
 }
+
+The three assertions marked ASSERTED are the ones that make a case able to fail
+for the right reason. Without them a suite is blind to any change that keeps the
+output text identical — measured: laundering every ABSTAIN reason to
+`no_memory`, or relabelling `context_mismatch` as `low_confidence`, is MISSED by
+a decision+text suite and CAUGHT once `reasons` is asserted.
+
+  "reasons" — set of reason strings over the tokens that actually had a
+    candidate memory (order and duplicates do not matter). Legal values:
+    ok | no_memory | low_confidence | already_canonical | context_mismatch |
+    conflicting_canonicals. Compare with `_decisive_reasons` in eval_runner.py.
+  "affected_tokens" — ordered [{"from": <formatted token core, no attached
+    punctuation>, "to": <canonical>}]; [] on ABSTAIN.
+  "memory_row_count" — the learner-side assertion. A "this must teach nothing"
+    case is not real until this is 0.
+
+Put `reasons` and `affected_tokens` on the `exact` and `phonetic` blocks only.
+They are never inherited from the case level: `off` runs no decider, and exact
+and phonetic legitimately abstain for different reasons on the same input.
+The learner-side reason strings (`not_grapheme_similar`, `refused_homophone`,
+`case_only`, `both_function_words`) are not decider reasons — assert those
+through `memory_row_count: 0`, not through `reasons`.
 
 Hard rules, in priority order:
 
@@ -558,10 +581,31 @@ Before emitting each file, self-check and state PASS/FAIL for each:
   - token counts: does formatted differ from asr only by formatting?
   - does the rewrite change letters, not just case?
   - do both correction words start with the same letter?
-  - is the reason string in the enum?
+  - are all reason strings in the decider enum?
+  - are "reasons" and "affected_tokens" present on exact and phonetic, and
+    absent from off and llm?
+  - is "memory_row_count" present, and 0 on every learner-refusal case?
   - is off == formatted verbatim?
   - entity budget still satisfied?
 Emit nothing that FAILs. List the FAILs instead and stop.
+
+Then verify by execution, which is not optional:
+
+  python - <<'EOF'
+  import sys; sys.path.insert(0, "src")
+  from kivi_memory import eval_runner as er
+  for case in er.load_cases():
+      o = er.run_case(case, ["off", "exact", "phonetic"])
+      bad = [p for p in o.profiles if p.status not in ("PASS", "SKIPPED")]
+      if bad:
+          print(o.id, [(p.profile, p.assertion_failures) for p in bad])
+  EOF
+
+Integrity rule: derive every expected value from the section 3 table first, then
+run. You may fix your own transcription slips. You may NOT overwrite a
+catalogue-specified decision, reason or text with whatever the code printed in
+order to make a case go green — leave it failing and say so. A case silently
+flipped to match the code is worse than no case at all.
 ```
 
 ---
