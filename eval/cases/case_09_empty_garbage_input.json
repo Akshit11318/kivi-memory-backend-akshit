@@ -35,11 +35,19 @@
       },
       "exact": {
         "decision": "ABSTAIN",
-        "memory_aware": ""
+        "memory_aware": "",
+        "reasons": [
+          "no_memory"
+        ],
+        "affected_tokens": []
       },
       "phonetic": {
         "decision": "ABSTAIN",
-        "memory_aware": ""
+        "memory_aware": "",
+        "reasons": [
+          "no_memory"
+        ],
+        "affected_tokens": []
       },
       "llm": {
         "decision": "ABSTAIN",
@@ -47,6 +55,7 @@
       }
     },
     "reason": "Empty input gracefully handled.",
-    "affected_tokens": []
+    "affected_tokens": [],
+    "memory_row_count": 1
   }
 }

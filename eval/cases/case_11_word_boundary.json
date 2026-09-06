@@ -37,11 +37,19 @@
       },
       "exact": {
         "decision": "ABSTAIN",
-        "memory_aware": "Mika Kivimaki published a new paper."
+        "memory_aware": "Mika Kivimaki published a new paper.",
+        "reasons": [
+          "no_memory"
+        ],
+        "affected_tokens": []
       },
       "phonetic": {
         "decision": "ABSTAIN",
-        "memory_aware": "Mika Kivimaki published a new paper."
+        "memory_aware": "Mika Kivimaki published a new paper.",
+        "reasons": [
+          "no_memory"
+        ],
+        "affected_tokens": []
       },
       "llm": {
         "decision": "ABSTAIN",
@@ -49,6 +57,7 @@
       }
     },
     "reason": "Token boundary respected; no substring match inside Kivimaki.",
-    "affected_tokens": []
+    "affected_tokens": [],
+    "memory_row_count": 1
   }
 }

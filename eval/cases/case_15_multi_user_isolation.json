@@ -37,11 +37,19 @@
       },
       "exact": {
         "decision": "ABSTAIN",
-        "memory_aware": "Run the Kiwi benchmark."
+        "memory_aware": "Run the Kiwi benchmark.",
+        "reasons": [
+          "no_memory"
+        ],
+        "affected_tokens": []
       },
       "phonetic": {
         "decision": "ABSTAIN",
-        "memory_aware": "Run the Kiwi benchmark."
+        "memory_aware": "Run the Kiwi benchmark.",
+        "reasons": [
+          "no_memory"
+        ],
+        "affected_tokens": []
       },
       "llm": {
         "decision": "ABSTAIN",
@@ -49,6 +57,7 @@
       }
     },
     "reason": "User isolation: memory belongs to user_a, query executed for user_b.",
-    "affected_tokens": []
+    "affected_tokens": [],
+    "memory_row_count": 0
   }
 }

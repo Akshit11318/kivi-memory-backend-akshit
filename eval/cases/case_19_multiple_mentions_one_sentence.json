@@ -36,11 +36,45 @@
       },
       "exact": {
         "decision": "APPLY",
-        "memory_aware": "Pratik asked Pratik to call Pratik."
+        "memory_aware": "Pratik asked Pratik to call Pratik.",
+        "reasons": [
+          "ok"
+        ],
+        "affected_tokens": [
+          {
+            "from": "Prateek",
+            "to": "Pratik"
+          },
+          {
+            "from": "Prateek",
+            "to": "Pratik"
+          },
+          {
+            "from": "Prateek",
+            "to": "Pratik"
+          }
+        ]
       },
       "phonetic": {
         "decision": "APPLY",
-        "memory_aware": "Pratik asked Pratik to call Pratik."
+        "memory_aware": "Pratik asked Pratik to call Pratik.",
+        "reasons": [
+          "ok"
+        ],
+        "affected_tokens": [
+          {
+            "from": "Prateek",
+            "to": "Pratik"
+          },
+          {
+            "from": "Prateek",
+            "to": "Pratik"
+          },
+          {
+            "from": "Prateek",
+            "to": "Pratik"
+          }
+        ]
       },
       "llm": {
         "decision": "APPLY",
@@ -61,6 +95,7 @@
         "from": "Prateek",
         "to": "Pratik"
       }
-    ]
+    ],
+    "memory_row_count": 1
   }
 }

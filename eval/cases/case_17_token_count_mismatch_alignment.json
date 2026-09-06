@@ -36,11 +36,29 @@
       },
       "exact": {
         "decision": "APPLY",
-        "memory_aware": "I'm going to ping Tanmaay."
+        "memory_aware": "I'm going to ping Tanmaay.",
+        "reasons": [
+          "ok"
+        ],
+        "affected_tokens": [
+          {
+            "from": "Tanmay",
+            "to": "Tanmaay"
+          }
+        ]
       },
       "phonetic": {
         "decision": "APPLY",
-        "memory_aware": "I'm going to ping Tanmaay."
+        "memory_aware": "I'm going to ping Tanmaay.",
+        "reasons": [
+          "ok"
+        ],
+        "affected_tokens": [
+          {
+            "from": "Tanmay",
+            "to": "Tanmaay"
+          }
+        ]
       },
       "llm": {
         "decision": "APPLY",
@@ -53,6 +71,7 @@
         "from": "Tanmay",
         "to": "Tanmaay"
       }
-    ]
+    ],
+    "memory_row_count": 1
   }
 }

@@ -34,11 +34,19 @@
       },
       "exact": {
         "decision": "ABSTAIN",
-        "memory_aware": "Remind me to buy kiwi tomorrow."
+        "memory_aware": "Remind me to buy kiwi tomorrow.",
+        "reasons": [
+          "context_mismatch"
+        ],
+        "affected_tokens": []
       },
       "phonetic": {
         "decision": "ABSTAIN",
-        "memory_aware": "Remind me to buy kiwi tomorrow."
+        "memory_aware": "Remind me to buy kiwi tomorrow.",
+        "reasons": [
+          "context_mismatch"
+        ],
+        "affected_tokens": []
       },
       "llm": {
         "decision": "ABSTAIN",
@@ -46,6 +54,7 @@
       }
     },
     "reason": "context_mismatch: memory 'Kivi' has context cues [sarvam, review, service] but none match window content tokens [remind, buy, tomorrow]",
-    "affected_tokens": []
+    "affected_tokens": [],
+    "memory_row_count": 1
   }
 }

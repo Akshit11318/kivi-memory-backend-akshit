@@ -46,11 +46,19 @@
       },
       "exact": {
         "decision": "ABSTAIN",
-        "memory_aware": "Please inform Kavita about the release."
+        "memory_aware": "Please inform Kavita about the release.",
+        "reasons": [
+          "conflicting_canonicals"
+        ],
+        "affected_tokens": []
       },
       "phonetic": {
         "decision": "ABSTAIN",
-        "memory_aware": "Please inform Kavita about the release."
+        "memory_aware": "Please inform Kavita about the release.",
+        "reasons": [
+          "conflicting_canonicals"
+        ],
+        "affected_tokens": []
       },
       "llm": {
         "decision": "ABSTAIN",
@@ -58,6 +66,7 @@
       }
     },
     "reason": "conflicting_canonicals: multiple memories [mem_conf_1, mem_conf_2] with canonicals [Kavita, Kaveeta] for surface 'kavita'",
-    "affected_tokens": []
+    "affected_tokens": [],
+    "memory_row_count": 2
   }
 }

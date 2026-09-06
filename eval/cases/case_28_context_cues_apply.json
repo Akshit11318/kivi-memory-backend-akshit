@@ -34,11 +34,29 @@
       },
       "exact": {
         "decision": "APPLY",
-        "memory_aware": "Ask Aditya to review the Sarvam Kivi service."
+        "memory_aware": "Ask Aditya to review the Sarvam Kivi service.",
+        "reasons": [
+          "ok"
+        ],
+        "affected_tokens": [
+          {
+            "from": "Kiwi",
+            "to": "Kivi"
+          }
+        ]
       },
       "phonetic": {
         "decision": "APPLY",
-        "memory_aware": "Ask Aditya to review the Sarvam Kivi service."
+        "memory_aware": "Ask Aditya to review the Sarvam Kivi service.",
+        "reasons": [
+          "ok"
+        ],
+        "affected_tokens": [
+          {
+            "from": "Kiwi",
+            "to": "Kivi"
+          }
+        ]
       },
       "llm": {
         "decision": "APPLY",
@@ -51,6 +69,7 @@
         "from": "Kiwi",
         "to": "Kivi"
       }
-    ]
+    ],
+    "memory_row_count": 1
   }
 }

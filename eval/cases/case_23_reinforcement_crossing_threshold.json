@@ -44,11 +44,29 @@
       },
       "exact": {
         "decision": "APPLY",
-        "memory_aware": "Chowdhury approved the release."
+        "memory_aware": "Chowdhury approved the release.",
+        "reasons": [
+          "ok"
+        ],
+        "affected_tokens": [
+          {
+            "from": "Choudhury",
+            "to": "Chowdhury"
+          }
+        ]
       },
       "phonetic": {
         "decision": "APPLY",
-        "memory_aware": "Chowdhury approved the release."
+        "memory_aware": "Chowdhury approved the release.",
+        "reasons": [
+          "ok"
+        ],
+        "affected_tokens": [
+          {
+            "from": "Choudhury",
+            "to": "Chowdhury"
+          }
+        ]
       },
       "llm": {
         "decision": "APPLY",
@@ -61,6 +79,7 @@
         "from": "Choudhury",
         "to": "Chowdhury"
       }
-    ]
+    ],
+    "memory_row_count": 1
   }
 }

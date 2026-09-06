@@ -36,11 +36,29 @@
       },
       "exact": {
         "decision": "APPLY",
-        "memory_aware": "Yaar Diksha suno, check the PR."
+        "memory_aware": "Yaar Diksha suno, check the PR.",
+        "reasons": [
+          "ok"
+        ],
+        "affected_tokens": [
+          {
+            "from": "Deeksha",
+            "to": "Diksha"
+          }
+        ]
       },
       "phonetic": {
         "decision": "APPLY",
-        "memory_aware": "Yaar Diksha suno, check the PR."
+        "memory_aware": "Yaar Diksha suno, check the PR.",
+        "reasons": [
+          "ok"
+        ],
+        "affected_tokens": [
+          {
+            "from": "Deeksha",
+            "to": "Diksha"
+          }
+        ]
       },
       "llm": {
         "decision": "APPLY",
@@ -53,6 +71,7 @@
         "from": "Deeksha",
         "to": "Diksha"
       }
-    ]
+    ],
+    "memory_row_count": 1
   }
 }

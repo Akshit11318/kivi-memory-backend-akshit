@@ -36,11 +36,19 @@
       },
       "exact": {
         "decision": "ABSTAIN",
-        "memory_aware": "Robbie joined the engineering call."
+        "memory_aware": "Robbie joined the engineering call.",
+        "reasons": [
+          "no_memory"
+        ],
+        "affected_tokens": []
       },
       "phonetic": {
         "decision": "ABSTAIN",
-        "memory_aware": "Robbie joined the engineering call."
+        "memory_aware": "Robbie joined the engineering call.",
+        "reasons": [
+          "no_memory"
+        ],
+        "affected_tokens": []
       },
       "llm": {
         "decision": "ABSTAIN",
@@ -48,6 +56,7 @@
       }
     },
     "reason": "Grapheme/length safeguard prevented false phonetic APPLY on Robbie.",
-    "affected_tokens": []
+    "affected_tokens": [],
+    "memory_row_count": 1
   }
 }

@@ -27,11 +27,19 @@
       },
       "exact": {
         "decision": "ABSTAIN",
-        "memory_aware": "Please schedule the quarterly planning call for next Monday morning."
+        "memory_aware": "Please schedule the quarterly planning call for next Monday morning.",
+        "reasons": [
+          "no_memory"
+        ],
+        "affected_tokens": []
       },
       "phonetic": {
         "decision": "ABSTAIN",
-        "memory_aware": "Please schedule the quarterly planning call for next Monday morning."
+        "memory_aware": "Please schedule the quarterly planning call for next Monday morning.",
+        "reasons": [
+          "no_memory"
+        ],
+        "affected_tokens": []
       },
       "llm": {
         "decision": "ABSTAIN",
@@ -39,6 +47,7 @@
       }
     },
     "reason": "No relevant memories found.",
-    "affected_tokens": []
+    "affected_tokens": [],
+    "memory_row_count": 0
   }
 }

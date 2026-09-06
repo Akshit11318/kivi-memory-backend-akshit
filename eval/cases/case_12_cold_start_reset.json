@@ -27,11 +27,19 @@
       },
       "exact": {
         "decision": "ABSTAIN",
-        "memory_aware": "Deploy the service tomorrow."
+        "memory_aware": "Deploy the service tomorrow.",
+        "reasons": [
+          "no_memory"
+        ],
+        "affected_tokens": []
       },
       "phonetic": {
         "decision": "ABSTAIN",
-        "memory_aware": "Deploy the service tomorrow."
+        "memory_aware": "Deploy the service tomorrow.",
+        "reasons": [
+          "no_memory"
+        ],
+        "affected_tokens": []
       },
       "llm": {
         "decision": "ABSTAIN",
@@ -39,6 +47,7 @@
       }
     },
     "reason": "Empty database after reset.",
-    "affected_tokens": []
+    "affected_tokens": [],
+    "memory_row_count": 0
   }
 }

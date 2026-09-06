@@ -44,11 +44,19 @@
       },
       "exact": {
         "decision": "ABSTAIN",
-        "memory_aware": "We need to buy two cartons of milk and brown bread from the store."
+        "memory_aware": "We need to buy two cartons of milk and brown bread from the store.",
+        "reasons": [
+          "no_memory"
+        ],
+        "affected_tokens": []
       },
       "phonetic": {
         "decision": "ABSTAIN",
-        "memory_aware": "We need to buy two cartons of milk and brown bread from the store."
+        "memory_aware": "We need to buy two cartons of milk and brown bread from the store.",
+        "reasons": [
+          "no_memory"
+        ],
+        "affected_tokens": []
       },
       "llm": {
         "decision": "ABSTAIN",
@@ -56,6 +64,7 @@
       }
     },
     "reason": "No overlapping memory candidates.",
-    "affected_tokens": []
+    "affected_tokens": [],
+    "memory_row_count": 2
   }
 }

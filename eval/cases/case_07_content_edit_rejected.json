@@ -33,11 +33,19 @@
       },
       "exact": {
         "decision": "ABSTAIN",
-        "memory_aware": "The meeting is on Friday."
+        "memory_aware": "The meeting is on Friday.",
+        "reasons": [
+          "no_memory"
+        ],
+        "affected_tokens": []
       },
       "phonetic": {
         "decision": "ABSTAIN",
-        "memory_aware": "The meeting is on Friday."
+        "memory_aware": "The meeting is on Friday.",
+        "reasons": [
+          "no_memory"
+        ],
+        "affected_tokens": []
       },
       "llm": {
         "decision": "ABSTAIN",
@@ -45,6 +53,7 @@
       }
     },
     "reason": "Content edit Friday->Thursday rejected by grapheme gate.",
-    "affected_tokens": []
+    "affected_tokens": [],
+    "memory_row_count": 0
   }
 }

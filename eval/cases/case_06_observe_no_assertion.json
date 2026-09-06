@@ -33,11 +33,19 @@
       },
       "exact": {
         "decision": "ABSTAIN",
-        "memory_aware": "Ask Prateek to check Notion."
+        "memory_aware": "Ask Prateek to check Notion.",
+        "reasons": [
+          "no_memory"
+        ],
+        "affected_tokens": []
       },
       "phonetic": {
         "decision": "ABSTAIN",
-        "memory_aware": "Ask Prateek to check Notion."
+        "memory_aware": "Ask Prateek to check Notion.",
+        "reasons": [
+          "no_memory"
+        ],
+        "affected_tokens": []
       },
       "llm": {
         "decision": "ABSTAIN",
@@ -45,6 +53,7 @@
       }
     },
     "reason": "No memory created without user assertion.",
-    "affected_tokens": []
+    "affected_tokens": [],
+    "memory_row_count": 0
   }
 }

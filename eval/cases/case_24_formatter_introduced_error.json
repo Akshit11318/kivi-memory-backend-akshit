@@ -36,11 +36,29 @@
       },
       "exact": {
         "decision": "APPLY",
-        "memory_aware": "Ask Sreenivas to join."
+        "memory_aware": "Ask Sreenivas to join.",
+        "reasons": [
+          "ok"
+        ],
+        "affected_tokens": [
+          {
+            "from": "Srinivas",
+            "to": "Sreenivas"
+          }
+        ]
       },
       "phonetic": {
         "decision": "APPLY",
-        "memory_aware": "Ask Sreenivas to join."
+        "memory_aware": "Ask Sreenivas to join.",
+        "reasons": [
+          "ok"
+        ],
+        "affected_tokens": [
+          {
+            "from": "Srinivas",
+            "to": "Sreenivas"
+          }
+        ]
       },
       "llm": {
         "decision": "APPLY",
@@ -53,6 +71,7 @@
         "from": "Srinivas",
         "to": "Sreenivas"
       }
-    ]
+    ],
+    "memory_row_count": 1
   }
 }

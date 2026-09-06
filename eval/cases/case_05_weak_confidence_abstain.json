@@ -37,11 +37,19 @@
       },
       "exact": {
         "decision": "ABSTAIN",
-        "memory_aware": "Sidharth will verify the pull request."
+        "memory_aware": "Sidharth will verify the pull request.",
+        "reasons": [
+          "low_confidence"
+        ],
+        "affected_tokens": []
       },
       "phonetic": {
         "decision": "ABSTAIN",
-        "memory_aware": "Sidharth will verify the pull request."
+        "memory_aware": "Sidharth will verify the pull request.",
+        "reasons": [
+          "low_confidence"
+        ],
+        "affected_tokens": []
       },
       "llm": {
         "decision": "ABSTAIN",
@@ -49,6 +57,7 @@
       }
     },
     "reason": "Confidence 0.40 is below threshold 0.75.",
-    "affected_tokens": []
+    "affected_tokens": [],
+    "memory_row_count": 1
   }
 }

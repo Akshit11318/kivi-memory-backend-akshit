@@ -36,11 +36,29 @@
       },
       "exact": {
         "decision": "APPLY",
-        "memory_aware": "Kivi's latency is low."
+        "memory_aware": "Kivi's latency is low.",
+        "reasons": [
+          "ok"
+        ],
+        "affected_tokens": [
+          {
+            "from": "Kiwi",
+            "to": "Kivi"
+          }
+        ]
       },
       "phonetic": {
         "decision": "APPLY",
-        "memory_aware": "Kivi's latency is low."
+        "memory_aware": "Kivi's latency is low.",
+        "reasons": [
+          "ok"
+        ],
+        "affected_tokens": [
+          {
+            "from": "Kiwi",
+            "to": "Kivi"
+          }
+        ]
       },
       "llm": {
         "decision": "APPLY",
@@ -53,6 +71,7 @@
         "from": "Kiwi's",
         "to": "Kivi's"
       }
-    ]
+    ],
+    "memory_row_count": 1
   }
 }

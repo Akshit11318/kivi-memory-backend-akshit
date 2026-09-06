@@ -36,11 +36,19 @@
       },
       "exact": {
         "decision": "ABSTAIN",
-        "memory_aware": "Ask Niharika to review the changes."
+        "memory_aware": "Ask Niharika to review the changes.",
+        "reasons": [
+          "already_canonical"
+        ],
+        "affected_tokens": []
       },
       "phonetic": {
         "decision": "ABSTAIN",
-        "memory_aware": "Ask Niharika to review the changes."
+        "memory_aware": "Ask Niharika to review the changes.",
+        "reasons": [
+          "already_canonical"
+        ],
+        "affected_tokens": []
       },
       "llm": {
         "decision": "ABSTAIN",
@@ -48,6 +56,7 @@
       }
     },
     "reason": "Token is already in canonical form.",
-    "affected_tokens": []
+    "affected_tokens": [],
+    "memory_row_count": 1
   }
 }

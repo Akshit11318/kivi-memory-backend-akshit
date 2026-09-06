@@ -38,11 +38,29 @@
       },
       "exact": {
         "decision": "APPLY",
-        "memory_aware": "Ask Laxmi to deploy."
+        "memory_aware": "Ask Laxmi to deploy.",
+        "reasons": [
+          "ok"
+        ],
+        "affected_tokens": [
+          {
+            "from": "Lakshmi",
+            "to": "Laxmi"
+          }
+        ]
       },
       "phonetic": {
         "decision": "APPLY",
-        "memory_aware": "Ask Laxmi to deploy."
+        "memory_aware": "Ask Laxmi to deploy.",
+        "reasons": [
+          "ok"
+        ],
+        "affected_tokens": [
+          {
+            "from": "Lakshmi",
+            "to": "Laxmi"
+          }
+        ]
       },
       "llm": {
         "decision": "APPLY",
@@ -55,6 +73,7 @@
         "from": "Lakshmi",
         "to": "Laxmi"
       }
-    ]
+    ],
+    "memory_row_count": 1
   }
 }

@@ -42,11 +42,29 @@
       },
       "exact": {
         "decision": "APPLY",
-        "memory_aware": "Test the Kivi service."
+        "memory_aware": "Test the Kivi service.",
+        "reasons": [
+          "ok"
+        ],
+        "affected_tokens": [
+          {
+            "from": "Kivvy",
+            "to": "Kivi"
+          }
+        ]
       },
       "phonetic": {
         "decision": "APPLY",
-        "memory_aware": "Test the Kivi service."
+        "memory_aware": "Test the Kivi service.",
+        "reasons": [
+          "ok"
+        ],
+        "affected_tokens": [
+          {
+            "from": "Kivvy",
+            "to": "Kivi"
+          }
+        ]
       },
       "llm": {
         "decision": "APPLY",
@@ -59,6 +77,7 @@
         "from": "Kivvy",
         "to": "Kivi"
       }
-    ]
+    ],
+    "memory_row_count": 1
   }
 }

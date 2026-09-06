@@ -33,11 +33,19 @@
       },
       "exact": {
         "decision": "ABSTAIN",
-        "memory_aware": "Look over there."
+        "memory_aware": "Look over there.",
+        "reasons": [
+          "no_memory"
+        ],
+        "affected_tokens": []
       },
       "phonetic": {
         "decision": "ABSTAIN",
-        "memory_aware": "Look over there."
+        "memory_aware": "Look over there.",
+        "reasons": [
+          "no_memory"
+        ],
+        "affected_tokens": []
       },
       "llm": {
         "decision": "ABSTAIN",
@@ -45,6 +53,7 @@
       }
     },
     "reason": "Homophone pair 'there/their' rejected by REFUSE_HOMOPHONE_PAIRS.",
-    "affected_tokens": []
+    "affected_tokens": [],
+    "memory_row_count": 0
   }
 }
