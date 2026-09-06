@@ -1,0 +1,50 @@
+{
+  "id": "case_n03_apply_respell_zeroshot_phonetic",
+  "family": "phonetic_only",
+  "difficulty": ["D1"],
+  "wall": ["W4"],
+  "title": "Zero-shot doubled-consonant respelling — phonetic retrieves it, exact cannot",
+  "why_real": "The user has only ever entered the respelled name as a standing dictionary entry, never spoken a sentence the system saw as a correction, so the very first utterance that uses the plain-spelling variant has to be caught by sound rather than by an exact string it has already seen.",
+  "setup": {
+    "observations": [
+      {
+        "source": "dictionary_add",
+        "canonical": "Ayushmann",
+        "forms": ["ayushmann"]
+      }
+    ]
+  },
+  "inputs": {
+    "asr": "ayushman is joining the call",
+    "formatted": "Ayushman is joining the call.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "APPLY",
+    "memory_aware": "Ayushmann is joining the call.",
+    "reason": "Phonetic retrieval closes the zero-shot doubled-consonant gap (ayushman/ayushmann share a metaphone key) and applies; exact has never seen the surface 'ayushman' as a stored form, so it abstains no_memory.",
+    "memory_row_count": 1,
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Ayushman is joining the call."
+      },
+      "exact": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Ayushman is joining the call.",
+        "reasons": ["no_memory"],
+        "affected_tokens": []
+      },
+      "phonetic": {
+        "decision": "APPLY",
+        "memory_aware": "Ayushmann is joining the call.",
+        "reasons": ["ok"],
+        "affected_tokens": [{"from": "Ayushman", "to": "Ayushmann"}]
+      },
+      "llm": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Ayushman is joining the call."
+      }
+    }
+  }
+}

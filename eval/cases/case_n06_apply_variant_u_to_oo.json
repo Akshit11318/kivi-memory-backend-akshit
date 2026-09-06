@@ -1,0 +1,50 @@
+{
+  "id": "case_n06_apply_variant_u_to_oo",
+  "family": "phonetic_only",
+  "difficulty": ["D2", "D3"],
+  "wall": ["W4"],
+  "title": "Romanization variant u↔oo — zero-shot phonetic win over exact",
+  "why_real": "Moorthy/Murthy is a common Indian surname pair split by which romanization the person's family settled on; the user taught one spelling once and a colleague's utterance in the other spelling must still resolve by sound alone.",
+  "setup": {
+    "observations": [
+      {
+        "source": "dictionary_add",
+        "canonical": "Moorthy",
+        "forms": ["moorthy"]
+      }
+    ]
+  },
+  "inputs": {
+    "asr": "murthy will sign off",
+    "formatted": "Murthy will sign off.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "APPLY",
+    "memory_aware": "Moorthy will sign off.",
+    "reason": "Phonetic retrieval matches the u/oo vowel-length variant zero-shot; exact has no stored form for 'murthy' and abstains no_memory.",
+    "memory_row_count": 1,
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Murthy will sign off."
+      },
+      "exact": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Murthy will sign off.",
+        "reasons": ["no_memory"],
+        "affected_tokens": []
+      },
+      "phonetic": {
+        "decision": "APPLY",
+        "memory_aware": "Moorthy will sign off.",
+        "reasons": ["ok"],
+        "affected_tokens": [{"from": "Murthy", "to": "Moorthy"}]
+      },
+      "llm": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Murthy will sign off."
+      }
+    }
+  }
+}

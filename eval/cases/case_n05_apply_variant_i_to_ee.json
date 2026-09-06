@@ -1,0 +1,50 @@
+{
+  "id": "case_n05_apply_variant_i_to_ee",
+  "family": "phonetic_only",
+  "difficulty": ["D2", "D3"],
+  "wall": ["W4"],
+  "title": "Romanization variant i↔ee — zero-shot phonetic win over exact",
+  "why_real": "Indian names reach Latin script through no single agreed system, so a name like Meera/Mira has two equally correct spellings; the user owns one of them and a first-time utterance in the other spelling should still be recognized by sound.",
+  "setup": {
+    "observations": [
+      {
+        "source": "dictionary_add",
+        "canonical": "Meera",
+        "forms": ["meera"]
+      }
+    ]
+  },
+  "inputs": {
+    "asr": "mira sent the invoice",
+    "formatted": "Mira sent the invoice.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "APPLY",
+    "memory_aware": "Meera sent the invoice.",
+    "reason": "Phonetic retrieval matches the i/ee vowel-length variant zero-shot; exact has no stored form for 'mira' and abstains no_memory.",
+    "memory_row_count": 1,
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Mira sent the invoice."
+      },
+      "exact": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Mira sent the invoice.",
+        "reasons": ["no_memory"],
+        "affected_tokens": []
+      },
+      "phonetic": {
+        "decision": "APPLY",
+        "memory_aware": "Meera sent the invoice.",
+        "reasons": ["ok"],
+        "affected_tokens": [{"from": "Mira", "to": "Meera"}]
+      },
+      "llm": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Mira sent the invoice."
+      }
+    }
+  }
+}

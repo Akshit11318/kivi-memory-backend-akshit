@@ -1,0 +1,50 @@
+{
+  "id": "case_n09_apply_brand_doubled_letter",
+  "family": "useful_apply",
+  "difficulty": ["D4"],
+  "wall": [],
+  "title": "Brand name with a doubled letter regresses to the dictionary word it was built from",
+  "why_real": "Groww is a real fintech brand spelled as a dictionary word with a letter doubled; ASR and the formatter both happily produce the ordinary word 'grow', and only a taught personal memory can recover the brand.",
+  "setup": {
+    "observations": [
+      {
+        "source": "dictionary_add",
+        "canonical": "Groww",
+        "forms": ["groww", "grow"]
+      }
+    ]
+  },
+  "inputs": {
+    "asr": "i moved my sip to grow",
+    "formatted": "I moved my SIP to grow.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "APPLY",
+    "memory_aware": "I moved my SIP to Groww.",
+    "reason": "The dictionary entry's forms list contains 'grow', so both retrievers find it and rewrite the dictionary word to the brand.",
+    "memory_row_count": 1,
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "I moved my SIP to grow."
+      },
+      "exact": {
+        "decision": "APPLY",
+        "memory_aware": "I moved my SIP to Groww.",
+        "reasons": ["ok"],
+        "affected_tokens": [{"from": "grow", "to": "Groww"}]
+      },
+      "phonetic": {
+        "decision": "APPLY",
+        "memory_aware": "I moved my SIP to Groww.",
+        "reasons": ["ok"],
+        "affected_tokens": [{"from": "grow", "to": "Groww"}]
+      },
+      "llm": {
+        "decision": "APPLY",
+        "memory_aware": "I moved my SIP to Groww."
+      }
+    }
+  }
+}

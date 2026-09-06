@@ -1,0 +1,50 @@
+{
+  "id": "case_n16_phonetic_blind_dental_th",
+  "family": "phonetic_blind",
+  "difficulty": ["D3"],
+  "wall": ["W4"],
+  "title": "Phonetic profile is blind to the dental t-to-th operation",
+  "why_real": "Gautam and Gautham are the same name under two romanizations, but Metaphone assigns the dental-aspirate spelling a different consonant skeleton, so a user who taught only 'Gautham' gets no help — by either retriever — when a dictation produces the plain 'Gautam'.",
+  "setup": {
+    "observations": [
+      {
+        "source": "dictionary_add",
+        "canonical": "Gautham",
+        "forms": ["gautham"]
+      }
+    ]
+  },
+  "inputs": {
+    "asr": "gautam reviewed the pr",
+    "formatted": "Gautam reviewed the PR.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "ABSTAIN",
+    "memory_aware": "Gautam reviewed the PR.",
+    "reason": "Metaphone keys for 'gautam' and 'gautham' do not intersect, so neither exact nor phonetic retrieves a candidate; both abstain no_memory.",
+    "memory_row_count": 1,
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Gautam reviewed the PR."
+      },
+      "exact": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Gautam reviewed the PR.",
+        "reasons": ["no_memory"],
+        "affected_tokens": []
+      },
+      "phonetic": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Gautam reviewed the PR.",
+        "reasons": ["no_memory"],
+        "affected_tokens": []
+      },
+      "llm": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Gautam reviewed the PR."
+      }
+    }
+  }
+}

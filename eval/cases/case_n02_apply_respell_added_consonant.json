@@ -1,0 +1,50 @@
+{
+  "id": "case_n02_apply_respell_added_consonant",
+  "family": "useful_apply",
+  "difficulty": ["D1"],
+  "wall": [],
+  "title": "Deliberate respelling learned from a live correction — added consonant",
+  "why_real": "A user corrects the formatter once after it writes the conventional spelling of a colleague's name, and every later utterance about that colleague should come back respelled the way the colleague actually spells it.",
+  "setup": {
+    "observations": [
+      {
+        "source": "correction",
+        "formatted": "Rajkumar shared the deck.",
+        "final": "Rajkummar shared the deck."
+      }
+    ]
+  },
+  "inputs": {
+    "asr": "rajkumar shared the deck",
+    "formatted": "Rajkumar shared the deck.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "APPLY",
+    "memory_aware": "Rajkummar shared the deck.",
+    "reason": "The correction taught Rajkumar->Rajkummar; both retrievers see the exact taught surface and rewrite it.",
+    "memory_row_count": 1,
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Rajkumar shared the deck."
+      },
+      "exact": {
+        "decision": "APPLY",
+        "memory_aware": "Rajkummar shared the deck.",
+        "reasons": ["ok"],
+        "affected_tokens": [{"from": "Rajkumar", "to": "Rajkummar"}]
+      },
+      "phonetic": {
+        "decision": "APPLY",
+        "memory_aware": "Rajkummar shared the deck.",
+        "reasons": ["ok"],
+        "affected_tokens": [{"from": "Rajkumar", "to": "Rajkummar"}]
+      },
+      "llm": {
+        "decision": "APPLY",
+        "memory_aware": "Rajkummar shared the deck."
+      }
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "case_n17_phonetic_short_token_floor",
+  "family": "phonetic_guard",
+  "difficulty": ["D3"],
+  "wall": ["W4"],
+  "title": "Phonetic profile's minimum-length floor blocks a two-character surface",
+  "why_real": "Om is a short, common given name, and a user who taught the 'Ohm' spelling gets no phonetic help at all when the utterance produces the two-character 'Om' — the retriever refuses to compute a phonetic key for anything shorter than three characters, by design, to avoid short-token false positives.",
+  "setup": {
+    "observations": [
+      {
+        "source": "dictionary_add",
+        "canonical": "Ohm",
+        "forms": ["ohm"]
+      }
+    ]
+  },
+  "inputs": {
+    "asr": "om joined the standup",
+    "formatted": "Om joined the standup.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "ABSTAIN",
+    "memory_aware": "Om joined the standup.",
+    "reason": "The query surface 'om' is only two characters, below the phonetic retriever's minimum length floor, so it never gets a phonetic key; exact has no stored form for it either. Both abstain no_memory.",
+    "memory_row_count": 1,
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Om joined the standup."
+      },
+      "exact": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Om joined the standup.",
+        "reasons": ["no_memory"],
+        "affected_tokens": []
+      },
+      "phonetic": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Om joined the standup.",
+        "reasons": ["no_memory"],
+        "affected_tokens": []
+      },
+      "llm": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Om joined the standup."
+      }
+    }
+  }
+}

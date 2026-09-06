@@ -1,0 +1,50 @@
+{
+  "id": "case_n13_apply_internal_codename",
+  "family": "useful_apply",
+  "difficulty": ["D1"],
+  "wall": ["W3"],
+  "title": "Personal-spelling pattern applied to org jargon, not a person's name",
+  "why_real": "Engineering teams invent codenames with their own deliberate spelling ('Chitragupt' instead of the mythological 'Chitragupta'), and the same respelling mechanism that fixes people's names must also fix internal jargon — the change is real letters, not a capitalization fix.",
+  "setup": {
+    "observations": [
+      {
+        "source": "dictionary_add",
+        "canonical": "Chitragupt",
+        "forms": ["chitragupt", "chitragupta"]
+      }
+    ]
+  },
+  "inputs": {
+    "asr": "migrate the chitragupta queue",
+    "formatted": "Migrate the Chitragupta queue.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "APPLY",
+    "memory_aware": "Migrate the Chitragupt queue.",
+    "reason": "The dictionary entry's forms list contains 'chitragupta', a real letter difference (dropped trailing 'a') from the canonical, so both retrievers rewrite it.",
+    "memory_row_count": 1,
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Migrate the Chitragupta queue."
+      },
+      "exact": {
+        "decision": "APPLY",
+        "memory_aware": "Migrate the Chitragupt queue.",
+        "reasons": ["ok"],
+        "affected_tokens": [{"from": "Chitragupta", "to": "Chitragupt"}]
+      },
+      "phonetic": {
+        "decision": "APPLY",
+        "memory_aware": "Migrate the Chitragupt queue.",
+        "reasons": ["ok"],
+        "affected_tokens": [{"from": "Chitragupta", "to": "Chitragupt"}]
+      },
+      "llm": {
+        "decision": "APPLY",
+        "memory_aware": "Migrate the Chitragupt queue."
+      }
+    }
+  }
+}

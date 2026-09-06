@@ -1,0 +1,43 @@
+{
+  "id": "case_n24_punct_possessive",
+  "family": "punctuation",
+  "difficulty": ["D8"],
+  "wall": [],
+  "title": "Possessive clitic stays attached across the rewrite",
+  "why_real": "A user dictates 'Priya's laptop' and the formatter attaches the possessive 's the same way it does for any noun, so the memory rewrite must replace the name core and reattach the clitic rather than clobbering it.",
+  "setup": {
+    "observations": [
+      {"source": "dictionary_add", "canonical": "Priyaa", "forms": ["priyaa", "priya"]}
+    ]
+  },
+  "inputs": {
+    "asr": "priya's laptop is slow",
+    "formatted": "Priya's laptop is slow.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "APPLY",
+    "memory_aware": "Priyaa's laptop is slow.",
+    "reason": "The token is decomposed into core plus possessive suffix; only the core is rewritten and the 's clitic is stitched back on.",
+    "memory_row_count": 1,
+    "expected_profile_results": {
+      "off": {"decision": "ABSTAIN", "memory_aware": "Priya's laptop is slow."},
+      "exact": {
+        "decision": "APPLY",
+        "memory_aware": "Priyaa's laptop is slow.",
+        "reasons": ["ok"],
+        "affected_tokens": [{"from": "Priya", "to": "Priyaa"}]
+      },
+      "phonetic": {
+        "decision": "APPLY",
+        "memory_aware": "Priyaa's laptop is slow.",
+        "reasons": ["ok"],
+        "affected_tokens": [{"from": "Priya", "to": "Priyaa"}]
+      },
+      "llm": {
+        "decision": "APPLY",
+        "memory_aware": "Priyaa's laptop is slow."
+      }
+    }
+  }
+}

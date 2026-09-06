@@ -1,0 +1,43 @@
+{
+  "id": "case_n21_align_contraction_expansion",
+  "family": "alignment_stress",
+  "difficulty": ["D7"],
+  "wall": [],
+  "title": "Contraction expansion shifts token indices without breaking the target rewrite",
+  "why_real": "The formatter expands 'gonna' into 'going to', which changes the token count between the ASR transcript and the formatted sentence, so any positional index-to-index mapping would corrupt the wrong word.",
+  "setup": {
+    "observations": [
+      {"source": "dictionary_add", "canonical": "Karthick", "forms": ["karthick", "karthik"]}
+    ]
+  },
+  "inputs": {
+    "asr": "im gonna ping karthik",
+    "formatted": "I'm going to ping Karthik.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "APPLY",
+    "memory_aware": "I'm going to ping Karthick.",
+    "reason": "Sequence alignment (not positional index) locates the target token despite the contraction expansion shifting every later index.",
+    "memory_row_count": 1,
+    "expected_profile_results": {
+      "off": {"decision": "ABSTAIN", "memory_aware": "I'm going to ping Karthik."},
+      "exact": {
+        "decision": "APPLY",
+        "memory_aware": "I'm going to ping Karthick.",
+        "reasons": ["ok"],
+        "affected_tokens": [{"from": "Karthik", "to": "Karthick"}]
+      },
+      "phonetic": {
+        "decision": "APPLY",
+        "memory_aware": "I'm going to ping Karthick.",
+        "reasons": ["ok"],
+        "affected_tokens": [{"from": "Karthik", "to": "Karthick"}]
+      },
+      "llm": {
+        "decision": "APPLY",
+        "memory_aware": "I'm going to ping Karthick."
+      }
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "case_n11_apply_brand_flickr_zeroshot",
+  "family": "phonetic_only",
+  "difficulty": ["D4"],
+  "wall": ["W4"],
+  "title": "Brand name with a dropped vowel, a second zero-shot phonetic win over exact",
+  "why_real": "Flickr drops a vowel from the dictionary word 'flicker'; the user has only entered it as a standing dictionary fact, and a first-time utterance of the ordinary word must still be caught by sound alone.",
+  "setup": {
+    "observations": [
+      {
+        "source": "dictionary_add",
+        "canonical": "Flickr",
+        "forms": ["flickr"]
+      }
+    ]
+  },
+  "inputs": {
+    "asr": "upload them to flicker",
+    "formatted": "Upload them to flicker.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "APPLY",
+    "memory_aware": "Upload them to Flickr.",
+    "reason": "Phonetic retrieval bridges the dropped-vowel spelling zero-shot; exact has no stored form for 'flicker' and abstains no_memory.",
+    "memory_row_count": 1,
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Upload them to flicker."
+      },
+      "exact": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Upload them to flicker.",
+        "reasons": ["no_memory"],
+        "affected_tokens": []
+      },
+      "phonetic": {
+        "decision": "APPLY",
+        "memory_aware": "Upload them to Flickr.",
+        "reasons": ["ok"],
+        "affected_tokens": [{"from": "flicker", "to": "Flickr"}]
+      },
+      "llm": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Upload them to flicker."
+      }
+    }
+  }
+}

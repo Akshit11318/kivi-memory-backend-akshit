@@ -173,7 +173,7 @@ is the only component that can undo this, because `decide` reads the
 → **In scope, and the strongest argument for the product.**
 
 **D7. Contraction expansion and disfluency stripping shift every index.**
-`im gonna ping karthik` → `I'm going to ping Karthik.` (5 tokens → 6);
+`im gonna ping karthik` → `I'm going to ping Karthik.` (4 tokens → 5);
 `matlab um i will ask priya na` → `I will ask Priya.` (7 → 4). Hinglish discourse
 particles (`matlab`, `na`, `yaar`, `arre`) get stripped exactly like `um`, and
 they are far more common in real Indian dictation than `um` is. Any positional
@@ -341,7 +341,7 @@ These four exist so nobody can claim `phonetic` dominates `exact`.
 
 | # | id | Teach | ASR | formatted | expected memory-aware | X | P | tests |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 21 | `align_contraction_expansion` **[M]** | dict(`Karthick`; `karthick, karthik`) | `im gonna ping karthik` | `I'm going to ping Karthik.` | `I'm going to ping Karthick.` | APPLY | APPLY | D7, 5 → 6 tokens |
+| 21 | `align_contraction_expansion` **[M]** | dict(`Karthick`; `karthick, karthik`) | `im gonna ping karthik` | `I'm going to ping Karthik.` | `I'm going to ping Karthick.` | APPLY | APPLY | D7, 4 → 5 tokens |
 | 22 | `align_hinglish_filler_stripped` **[M]** | dict(`Priyaa`; `priyaa, priya`) | `matlab um i will ask priya na` | `I will ask Priya.` | `I will ask Priyaa.` | APPLY | APPLY | D7, 7 → 4, real fillers |
 | 23 | `align_asr_stutter` **[M]** | dict(`Deeksha`; `deeksha, diksha`) | `ask ask diksha for the file` | `Ask Diksha for the file.` | `Ask Deeksha for the file.` | APPLY | APPLY | D7, repeated ASR token |
 | 24 | `punct_possessive` **[M]** | dict(`Priyaa`; `priyaa, priya`) | `priya's laptop is slow` | `Priya's laptop is slow.` | `Priyaa's laptop is slow.` | APPLY | APPLY | D8, clitic preserved |

@@ -1,0 +1,50 @@
+{
+  "id": "case_n28_two_entities_one_line",
+  "family": "two_names",
+  "difficulty": ["D8"],
+  "wall": [],
+  "title": "Two independently taught entities in one sentence each get their own decision",
+  "why_real": "A single dictated sentence can carry a colleague's name and a mistyped brand together ('Srinivas checked the Grow dashboard'), and the notebook must resolve each one against its own memory row without either interfering with the other.",
+  "setup": {
+    "observations": [
+      {"source": "dictionary_add", "canonical": "Sreenivas", "forms": ["sreenivas", "srinivas"]},
+      {"source": "dictionary_add", "canonical": "Groww", "forms": ["groww", "grow"]}
+    ]
+  },
+  "inputs": {
+    "asr": "srinivas checked the grow dashboard",
+    "formatted": "Srinivas checked the Grow dashboard.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "APPLY",
+    "memory_aware": "Sreenivas checked the Groww dashboard.",
+    "reason": "Two independent memory rows are each matched and applied to their own token, unaffected by the other entity in the same sentence.",
+    "memory_row_count": 2,
+    "expected_profile_results": {
+      "off": {"decision": "ABSTAIN", "memory_aware": "Srinivas checked the Grow dashboard."},
+      "exact": {
+        "decision": "APPLY",
+        "memory_aware": "Sreenivas checked the Groww dashboard.",
+        "reasons": ["ok"],
+        "affected_tokens": [
+          {"from": "Srinivas", "to": "Sreenivas"},
+          {"from": "Grow", "to": "Groww"}
+        ]
+      },
+      "phonetic": {
+        "decision": "APPLY",
+        "memory_aware": "Sreenivas checked the Groww dashboard.",
+        "reasons": ["ok"],
+        "affected_tokens": [
+          {"from": "Srinivas", "to": "Sreenivas"},
+          {"from": "Grow", "to": "Groww"}
+        ]
+      },
+      "llm": {
+        "decision": "APPLY",
+        "memory_aware": "Sreenivas checked the Groww dashboard."
+      }
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "id": "case_n23_align_asr_stutter",
+  "family": "alignment_stress",
+  "difficulty": ["D7"],
+  "wall": [],
+  "title": "A repeated ASR token from a real speech disfluency shifts token indices",
+  "why_real": "Speakers repeat a word when they stumble ('ask ask diksha'), and the ASR faithfully transcribes both repetitions while the formatter only keeps one, so the token counts diverge exactly like they do for filler words.",
+  "setup": {
+    "observations": [
+      {"source": "dictionary_add", "canonical": "Deeksha", "forms": ["deeksha", "diksha"]}
+    ]
+  },
+  "inputs": {
+    "asr": "ask ask diksha for the file",
+    "formatted": "Ask Diksha for the file.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "APPLY",
+    "memory_aware": "Ask Deeksha for the file.",
+    "reason": "Sequence alignment resolves the repeated ASR token to a single formatted token and still finds the right memory.",
+    "memory_row_count": 1,
+    "expected_profile_results": {
+      "off": {"decision": "ABSTAIN", "memory_aware": "Ask Diksha for the file."},
+      "exact": {
+        "decision": "APPLY",
+        "memory_aware": "Ask Deeksha for the file.",
+        "reasons": ["ok"],
+        "affected_tokens": [{"from": "Diksha", "to": "Deeksha"}]
+      },
+      "phonetic": {
+        "decision": "APPLY",
+        "memory_aware": "Ask Deeksha for the file.",
+        "reasons": ["ok"],
+        "affected_tokens": [{"from": "Diksha", "to": "Deeksha"}]
+      },
+      "llm": {
+        "decision": "APPLY",
+        "memory_aware": "Ask Deeksha for the file."
+      }
+    }
+  }
+}
