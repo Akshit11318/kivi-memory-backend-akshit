@@ -2,7 +2,7 @@
   "id": "case_04_irrelevant_memory_store",
   "family": "noop",
   "title": "Deliberate No-Op \u2014 Irrelevant Personal Memories in Store",
-  "description": "Store contains fintech terms (Razorpay, Sreenivas), but dictation is an unrelated grocery list. Must not touch common words.",
+  "description": "Store contains tech terms (Kivi, Aaditya), but dictation is an unrelated grocery list. Must not touch common words.",
   "mixture_of_thoughts": {
     "acoustic_thought": "Acoustic terms 'apples', 'milk', 'bread' have zero phonetic relation to stored entities.",
     "formatter_thought": "Punctuation and list formatting applied.",
@@ -13,18 +13,18 @@
     "observations": [
       {
         "source": "dictionary_add",
-        "canonical": "Razorpay",
+        "canonical": "Kivi",
         "forms": [
-          "razor pay",
-          "Razorpay"
+          "kiwi",
+          "Kiwi"
         ]
       },
       {
         "source": "dictionary_add",
-        "canonical": "Sreenivas",
+        "canonical": "Aaditya",
         "forms": [
-          "srinivas",
-          "Srinivas"
+          "aditya",
+          "Aditya"
         ]
       }
     ]

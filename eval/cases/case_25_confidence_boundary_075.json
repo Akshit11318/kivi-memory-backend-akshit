@@ -1,21 +1,21 @@
 {
   "id": "case_25_confidence_boundary_075",
   "family": "boundary",
-  "title": "Threshold Boundary Test \u2014 Confidence Exactly 0.75 (PhonePe)",
-  "description": "Testing boundary condition: confidence is exactly 0.75. Contract specifies '>= 0.75' (inclusive), so system must APPLY.",
+  "title": "Threshold Boundary Test \u2014 Confidence Exactly 0.75 (Single Token)",
+  "description": "Testing boundary condition: confidence is exactly 0.75 on a clean single token substitution. Contract specifies '>= 0.75' (inclusive), so system must APPLY.",
   "mixture_of_thoughts": {
-    "acoustic_thought": "Target brand captured as 'phone pay'.",
-    "formatter_thought": "Formatted representation has 'phone pay'.",
-    "alignment_thought": "Candidate retrieved with confidence == 0.75.",
-    "decision_thought": "Predicate is 'confidence >= 0.75'. Since 0.75 >= 0.75 is True, system MUST emit APPLY."
+    "acoustic_thought": "Single token 'kiwi' in transcript.",
+    "formatter_thought": "Formatted representation is 'Kiwi'.",
+    "alignment_thought": "Single token candidate retrieved with confidence == 0.75.",
+    "decision_thought": "Predicate is 'confidence >= 0.75'. Since 0.75 >= 0.75 is True, decider MUST emit APPLY."
   },
   "setup": {
     "seeded_memories": [
       {
-        "canonical": "PhonePe",
+        "canonical": "Kivi",
         "observed_forms": [
-          "phone pay",
-          "phonepe"
+          "kiwi",
+          "Kiwi"
         ],
         "confidence": 0.75,
         "evidence_count": 1
@@ -23,36 +23,36 @@
     ]
   },
   "inputs": {
-    "asr": "send payment via phone pay",
-    "formatted": "Send payment via phone pay.",
+    "asr": "test the kiwi service",
+    "formatted": "Test the Kiwi service.",
     "user_id": "demo_user"
   },
   "expected": {
     "decision": "APPLY",
-    "memory_aware": "Send payment via PhonePe.",
+    "memory_aware": "Test the Kivi service.",
     "expected_profile_results": {
       "off": {
         "decision": "ABSTAIN",
-        "memory_aware": "Send payment via phone pay."
+        "memory_aware": "Test the Kiwi service."
       },
       "exact": {
         "decision": "APPLY",
-        "memory_aware": "Send payment via PhonePe."
+        "memory_aware": "Test the Kivi service."
       },
       "phonetic": {
         "decision": "APPLY",
-        "memory_aware": "Send payment via PhonePe."
+        "memory_aware": "Test the Kivi service."
       },
       "llm": {
         "decision": "APPLY",
-        "memory_aware": "Send payment via PhonePe."
+        "memory_aware": "Test the Kivi service."
       }
     },
     "reason": "Confidence exactly 0.75 satisfies inclusive >= 0.75 threshold.",
     "affected_tokens": [
       {
-        "from": "phone pay",
-        "to": "PhonePe"
+        "from": "Kiwi",
+        "to": "Kivi"
       }
     ]
   }

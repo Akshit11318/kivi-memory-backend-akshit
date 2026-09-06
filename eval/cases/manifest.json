@@ -1,5 +1,5 @@
 {
-  "total_cases": 34,
+  "total_cases": 29,
   "families_covered": [
     "abstain_weak",
     "alignment_stress",
@@ -7,7 +7,7 @@
     "casing",
     "code_switch",
     "conflict",
-    "contextual_limit",
+    "context_cues",
     "edge_robustness",
     "form_merge",
     "formatter_error",
@@ -18,15 +18,9 @@
     "noop",
     "phonetic_guard",
     "phonetic_only",
+    "profile_validation",
     "punctuation",
     "reset_state",
-    "theme_academic",
-    "theme_developer",
-    "theme_finance",
-    "theme_geography",
-    "theme_healthcare",
-    "theme_legal",
-    "theme_lifestyle",
     "threshold_crossing",
     "two_names",
     "useful_apply"
@@ -58,13 +52,8 @@
     "case_24_formatter_introduced_error",
     "case_25_confidence_boundary_075",
     "case_26_refuse_homophone_grammar",
-    "case_27_generic_homograph_fruit",
-    "case_28_theme_dev_fastapi",
-    "case_29_theme_health_crocin",
-    "case_30_theme_finance_rtgs",
-    "case_31_theme_location_koramangala",
-    "case_32_theme_academic_arxiv",
-    "case_33_theme_legal_suo_motu",
-    "case_34_theme_lifestyle_cuisine"
+    "case_27_invalid_profile_error",
+    "case_28_context_cues_apply",
+    "case_29_context_cues_abstain"
   ]
 }

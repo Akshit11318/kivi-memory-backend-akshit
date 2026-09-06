@@ -54,6 +54,7 @@ class TokenDecision:
     reason: str
     canonical: str | None = None
     memory_ids: tuple[int, ...] = ()
+    matched_surface: str | None = None
 
 
 @dataclass(frozen=True)

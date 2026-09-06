@@ -7,7 +7,7 @@ import json
 import sys
 from pathlib import Path
 
-from kivi_memory.cli.art import banner, command_bench, error_line, not_built
+from kivi_memory.cli.art import banner, command_bench, error_line, not_built, trace_frame
 from kivi_memory.cli.style import Ink, color_enabled
 from kivi_memory.config import (
     DEFAULT_DB_PATH,
@@ -17,6 +17,7 @@ from kivi_memory.config import (
     SEED_PATH,
 )
 from kivi_memory.learner import explicit as explicit_learner
+from kivi_memory.pipeline.run import run as run_pipeline
 from kivi_memory.store.db import MemoryStore
 
 
@@ -93,6 +94,38 @@ def _cmd_observe(args: argparse.Namespace) -> int:
         return 2
 
 
+def _cmd_run(args: argparse.Namespace, ink: Ink) -> int:
+    with MemoryStore(Path(args.db)) as store:
+        try:
+            trace = run_pipeline(store, args.user_id, args.asr, args.formatted, args.profile)
+        except NotImplementedError as exc:
+            print(error_line(ink, str(exc)), file=sys.stderr)
+            return 2
+
+    applied = [d for d in trace.decisions if d.decision == "APPLY"]
+    if trace.profile == "off":
+        overall_decision, overall_reason = "ABSTAIN", "memory disabled"
+    elif applied:
+        canonicals = sorted({d.canonical for d in applied if d.canonical})
+        overall_decision, overall_reason = "APPLY", "applied " + ", ".join(canonicals)
+    else:
+        reasons = sorted({d.reason for d in trace.decisions}) or ["no_memory"]
+        overall_decision, overall_reason = "ABSTAIN", ", ".join(reasons)
+
+    print(
+        trace_frame(
+            ink,
+            asr=trace.asr,
+            formatted=trace.formatted,
+            decision=overall_decision,
+            memory_aware=trace.memory_aware,
+            reason=overall_reason,
+            profile=trace.profile,
+        )
+    )
+    return 0
+
+
 def _cmd_memories(args: argparse.Namespace) -> int:
     with MemoryStore(Path(args.db)) as store:
         memories = store.list_memories()
@@ -145,6 +178,7 @@ def _parser() -> argparse.ArgumentParser:
     run = sub.add_parser("run", help="try a new line")
     run.add_argument("--asr", default="")
     run.add_argument("--formatted", default="")
+    run.add_argument("--user-id", dest="user_id", default=DEFAULT_USER_ID)
     eval_p = sub.add_parser("eval", help="score fixtures")
     eval_p.add_argument("--profiles", default=",".join(PROFILES))
     reset = sub.add_parser("reset", help="clear the page; --seed to refill")
@@ -175,6 +209,8 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "observe":
         return _cmd_observe(args)
+    if args.command == "run":
+        return _cmd_run(args, ink)
     if args.command == "reset":
         return _cmd_reset(args)
     if args.command == "memories":

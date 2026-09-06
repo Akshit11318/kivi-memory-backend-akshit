@@ -2,7 +2,7 @@
   "id": "case_16_code_switch_hinglish",
   "family": "code_switch",
   "title": "Hinglish Dictation \u2014 Latin-script Indian Name (Deeksha) in Mixed Context",
-  "description": "Code-switched colloquial workplace sentence ('yaar deeksha suno'). Personal name variant Diksha must be applied.",
+  "description": "Code-switched colloquial workplace sentence ('yaar deeksha suno'). Personal single-token name Diksha must be applied.",
   "mixture_of_thoughts": {
     "acoustic_thought": "Indian English mixed with Hindi colloquialisms ('yaar', 'suno').",
     "formatter_thought": "Formatter transliterates Latin words: 'Yaar Deeksha suno, check the PR.'",

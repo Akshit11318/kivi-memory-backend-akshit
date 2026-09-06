@@ -1,13 +1,13 @@
 {
   "id": "case_13_duplicate_observe_idempotent",
   "family": "idempotency",
-  "title": "Learner Idempotency \u2014 Replaying Duplicate Observations (Laxmi)",
-  "description": "Replaying the exact same observation for Lakshmi -> Laxmi multiple times must be idempotent: confidence caps at 1.0, single row maintained.",
+  "title": "Learner Deduplication \u2014 Repeated Correction Replays",
+  "description": "Observing the exact same correction formatted->final reinforces evidence count and confidence (+0.05) without inserting duplicate database rows.",
   "mixture_of_thoughts": {
     "acoustic_thought": "Identical audio input: 'ask lakshmi to deploy'.",
     "formatter_thought": "Identical formatted input: 'Ask Lakshmi to deploy.'",
     "alignment_thought": "Repeated observe calls update evidence count and reinforce confidence without creating duplicate canonical rows.",
-    "decision_thought": "Single row in store with confidence capped at 1.0. Decider emits clean APPLY."
+    "decision_thought": "Single row in store with merged forms and confidence updated (0.85 -> 0.90). Decider emits clean APPLY."
   },
   "setup": {
     "observations": [

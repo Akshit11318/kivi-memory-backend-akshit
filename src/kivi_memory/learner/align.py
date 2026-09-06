@@ -46,6 +46,7 @@ COMMON_FUNCTION_WORDS: frozenset[str] = frozenset(
     might must with from by about into onto over under again further
     then there here when where why how all any both each few more
     most other some such no yes only own same than too very s t
+    me my mine us our ours him her hers them their theirs
     """.split()
 )
 

@@ -1,11 +1,11 @@
 {
   "id": "case_15_multi_user_isolation",
   "family": "isolation",
-  "title": "Multi-User Isolation \u2014 User A Memory (Razorpay) Inaccessible to User B",
-  "description": "User A registered canonical 'Razorpay'. User B dictates 'razor pay'. User B session must strictly ABSTAIN.",
+  "title": "Multi-User Isolation \u2014 User A Memory (Kivi) Inaccessible to User B",
+  "description": "User A registered canonical 'Kivi'. User B dictates 'kiwi'. User B session must strictly ABSTAIN.",
   "mixture_of_thoughts": {
-    "acoustic_thought": "User B dictates 'razor pay'.",
-    "formatter_thought": "Formatter emits 'We integrated razor pay for checkout.'",
+    "acoustic_thought": "User B dictates 'kiwi'.",
+    "formatter_thought": "Formatter emits 'Kiwi'.",
     "alignment_thought": "Store query filters strictly by user_id='user_b'. User A's row has user_id='user_a'.",
     "decision_thought": "Query returns 0 matching rows for user_b. System must ABSTAIN to prevent cross-tenant privacy leaks."
   },
@@ -14,38 +14,38 @@
       {
         "user_id": "user_a",
         "source": "dictionary_add",
-        "canonical": "Razorpay",
+        "canonical": "Kivi",
         "forms": [
-          "razor pay",
-          "Razorpay"
+          "kiwi",
+          "Kiwi"
         ]
       }
     ]
   },
   "inputs": {
-    "asr": "we integrated razor pay for checkout",
-    "formatted": "We integrated razor pay for checkout.",
+    "asr": "run the kiwi benchmark",
+    "formatted": "Run the Kiwi benchmark.",
     "user_id": "user_b"
   },
   "expected": {
     "decision": "ABSTAIN",
-    "memory_aware": "We integrated razor pay for checkout.",
+    "memory_aware": "Run the Kiwi benchmark.",
     "expected_profile_results": {
       "off": {
         "decision": "ABSTAIN",
-        "memory_aware": "We integrated razor pay for checkout."
+        "memory_aware": "Run the Kiwi benchmark."
       },
       "exact": {
         "decision": "ABSTAIN",
-        "memory_aware": "We integrated razor pay for checkout."
+        "memory_aware": "Run the Kiwi benchmark."
       },
       "phonetic": {
         "decision": "ABSTAIN",
-        "memory_aware": "We integrated razor pay for checkout."
+        "memory_aware": "Run the Kiwi benchmark."
       },
       "llm": {
         "decision": "ABSTAIN",
-        "memory_aware": "We integrated razor pay for checkout."
+        "memory_aware": "Run the Kiwi benchmark."
       }
     },
     "reason": "User isolation: memory belongs to user_a, query executed for user_b.",

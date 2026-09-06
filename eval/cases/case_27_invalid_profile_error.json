@@ -1,0 +1,33 @@
+{
+  "id": "case_27_invalid_profile_error",
+  "family": "profile_validation",
+  "title": "Profile Validation \u2014 Rejecting Invalid Profile Name (--profile foo)",
+  "description": "Spec requires: '--profile foo -> non-zero exit, list valid names, no silent fallback'. System must fail cleanly.",
+  "mixture_of_thoughts": {
+    "acoustic_thought": "Standard audio transcript.",
+    "formatter_thought": "Standard formatted text.",
+    "alignment_thought": "Input requests profile 'foo'.",
+    "decision_thought": "Profile 'foo' is not in ['off', 'exact', 'phonetic', 'llm']. System must reject with clear error."
+  },
+  "setup": {
+    "observations": []
+  },
+  "inputs": {
+    "asr": "test the service",
+    "formatted": "Test the service.",
+    "user_id": "demo_user",
+    "profile": "foo"
+  },
+  "expected": {
+    "decision": "ERROR",
+    "memory_aware": null,
+    "expected_profile_results": {
+      "foo": {
+        "status": "ERROR",
+        "reason": "Invalid profile 'foo'. Valid profiles are: off, exact, phonetic, llm"
+      }
+    },
+    "reason": "Invalid profile 'foo' rejected with non-zero exit.",
+    "affected_tokens": []
+  }
+}

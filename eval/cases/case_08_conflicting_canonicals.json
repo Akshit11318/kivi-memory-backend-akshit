@@ -2,12 +2,12 @@
   "id": "case_08_conflicting_canonicals",
   "family": "conflict",
   "title": "Conflicting Canonicals \u2014 Kavita vs Kaveeta for Single Surface",
-  "description": "Store contains two distinct canonicals for the normalized surface 'kavita'. System must refuse to guess and ABSTAIN.",
+  "description": "Store contains two distinct canonicals for normalized surface 'kavita'. Decider must ABSTAIN and list both memory IDs.",
   "mixture_of_thoughts": {
     "acoustic_thought": "ASR outputs 'kavita'.",
     "formatter_thought": "Formatter outputs 'Kavita'.",
-    "alignment_thought": "Token 'Kavita' normalized matches candidate memory 1 (canonical 'Kavita') and candidate memory 2 (canonical 'Kaveeta').",
-    "decision_thought": "Multiple candidate canonicals for the same surface. Contract mandates ABSTAIN with reason 'conflicting_canonicals' listing both memory IDs."
+    "alignment_thought": "Token 'Kavita' normalized matches candidate memory 1 (id: mem_conf_1, canonical: 'Kavita') and candidate memory 2 (id: mem_conf_2, canonical: 'Kaveeta').",
+    "decision_thought": "Multiple candidate canonicals for the same surface. Contract mandates ABSTAIN with reason 'conflicting_canonicals' listing both memory IDs [mem_conf_1, mem_conf_2]."
   },
   "setup": {
     "seeded_memories": [
@@ -57,7 +57,7 @@
         "memory_aware": "Please inform Kavita about the release."
       }
     },
-    "reason": "conflicting_canonicals: multiple active canonicals [Kavita, Kaveeta] for surface 'kavita'",
+    "reason": "conflicting_canonicals: multiple memories [mem_conf_1, mem_conf_2] with canonicals [Kavita, Kaveeta] for surface 'kavita'",
     "affected_tokens": []
   }
 }

@@ -1,53 +1,54 @@
 {
   "id": "case_11_word_boundary",
   "family": "boundary",
-  "title": "Word Boundary Protection \u2014 Substring Inside Compound Name (Hasura vs Hasuranga)",
-  "description": "Memory contains GraphQL engine 'Hasura'. Transcript mentions Sri Lankan cricketer 'Hasuranga'. Substring match must NOT trigger.",
+  "title": "Word Boundary Protection \u2014 Substring Inside Compound Name (Kivi inside Kivimaki)",
+  "description": "Memory contains canonical 'Kivi' (form 'kivi'). Utterance contains Finnish name 'Kivimaki'. Substring match must NOT trigger inside a larger word.",
   "mixture_of_thoughts": {
-    "acoustic_thought": "ASR transcribes proper noun 'Hasuranga'.",
-    "formatter_thought": "Formatter outputs 'Hasuranga took three wickets.'",
-    "alignment_thought": "Token boundary isolation ensures 'Hasura' is not treated as a match for 'Hasuranga'.",
-    "decision_thought": "Token equality check fails ('hasuranga' != 'hasura'). System must ABSTAIN."
+    "acoustic_thought": "ASR transcribes proper surname 'Kivimaki'.",
+    "formatter_thought": "Formatter outputs 'Mika Kivimaki published a new paper.'",
+    "alignment_thought": "Token is 'Kivimaki'. A naive substring match would see 'kivi' inside 'kivimaki'. Token-level boundary enforcement ensures full token matching.",
+    "decision_thought": "Token equality check fails ('kivimaki' != 'kivi'). System must ABSTAIN."
   },
   "setup": {
     "observations": [
       {
         "source": "dictionary_add",
-        "canonical": "Hasura",
+        "canonical": "Kivi",
         "forms": [
-          "hasura",
-          "Hasura"
+          "kiwi",
+          "kivi",
+          "Kiwi"
         ]
       }
     ]
   },
   "inputs": {
-    "asr": "hasuranga took three wickets",
-    "formatted": "Hasuranga took three wickets.",
+    "asr": "mika kivimaki published a new paper",
+    "formatted": "Mika Kivimaki published a new paper.",
     "user_id": "demo_user"
   },
   "expected": {
     "decision": "ABSTAIN",
-    "memory_aware": "Hasuranga took three wickets.",
+    "memory_aware": "Mika Kivimaki published a new paper.",
     "expected_profile_results": {
       "off": {
         "decision": "ABSTAIN",
-        "memory_aware": "Hasuranga took three wickets."
+        "memory_aware": "Mika Kivimaki published a new paper."
       },
       "exact": {
         "decision": "ABSTAIN",
-        "memory_aware": "Hasuranga took three wickets."
+        "memory_aware": "Mika Kivimaki published a new paper."
       },
       "phonetic": {
         "decision": "ABSTAIN",
-        "memory_aware": "Hasuranga took three wickets."
+        "memory_aware": "Mika Kivimaki published a new paper."
       },
       "llm": {
         "decision": "ABSTAIN",
-        "memory_aware": "Hasuranga took three wickets."
+        "memory_aware": "Mika Kivimaki published a new paper."
       }
     },
-    "reason": "Token boundary respected; no substring match inside Hasuranga.",
+    "reason": "Token boundary respected; no substring match inside Kivimaki.",
     "affected_tokens": []
   }
 }

@@ -1,57 +1,57 @@
 {
   "id": "case_10_phonetic_only_retrieval",
   "family": "phonetic_only",
-  "title": "Phonetic-Only Win \u2014 Stored Canonical 'Zerodha', Unseen Form 'zero da'",
-  "description": "Store has canonical 'Zerodha' with only form 'zerodha'. ASR emits 'zeroda' never logged in observed_forms. Exact misses; Phonetic retrieves via Double Metaphone.",
+  "title": "Phonetic-Only Win \u2014 Stored Canonical 'Kivi', Unseen Form 'kiwi'",
+  "description": "Store has canonical 'Kivi' with only form 'kivi' (never recorded 'kiwi'). Exact profile misses; Phonetic profile retrieves via Double Metaphone.",
   "mixture_of_thoughts": {
-    "acoustic_thought": "ASR emits dental variation 'zeroda'.",
-    "formatter_thought": "Formatter emits 'Zeroda'.",
-    "alignment_thought": "Token 'Zeroda' is not in exact observed_forms. Double Metaphone key of 'Zeroda' matches 'Zerodha' (SRT).",
-    "decision_thought": "Exact profile must ABSTAIN (unseen surface). Phonetic profile must retrieve 'Zerodha' and emit APPLY."
+    "acoustic_thought": "ASR emits 'kiwi'.",
+    "formatter_thought": "Formatter emits 'Kiwi'.",
+    "alignment_thought": "Token 'Kiwi' normalized is 'kiwi'. In exact retriever, 'kiwi' does not exist in observed_forms -> misses. In phonetic retriever, Metaphone('Kiwi') == Metaphone('Kivi') -> matches.",
+    "decision_thought": "Exact profile must ABSTAIN (unseen surface). Phonetic profile must APPLY 'Kivi'."
   },
   "setup": {
     "seeded_memories": [
       {
-        "canonical": "Zerodha",
+        "canonical": "Kivi",
         "observed_forms": [
-          "zerodha",
-          "Zerodha"
+          "kivi",
+          "Kivi"
         ],
         "confidence": 0.85
       }
     ]
   },
   "inputs": {
-    "asr": "check account on zeroda",
-    "formatted": "Check account on Zeroda.",
+    "asr": "deploy the kiwi service",
+    "formatted": "Deploy the Kiwi service.",
     "user_id": "demo_user"
   },
   "expected": {
     "decision": "APPLY",
-    "memory_aware": "Check account on Zerodha.",
+    "memory_aware": "Deploy the Kivi service.",
     "expected_profile_results": {
       "off": {
         "decision": "ABSTAIN",
-        "memory_aware": "Check account on Zeroda."
+        "memory_aware": "Deploy the Kiwi service."
       },
       "exact": {
         "decision": "ABSTAIN",
-        "memory_aware": "Check account on Zeroda."
+        "memory_aware": "Deploy the Kiwi service."
       },
       "phonetic": {
         "decision": "APPLY",
-        "memory_aware": "Check account on Zerodha."
+        "memory_aware": "Deploy the Kivi service."
       },
       "llm": {
         "decision": "ABSTAIN",
-        "memory_aware": "Check account on Zeroda."
+        "memory_aware": "Deploy the Kiwi service."
       }
     },
     "reason": "Phonetic profile matches Double Metaphone key; exact profile abstains.",
     "affected_tokens": [
       {
-        "from": "Zeroda",
-        "to": "Zerodha"
+        "from": "Kiwi",
+        "to": "Kivi"
       }
     ]
   }

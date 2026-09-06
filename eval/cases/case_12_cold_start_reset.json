@@ -2,10 +2,10 @@
   "id": "case_12_cold_start_reset",
   "family": "reset_state",
   "title": "Cold Start Verification \u2014 Post-Reset Empty State",
-  "description": "Immediately following 'kivi reset', memories table is empty. Dictation with Zepto must yield ABSTAIN.",
+  "description": "Immediately following 'kivi reset', memories table is empty. Any input must yield ABSTAIN.",
   "mixture_of_thoughts": {
-    "acoustic_thought": "Audio transcript contains 'zepto'.",
-    "formatter_thought": "Formatted text: 'Order groceries on Zepto.'",
+    "acoustic_thought": "Audio transcript contains standard words.",
+    "formatter_thought": "Formatted text: 'Deploy the service tomorrow.'",
     "alignment_thought": "Store query returns 0 rows.",
     "decision_thought": "Cold start condition: zero memory records exist -> ABSTAIN."
   },
@@ -13,29 +13,29 @@
     "observations": []
   },
   "inputs": {
-    "asr": "order groceries on zepto",
-    "formatted": "Order groceries on Zepto.",
+    "asr": "deploy the service tomorrow",
+    "formatted": "Deploy the service tomorrow.",
     "user_id": "demo_user"
   },
   "expected": {
     "decision": "ABSTAIN",
-    "memory_aware": "Order groceries on Zepto.",
+    "memory_aware": "Deploy the service tomorrow.",
     "expected_profile_results": {
       "off": {
         "decision": "ABSTAIN",
-        "memory_aware": "Order groceries on Zepto."
+        "memory_aware": "Deploy the service tomorrow."
       },
       "exact": {
         "decision": "ABSTAIN",
-        "memory_aware": "Order groceries on Zepto."
+        "memory_aware": "Deploy the service tomorrow."
       },
       "phonetic": {
         "decision": "ABSTAIN",
-        "memory_aware": "Order groceries on Zepto."
+        "memory_aware": "Deploy the service tomorrow."
       },
       "llm": {
         "decision": "ABSTAIN",
-        "memory_aware": "Order groceries on Zepto."
+        "memory_aware": "Deploy the service tomorrow."
       }
     },
     "reason": "Empty database after reset.",

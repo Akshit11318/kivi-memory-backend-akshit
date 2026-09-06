@@ -15,3 +15,6 @@ data/kivi.sqlite
 dist/
 *.egg-info/
 .uv/
+
+# Internal build instructions to the coding agent — not part of the submission.
+HANDOFF.md

@@ -2,7 +2,7 @@
   "id": "case_02_useful_apply_two_names",
   "family": "two_names",
   "title": "Useful APPLY \u2014 Two Distinct Indian Names (Gautham & Ananyaa)",
-  "description": "Utterance contains two distinct personal names with spelling variations (Gautam -> Gautham, Ananya -> Ananyaa).",
+  "description": "Utterance contains two distinct personal names with single-token spelling variations (Gautam -> Gautham, Ananya -> Ananyaa).",
   "mixture_of_thoughts": {
     "acoustic_thought": "ASR emits common transliterations 'gautam' (/\u0261a\u028at\u032a\u0259m/) and 'ananya' (/\u0259n\u0259nj\u0251\u02d0/).",
     "formatter_thought": "Formatter capitalizes both proper nouns: 'Ask Gautam and Ananya to join the sprint demo.'",
