@@ -1,0 +1,61 @@
+{
+  "id": "case_n37_refuse_onset_clipped",
+  "family": "edge_robustness",
+  "difficulty": [
+    "D12"
+  ],
+  "wall": [
+    "W4"
+  ],
+  "title": "A clipped onset removes the letter the first-letter gate needs",
+  "why_real": "A mic that opens late clips the first syllable, so ASR emits 'ditya' for a name stored as Aaditya; the clipped surface shares a metaphone key with the stored form, and only the retriever's first-letter rule keeps the system from rewriting a word it cannot actually identify.",
+  "setup": {
+    "observations": [
+      {
+        "source": "dictionary_add",
+        "canonical": "Aaditya",
+        "forms": [
+          "aaditya",
+          "aditya"
+        ]
+      }
+    ]
+  },
+  "inputs": {
+    "asr": "ditya will confirm",
+    "formatted": "Ditya will confirm.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "ABSTAIN",
+    "memory_aware": "Ditya will confirm.",
+    "reason": "no_memory: 'ditya' shares no first letter with 'aaditya'/'aditya', so neither retriever finds a candidate",
+    "memory_row_count": 1,
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Ditya will confirm."
+      },
+      "exact": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Ditya will confirm.",
+        "reasons": [
+          "no_memory"
+        ],
+        "affected_tokens": []
+      },
+      "phonetic": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Ditya will confirm.",
+        "reasons": [
+          "no_memory"
+        ],
+        "affected_tokens": []
+      },
+      "llm": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Ditya will confirm."
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "case_n32_refuse_dictionary_add_has_no_cues",
+  "family": "context_cues",
+  "difficulty": ["D19"],
+  "wall": ["W5"],
+  "title": "Documented limitation: a dictionary_add teach has no cues, so nothing gates it",
+  "why_real": "This is NOT desired behaviour, it is a recorded limitation of the current system: because dictionary_add stores empty context_cues, the Groww memory rewrites the ordinary verb 'grow' in a sentence about houseplants that has nothing to do with the brand, and there is no cue gate to stop it.",
+  "setup": {
+    "observations": [
+      {"source": "dictionary_add", "canonical": "Groww", "forms": ["groww", "grow"]}
+    ]
+  },
+  "inputs": {"asr": "the plants will grow faster now", "formatted": "The plants will grow faster now.", "user_id": "demo_user"},
+  "expected": {
+    "decision": "APPLY",
+    "memory_aware": "The plants will Groww faster now.",
+    "reason": "ok: dictionary_add memories carry no context_cues, so the cue gate never fires (documented limitation, catalogue Q2)",
+    "memory_row_count": 1,
+    "expected_profile_results": {
+      "off": {"decision": "ABSTAIN", "memory_aware": "The plants will grow faster now."},
+      "exact": {"decision": "APPLY", "memory_aware": "The plants will Groww faster now.", "reasons": ["ok"], "affected_tokens": [{"from": "grow", "to": "Groww"}]},
+      "phonetic": {"decision": "APPLY", "memory_aware": "The plants will Groww faster now.", "reasons": ["ok"], "affected_tokens": [{"from": "grow", "to": "Groww"}]},
+      "llm": {"decision": "APPLY", "memory_aware": "The plants will Groww faster now."}
+    }
+  }
+}

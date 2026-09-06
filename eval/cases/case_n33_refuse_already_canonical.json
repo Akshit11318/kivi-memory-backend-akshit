@@ -1,0 +1,26 @@
+{
+  "id": "case_n33_refuse_already_canonical",
+  "family": "casing",
+  "difficulty": [],
+  "wall": ["W3"],
+  "title": "A surface that already spells the canonical needs no rewrite",
+  "why_real": "The formatter already wrote the name exactly as the user's memory has it, so any rewrite here would be a no-op decorated as an edit, and the system correctly recognizes it has nothing to do.",
+  "setup": {
+    "observations": [
+      {"source": "dictionary_add", "canonical": "Meera", "forms": ["meera", "mira"]}
+    ]
+  },
+  "inputs": {"asr": "meera approved it", "formatted": "Meera approved it.", "user_id": "demo_user"},
+  "expected": {
+    "decision": "ABSTAIN",
+    "memory_aware": "Meera approved it.",
+    "reason": "already_canonical: token.lower() equals canonical.lower()",
+    "memory_row_count": 1,
+    "expected_profile_results": {
+      "off": {"decision": "ABSTAIN", "memory_aware": "Meera approved it."},
+      "exact": {"decision": "ABSTAIN", "memory_aware": "Meera approved it.", "reasons": ["already_canonical"], "affected_tokens": []},
+      "phonetic": {"decision": "ABSTAIN", "memory_aware": "Meera approved it.", "reasons": ["already_canonical"], "affected_tokens": []},
+      "llm": {"decision": "ABSTAIN", "memory_aware": "Meera approved it."}
+    }
+  }
+}

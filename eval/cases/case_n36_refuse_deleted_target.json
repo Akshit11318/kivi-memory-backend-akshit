@@ -1,0 +1,26 @@
+{
+  "id": "case_n36_refuse_deleted_target",
+  "family": "edge_robustness",
+  "difficulty": ["D12"],
+  "wall": [],
+  "title": "Never insert a word the formatter dropped",
+  "why_real": "ASR deletion clipped the name entirely out of the formatted text ('The papers will be signed.' names nobody), and the system must not hallucinate the missing name back in just because a memory for it exists.",
+  "setup": {
+    "observations": [
+      {"source": "dictionary_add", "canonical": "Moorthy", "forms": ["moorthy", "murthy"]}
+    ]
+  },
+  "inputs": {"asr": "murthy will sign the papers", "formatted": "The papers will be signed.", "user_id": "demo_user"},
+  "expected": {
+    "decision": "ABSTAIN",
+    "memory_aware": "The papers will be signed.",
+    "reason": "no_memory: the target surface is absent from the formatted text, so retrieval finds nothing to attach to",
+    "memory_row_count": 1,
+    "expected_profile_results": {
+      "off": {"decision": "ABSTAIN", "memory_aware": "The papers will be signed."},
+      "exact": {"decision": "ABSTAIN", "memory_aware": "The papers will be signed.", "reasons": ["no_memory"], "affected_tokens": []},
+      "phonetic": {"decision": "ABSTAIN", "memory_aware": "The papers will be signed.", "reasons": ["no_memory"], "affected_tokens": []},
+      "llm": {"decision": "ABSTAIN", "memory_aware": "The papers will be signed."}
+    }
+  }
+}

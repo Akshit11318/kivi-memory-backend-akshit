@@ -1,0 +1,22 @@
+{
+  "id": "case_n43_noop_clinic_line_empty_store",
+  "family": "noop",
+  "difficulty": ["D18"],
+  "wall": [],
+  "title": "A cold store has nothing to say about a clinic note",
+  "why_real": "Most real utterances carry no personal vocabulary at all; with an empty store and a routine clinic OPD line, the honest behaviour is to hand the formatted text back completely unchanged.",
+  "setup": {"observations": []},
+  "inputs": {"asr": "patient reports mild fever since monday", "formatted": "Patient reports mild fever since Monday.", "user_id": "demo_user"},
+  "expected": {
+    "decision": "ABSTAIN",
+    "memory_aware": "Patient reports mild fever since Monday.",
+    "reason": "no_memory: the store is empty, so every token abstains identically",
+    "memory_row_count": 0,
+    "expected_profile_results": {
+      "off": {"decision": "ABSTAIN", "memory_aware": "Patient reports mild fever since Monday."},
+      "exact": {"decision": "ABSTAIN", "memory_aware": "Patient reports mild fever since Monday.", "reasons": ["no_memory"], "affected_tokens": []},
+      "phonetic": {"decision": "ABSTAIN", "memory_aware": "Patient reports mild fever since Monday.", "reasons": ["no_memory"], "affected_tokens": []},
+      "llm": {"decision": "ABSTAIN", "memory_aware": "Patient reports mild fever since Monday."}
+    }
+  }
+}

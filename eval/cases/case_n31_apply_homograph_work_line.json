@@ -1,0 +1,31 @@
+{
+  "id": "case_n31_apply_homograph_work_line",
+  "family": "context_cues",
+  "difficulty": ["D10"],
+  "wall": ["W5"],
+  "title": "The matched work-context line the cue gate is supposed to let through",
+  "why_real": "The same Tumblr memory as the household case, but this sentence shares the teach line's cues (post, update), so the same brand-vs-noun ambiguity resolves the other way and the rewrite fires.",
+  "setup": {
+    "observations": [
+      {
+        "source": "correction",
+        "asr": "post the update on tumbler",
+        "formatted": "Post the update on Tumbler.",
+        "final": "Post the update on Tumblr."
+      }
+    ]
+  },
+  "inputs": {"asr": "post the update on tumbler tonight", "formatted": "Post the update on Tumbler tonight.", "user_id": "demo_user"},
+  "expected": {
+    "decision": "APPLY",
+    "memory_aware": "Post the update on Tumblr tonight.",
+    "reason": "ok: cue overlap ({post, update}) lets the Tumblr memory through",
+    "memory_row_count": 1,
+    "expected_profile_results": {
+      "off": {"decision": "ABSTAIN", "memory_aware": "Post the update on Tumbler tonight."},
+      "exact": {"decision": "APPLY", "memory_aware": "Post the update on Tumblr tonight.", "reasons": ["ok"], "affected_tokens": [{"from": "Tumbler", "to": "Tumblr"}]},
+      "phonetic": {"decision": "APPLY", "memory_aware": "Post the update on Tumblr tonight.", "reasons": ["ok"], "affected_tokens": [{"from": "Tumbler", "to": "Tumblr"}]},
+      "llm": {"decision": "APPLY", "memory_aware": "Post the update on Tumblr tonight."}
+    }
+  }
+}

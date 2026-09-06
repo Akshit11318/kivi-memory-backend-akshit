@@ -1,0 +1,59 @@
+{
+  "id": "case_n41_learner_refuse_content_edit",
+  "family": "learner_gate",
+  "difficulty": [
+    "D15"
+  ],
+  "wall": [
+    "W2"
+  ],
+  "title": "A content edit wearing a spelling costume must teach nothing",
+  "why_real": "Correcting 'Friday' to 'Thursday' is a calendar fix, not a personal spelling; the grapheme gate's first-letter rule refuses it, so the learner writes zero rows instead of quietly deciding the user's day of the week for them forever.",
+  "setup": {
+    "observations": [
+      {
+        "source": "correction",
+        "asr": "ship it on friday",
+        "formatted": "Ship it on Friday.",
+        "final": "Ship it on Thursday."
+      }
+    ]
+  },
+  "inputs": {
+    "asr": "ship it on friday",
+    "formatted": "Ship it on Friday.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "ABSTAIN",
+    "memory_aware": "Ship it on Friday.",
+    "reason": "not_grapheme_similar: 'Friday'/'Thursday' start with different letters, so the learner refuses to write a memory",
+    "memory_row_count": 0,
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Ship it on Friday."
+      },
+      "exact": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Ship it on Friday.",
+        "reasons": [
+          "no_memory"
+        ],
+        "affected_tokens": []
+      },
+      "phonetic": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Ship it on Friday.",
+        "reasons": [
+          "no_memory"
+        ],
+        "affected_tokens": []
+      },
+      "llm": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Ship it on Friday."
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "id": "case_n42_learner_refuse_grammar_homophone",
+  "family": "learner_gate",
+  "difficulty": ["D15"],
+  "wall": [],
+  "title": "A grammar fix that edit-distance alone cannot tell from a spelling correction",
+  "why_real": "'there' to 'their' scores higher on plain edit-distance similarity than the brief's own kiwi/kivi example, which is exactly why the system needs a named homophone list rather than a similarity threshold; the learner writes zero rows.",
+  "setup": {
+    "observations": [
+      {
+        "source": "correction",
+        "asr": "send it to there team",
+        "formatted": "Send it to there team.",
+        "final": "Send it to their team."
+      }
+    ]
+  },
+  "inputs": {"asr": "send it to there team", "formatted": "Send it to there team.", "user_id": "demo_user"},
+  "expected": {
+    "decision": "ABSTAIN",
+    "memory_aware": "Send it to there team.",
+    "reason": "refused_homophone: 'there'/'their' is on the named homophone refuse list, so the learner writes nothing",
+    "memory_row_count": 0,
+    "expected_profile_results": {
+      "off": {"decision": "ABSTAIN", "memory_aware": "Send it to there team."},
+      "exact": {"decision": "ABSTAIN", "memory_aware": "Send it to there team.", "reasons": ["no_memory"], "affected_tokens": []},
+      "phonetic": {"decision": "ABSTAIN", "memory_aware": "Send it to there team.", "reasons": ["no_memory"], "affected_tokens": []},
+      "llm": {"decision": "ABSTAIN", "memory_aware": "Send it to there team."}
+    }
+  }
+}
