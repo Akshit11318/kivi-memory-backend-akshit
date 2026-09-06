@@ -1,0 +1,1797 @@
+{
+  "profiles": [
+    "off",
+    "exact",
+    "phonetic",
+    "llm"
+  ],
+  "cases": [
+    {
+      "id": "case_01_useful_apply_brief",
+      "family": "useful_apply",
+      "memory_row_count": 2,
+      "profiles": [
+        {
+          "profile": "off",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Ask Aditya to review the Sarvam Kiwi service.",
+          "actual_memory_aware": "Ask Aditya to review the Sarvam Kiwi service.",
+          "classification": "expected_abstain",
+          "reason": "memory disabled",
+          "latency_ms": 0.000719002855475992,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "exact",
+          "status": "PASS",
+          "expected_decision": "APPLY",
+          "actual_decision": "APPLY",
+          "expected_memory_aware": "Ask Aaditya to review the Sarvam Kivi service.",
+          "actual_memory_aware": "Ask Aaditya to review the Sarvam Kivi service.",
+          "classification": "useful_apply",
+          "reason": "applied Aaditya, Kivi",
+          "latency_ms": 0.20488399604801089,
+          "model_calls": 0,
+          "memory_ids_used": [
+            1,
+            2
+          ]
+        },
+        {
+          "profile": "phonetic",
+          "status": "PASS",
+          "expected_decision": "APPLY",
+          "actual_decision": "APPLY",
+          "expected_memory_aware": "Ask Aaditya to review the Sarvam Kivi service.",
+          "actual_memory_aware": "Ask Aaditya to review the Sarvam Kivi service.",
+          "classification": "useful_apply",
+          "reason": "applied Aaditya, Kivi",
+          "latency_ms": 0.28744599694618955,
+          "model_calls": 0,
+          "memory_ids_used": [
+            1,
+            2
+          ]
+        },
+        {
+          "profile": "llm",
+          "status": "SKIPPED",
+          "expected_decision": "APPLY",
+          "actual_decision": null,
+          "expected_memory_aware": "Ask Aaditya to review the Sarvam Kivi service.",
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    },
+    {
+      "id": "case_02_useful_apply_two_names",
+      "family": "two_names",
+      "memory_row_count": 2,
+      "profiles": [
+        {
+          "profile": "off",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Ask Gautam and Ananya to join the sprint demo.",
+          "actual_memory_aware": "Ask Gautam and Ananya to join the sprint demo.",
+          "classification": "expected_abstain",
+          "reason": "memory disabled",
+          "latency_ms": 0.0008220013114623725,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "exact",
+          "status": "FAIL",
+          "expected_decision": "APPLY",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Ask Gautham and Ananyaa to join the sprint demo.",
+          "actual_memory_aware": "Ask Gautam and Ananya to join the sprint demo.",
+          "classification": "unexpected_abstain",
+          "reason": "context_mismatch, no_memory",
+          "latency_ms": 0.18249099957756698,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "phonetic",
+          "status": "FAIL",
+          "expected_decision": "APPLY",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Ask Gautham and Ananyaa to join the sprint demo.",
+          "actual_memory_aware": "Ask Gautam and Ananya to join the sprint demo.",
+          "classification": "unexpected_abstain",
+          "reason": "context_mismatch, no_memory",
+          "latency_ms": 0.2978019983856939,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "llm",
+          "status": "SKIPPED",
+          "expected_decision": "APPLY",
+          "actual_decision": null,
+          "expected_memory_aware": "Ask Gautham and Ananyaa to join the sprint demo.",
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    },
+    {
+      "id": "case_03_deliberate_noop_empty_store",
+      "family": "noop",
+      "memory_row_count": 0,
+      "profiles": [
+        {
+          "profile": "off",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Please schedule the quarterly planning call for next Monday morning.",
+          "actual_memory_aware": "Please schedule the quarterly planning call for next Monday morning.",
+          "classification": "expected_abstain",
+          "reason": "memory disabled",
+          "latency_ms": 0.00045499473344534636,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "exact",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Please schedule the quarterly planning call for next Monday morning.",
+          "actual_memory_aware": "Please schedule the quarterly planning call for next Monday morning.",
+          "classification": "expected_abstain",
+          "reason": "no_memory",
+          "latency_ms": 0.14985800225986168,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "phonetic",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Please schedule the quarterly planning call for next Monday morning.",
+          "actual_memory_aware": "Please schedule the quarterly planning call for next Monday morning.",
+          "classification": "expected_abstain",
+          "reason": "no_memory",
+          "latency_ms": 0.12913299724459648,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "llm",
+          "status": "SKIPPED",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": null,
+          "expected_memory_aware": "Please schedule the quarterly planning call for next Monday morning.",
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    },
+    {
+      "id": "case_04_irrelevant_memory_store",
+      "family": "noop",
+      "memory_row_count": 2,
+      "profiles": [
+        {
+          "profile": "off",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "We need to buy two cartons of milk and brown bread from the store.",
+          "actual_memory_aware": "We need to buy two cartons of milk and brown bread from the store.",
+          "classification": "expected_abstain",
+          "reason": "memory disabled",
+          "latency_ms": 0.0004440007614903152,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "exact",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "We need to buy two cartons of milk and brown bread from the store.",
+          "actual_memory_aware": "We need to buy two cartons of milk and brown bread from the store.",
+          "classification": "expected_abstain",
+          "reason": "no_memory",
+          "latency_ms": 0.2221670001745224,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "phonetic",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "We need to buy two cartons of milk and brown bread from the store.",
+          "actual_memory_aware": "We need to buy two cartons of milk and brown bread from the store.",
+          "classification": "expected_abstain",
+          "reason": "no_memory",
+          "latency_ms": 0.6722649995936081,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "llm",
+          "status": "SKIPPED",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": null,
+          "expected_memory_aware": "We need to buy two cartons of milk and brown bread from the store.",
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    },
+    {
+      "id": "case_05_weak_confidence_abstain",
+      "family": "abstain_weak",
+      "memory_row_count": 1,
+      "profiles": [
+        {
+          "profile": "off",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Sidharth will verify the pull request.",
+          "actual_memory_aware": "Sidharth will verify the pull request.",
+          "classification": "expected_abstain",
+          "reason": "memory disabled",
+          "latency_ms": 0.0009880022844299674,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "exact",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Sidharth will verify the pull request.",
+          "actual_memory_aware": "Sidharth will verify the pull request.",
+          "classification": "expected_abstain",
+          "reason": "low_confidence, no_memory",
+          "latency_ms": 0.3521020043990575,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "phonetic",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Sidharth will verify the pull request.",
+          "actual_memory_aware": "Sidharth will verify the pull request.",
+          "classification": "expected_abstain",
+          "reason": "low_confidence, no_memory",
+          "latency_ms": 0.46874400140950456,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "llm",
+          "status": "SKIPPED",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": null,
+          "expected_memory_aware": "Sidharth will verify the pull request.",
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    },
+    {
+      "id": "case_06_observe_no_assertion",
+      "family": "learner_gate",
+      "memory_row_count": 0,
+      "profiles": [
+        {
+          "profile": "off",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Ask Prateek to check Notion.",
+          "actual_memory_aware": "Ask Prateek to check Notion.",
+          "classification": "expected_abstain",
+          "reason": "memory disabled",
+          "latency_ms": 0.0009419964044354856,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "exact",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Ask Prateek to check Notion.",
+          "actual_memory_aware": "Ask Prateek to check Notion.",
+          "classification": "expected_abstain",
+          "reason": "no_memory",
+          "latency_ms": 0.23780600167810917,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "phonetic",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Ask Prateek to check Notion.",
+          "actual_memory_aware": "Ask Prateek to check Notion.",
+          "classification": "expected_abstain",
+          "reason": "no_memory",
+          "latency_ms": 0.1692890000413172,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "llm",
+          "status": "SKIPPED",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": null,
+          "expected_memory_aware": "Ask Prateek to check Notion.",
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    },
+    {
+      "id": "case_07_content_edit_rejected",
+      "family": "learner_gate",
+      "memory_row_count": 0,
+      "profiles": [
+        {
+          "profile": "off",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "The meeting is on Friday.",
+          "actual_memory_aware": "The meeting is on Friday.",
+          "classification": "expected_abstain",
+          "reason": "memory disabled",
+          "latency_ms": 0.0018479986465536058,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "exact",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "The meeting is on Friday.",
+          "actual_memory_aware": "The meeting is on Friday.",
+          "classification": "expected_abstain",
+          "reason": "no_memory",
+          "latency_ms": 0.5448399970191531,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "phonetic",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "The meeting is on Friday.",
+          "actual_memory_aware": "The meeting is on Friday.",
+          "classification": "expected_abstain",
+          "reason": "no_memory",
+          "latency_ms": 0.33850200270535424,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "llm",
+          "status": "SKIPPED",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": null,
+          "expected_memory_aware": "The meeting is on Friday.",
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    },
+    {
+      "id": "case_08_conflicting_canonicals",
+      "family": "conflict",
+      "memory_row_count": 2,
+      "profiles": [
+        {
+          "profile": "off",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Please inform Kavita about the release.",
+          "actual_memory_aware": "Please inform Kavita about the release.",
+          "classification": "expected_abstain",
+          "reason": "memory disabled",
+          "latency_ms": 0.0011110023478977382,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "exact",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Please inform Kavita about the release.",
+          "actual_memory_aware": "Please inform Kavita about the release.",
+          "classification": "expected_abstain",
+          "reason": "conflicting_canonicals, no_memory",
+          "latency_ms": 0.46069399832049385,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "phonetic",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Please inform Kavita about the release.",
+          "actual_memory_aware": "Please inform Kavita about the release.",
+          "classification": "expected_abstain",
+          "reason": "conflicting_canonicals, no_memory",
+          "latency_ms": 0.5736960010835901,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "llm",
+          "status": "SKIPPED",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": null,
+          "expected_memory_aware": "Please inform Kavita about the release.",
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    },
+    {
+      "id": "case_09_empty_garbage_input",
+      "family": "edge_robustness",
+      "memory_row_count": 1,
+      "profiles": [
+        {
+          "profile": "off",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "",
+          "actual_memory_aware": "",
+          "classification": "expected_abstain",
+          "reason": "memory disabled",
+          "latency_ms": 0.0017240017768926919,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "exact",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "",
+          "actual_memory_aware": "",
+          "classification": "expected_abstain",
+          "reason": "no_memory",
+          "latency_ms": 0.039758000639267266,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "phonetic",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "",
+          "actual_memory_aware": "",
+          "classification": "expected_abstain",
+          "reason": "no_memory",
+          "latency_ms": 0.01728099596221,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "llm",
+          "status": "SKIPPED",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": null,
+          "expected_memory_aware": "",
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    },
+    {
+      "id": "case_10_phonetic_only_retrieval",
+      "family": "phonetic_only",
+      "memory_row_count": 1,
+      "profiles": [
+        {
+          "profile": "off",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Deploy the Kiwi service.",
+          "actual_memory_aware": "Deploy the Kiwi service.",
+          "classification": "expected_abstain",
+          "reason": "memory disabled",
+          "latency_ms": 0.0012730015441775322,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "exact",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Deploy the Kiwi service.",
+          "actual_memory_aware": "Deploy the Kiwi service.",
+          "classification": "expected_abstain",
+          "reason": "no_memory",
+          "latency_ms": 0.2829939985531382,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "phonetic",
+          "status": "PASS",
+          "expected_decision": "APPLY",
+          "actual_decision": "APPLY",
+          "expected_memory_aware": "Deploy the Kivi service.",
+          "actual_memory_aware": "Deploy the Kivi service.",
+          "classification": "useful_apply",
+          "reason": "applied Kivi",
+          "latency_ms": 0.4202940035611391,
+          "model_calls": 0,
+          "memory_ids_used": [
+            1
+          ]
+        },
+        {
+          "profile": "llm",
+          "status": "SKIPPED",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": null,
+          "expected_memory_aware": "Deploy the Kiwi service.",
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    },
+    {
+      "id": "case_11_word_boundary",
+      "family": "boundary",
+      "memory_row_count": 1,
+      "profiles": [
+        {
+          "profile": "off",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Mika Kivimaki published a new paper.",
+          "actual_memory_aware": "Mika Kivimaki published a new paper.",
+          "classification": "expected_abstain",
+          "reason": "memory disabled",
+          "latency_ms": 0.0018230057321488857,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "exact",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Mika Kivimaki published a new paper.",
+          "actual_memory_aware": "Mika Kivimaki published a new paper.",
+          "classification": "expected_abstain",
+          "reason": "no_memory",
+          "latency_ms": 0.44520800292957574,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "phonetic",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Mika Kivimaki published a new paper.",
+          "actual_memory_aware": "Mika Kivimaki published a new paper.",
+          "classification": "expected_abstain",
+          "reason": "no_memory",
+          "latency_ms": 0.503085000673309,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "llm",
+          "status": "SKIPPED",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": null,
+          "expected_memory_aware": "Mika Kivimaki published a new paper.",
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    },
+    {
+      "id": "case_12_cold_start_reset",
+      "family": "reset_state",
+      "memory_row_count": 0,
+      "profiles": [
+        {
+          "profile": "off",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Deploy the service tomorrow.",
+          "actual_memory_aware": "Deploy the service tomorrow.",
+          "classification": "expected_abstain",
+          "reason": "memory disabled",
+          "latency_ms": 0.0012620002962648869,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "exact",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Deploy the service tomorrow.",
+          "actual_memory_aware": "Deploy the service tomorrow.",
+          "classification": "expected_abstain",
+          "reason": "no_memory",
+          "latency_ms": 0.2641300015966408,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "phonetic",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Deploy the service tomorrow.",
+          "actual_memory_aware": "Deploy the service tomorrow.",
+          "classification": "expected_abstain",
+          "reason": "no_memory",
+          "latency_ms": 0.19410200184211135,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "llm",
+          "status": "SKIPPED",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": null,
+          "expected_memory_aware": "Deploy the service tomorrow.",
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    },
+    {
+      "id": "case_13_duplicate_observe_idempotent",
+      "family": "idempotency",
+      "memory_row_count": 1,
+      "profiles": [
+        {
+          "profile": "off",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Ask Lakshmi to deploy.",
+          "actual_memory_aware": "Ask Lakshmi to deploy.",
+          "classification": "expected_abstain",
+          "reason": "memory disabled",
+          "latency_ms": 0.0014030010788701475,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "exact",
+          "status": "PASS",
+          "expected_decision": "APPLY",
+          "actual_decision": "APPLY",
+          "expected_memory_aware": "Ask Laxmi to deploy.",
+          "actual_memory_aware": "Ask Laxmi to deploy.",
+          "classification": "useful_apply",
+          "reason": "applied Laxmi",
+          "latency_ms": 0.37840699951630086,
+          "model_calls": 0,
+          "memory_ids_used": [
+            1
+          ]
+        },
+        {
+          "profile": "phonetic",
+          "status": "PASS",
+          "expected_decision": "APPLY",
+          "actual_decision": "APPLY",
+          "expected_memory_aware": "Ask Laxmi to deploy.",
+          "actual_memory_aware": "Ask Laxmi to deploy.",
+          "classification": "useful_apply",
+          "reason": "applied Laxmi",
+          "latency_ms": 0.3621140058385208,
+          "model_calls": 0,
+          "memory_ids_used": [
+            1
+          ]
+        },
+        {
+          "profile": "llm",
+          "status": "SKIPPED",
+          "expected_decision": "APPLY",
+          "actual_decision": null,
+          "expected_memory_aware": "Ask Laxmi to deploy.",
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    },
+    {
+      "id": "case_14_already_canonical_abstain",
+      "family": "noop",
+      "memory_row_count": 1,
+      "profiles": [
+        {
+          "profile": "off",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Ask Niharika to review the changes.",
+          "actual_memory_aware": "Ask Niharika to review the changes.",
+          "classification": "expected_abstain",
+          "reason": "memory disabled",
+          "latency_ms": 0.0015009936760179698,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "exact",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Ask Niharika to review the changes.",
+          "actual_memory_aware": "Ask Niharika to review the changes.",
+          "classification": "expected_abstain",
+          "reason": "already_canonical, no_memory",
+          "latency_ms": 0.505711002915632,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "phonetic",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Ask Niharika to review the changes.",
+          "actual_memory_aware": "Ask Niharika to review the changes.",
+          "classification": "expected_abstain",
+          "reason": "already_canonical, no_memory",
+          "latency_ms": 0.5061949996161275,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "llm",
+          "status": "SKIPPED",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": null,
+          "expected_memory_aware": "Ask Niharika to review the changes.",
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    },
+    {
+      "id": "case_15_multi_user_isolation",
+      "family": "isolation",
+      "memory_row_count": 0,
+      "profiles": [
+        {
+          "profile": "off",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Run the Kiwi benchmark.",
+          "actual_memory_aware": "Run the Kiwi benchmark.",
+          "classification": "expected_abstain",
+          "reason": "memory disabled",
+          "latency_ms": 0.0019340004655532539,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "exact",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Run the Kiwi benchmark.",
+          "actual_memory_aware": "Run the Kiwi benchmark.",
+          "classification": "expected_abstain",
+          "reason": "no_memory",
+          "latency_ms": 0.38135299837449566,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "phonetic",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Run the Kiwi benchmark.",
+          "actual_memory_aware": "Run the Kiwi benchmark.",
+          "classification": "expected_abstain",
+          "reason": "no_memory",
+          "latency_ms": 0.2515580054023303,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "llm",
+          "status": "SKIPPED",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": null,
+          "expected_memory_aware": "Run the Kiwi benchmark.",
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    },
+    {
+      "id": "case_16_code_switch_hinglish",
+      "family": "code_switch",
+      "memory_row_count": 1,
+      "profiles": [
+        {
+          "profile": "off",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Yaar Deeksha suno, check the PR.",
+          "actual_memory_aware": "Yaar Deeksha suno, check the PR.",
+          "classification": "expected_abstain",
+          "reason": "memory disabled",
+          "latency_ms": 0.0015830009942874312,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "exact",
+          "status": "PASS",
+          "expected_decision": "APPLY",
+          "actual_decision": "APPLY",
+          "expected_memory_aware": "Yaar Diksha suno, check the PR.",
+          "actual_memory_aware": "Yaar Diksha suno, check the PR.",
+          "classification": "useful_apply",
+          "reason": "applied Diksha",
+          "latency_ms": 1.20444200001657,
+          "model_calls": 0,
+          "memory_ids_used": [
+            1
+          ]
+        },
+        {
+          "profile": "phonetic",
+          "status": "PASS",
+          "expected_decision": "APPLY",
+          "actual_decision": "APPLY",
+          "expected_memory_aware": "Yaar Diksha suno, check the PR.",
+          "actual_memory_aware": "Yaar Diksha suno, check the PR.",
+          "classification": "useful_apply",
+          "reason": "applied Diksha",
+          "latency_ms": 0.5253109993645921,
+          "model_calls": 0,
+          "memory_ids_used": [
+            1
+          ]
+        },
+        {
+          "profile": "llm",
+          "status": "SKIPPED",
+          "expected_decision": "APPLY",
+          "actual_decision": null,
+          "expected_memory_aware": "Yaar Diksha suno, check the PR.",
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    },
+    {
+      "id": "case_17_token_count_mismatch_alignment",
+      "family": "alignment_stress",
+      "memory_row_count": 1,
+      "profiles": [
+        {
+          "profile": "off",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "I'm going to ping Tanmay.",
+          "actual_memory_aware": "I'm going to ping Tanmay.",
+          "classification": "expected_abstain",
+          "reason": "memory disabled",
+          "latency_ms": 0.001186002918984741,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "exact",
+          "status": "PASS",
+          "expected_decision": "APPLY",
+          "actual_decision": "APPLY",
+          "expected_memory_aware": "I'm going to ping Tanmaay.",
+          "actual_memory_aware": "I'm going to ping Tanmaay.",
+          "classification": "useful_apply",
+          "reason": "applied Tanmaay",
+          "latency_ms": 0.41488699935143813,
+          "model_calls": 0,
+          "memory_ids_used": [
+            1
+          ]
+        },
+        {
+          "profile": "phonetic",
+          "status": "PASS",
+          "expected_decision": "APPLY",
+          "actual_decision": "APPLY",
+          "expected_memory_aware": "I'm going to ping Tanmaay.",
+          "actual_memory_aware": "I'm going to ping Tanmaay.",
+          "classification": "useful_apply",
+          "reason": "applied Tanmaay",
+          "latency_ms": 0.3858580021187663,
+          "model_calls": 0,
+          "memory_ids_used": [
+            1
+          ]
+        },
+        {
+          "profile": "llm",
+          "status": "SKIPPED",
+          "expected_decision": "APPLY",
+          "actual_decision": null,
+          "expected_memory_aware": "I'm going to ping Tanmaay.",
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    },
+    {
+      "id": "case_18_punctuation_attached_clitics",
+      "family": "punctuation",
+      "memory_row_count": 1,
+      "profiles": [
+        {
+          "profile": "off",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Kiwi's latency is low.",
+          "actual_memory_aware": "Kiwi's latency is low.",
+          "classification": "expected_abstain",
+          "reason": "memory disabled",
+          "latency_ms": 0.0021229934645816684,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "exact",
+          "status": "PASS",
+          "expected_decision": "APPLY",
+          "actual_decision": "APPLY",
+          "expected_memory_aware": "Kivi's latency is low.",
+          "actual_memory_aware": "Kivi's latency is low.",
+          "classification": "useful_apply",
+          "reason": "applied Kivi",
+          "latency_ms": 0.7268830013344996,
+          "model_calls": 0,
+          "memory_ids_used": [
+            1
+          ]
+        },
+        {
+          "profile": "phonetic",
+          "status": "PASS",
+          "expected_decision": "APPLY",
+          "actual_decision": "APPLY",
+          "expected_memory_aware": "Kivi's latency is low.",
+          "actual_memory_aware": "Kivi's latency is low.",
+          "classification": "useful_apply",
+          "reason": "applied Kivi",
+          "latency_ms": 0.541054003406316,
+          "model_calls": 0,
+          "memory_ids_used": [
+            1
+          ]
+        },
+        {
+          "profile": "llm",
+          "status": "SKIPPED",
+          "expected_decision": "APPLY",
+          "actual_decision": null,
+          "expected_memory_aware": "Kivi's latency is low.",
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    },
+    {
+      "id": "case_19_multiple_mentions_one_sentence",
+      "family": "multi_mention",
+      "memory_row_count": 1,
+      "profiles": [
+        {
+          "profile": "off",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Prateek asked Prateek to call Prateek.",
+          "actual_memory_aware": "Prateek asked Prateek to call Prateek.",
+          "classification": "expected_abstain",
+          "reason": "memory disabled",
+          "latency_ms": 0.0013979952200315893,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "exact",
+          "status": "PASS",
+          "expected_decision": "APPLY",
+          "actual_decision": "APPLY",
+          "expected_memory_aware": "Pratik asked Pratik to call Pratik.",
+          "actual_memory_aware": "Pratik asked Pratik to call Pratik.",
+          "classification": "useful_apply",
+          "reason": "applied Pratik",
+          "latency_ms": 0.5826799970236607,
+          "model_calls": 0,
+          "memory_ids_used": [
+            1
+          ]
+        },
+        {
+          "profile": "phonetic",
+          "status": "PASS",
+          "expected_decision": "APPLY",
+          "actual_decision": "APPLY",
+          "expected_memory_aware": "Pratik asked Pratik to call Pratik.",
+          "actual_memory_aware": "Pratik asked Pratik to call Pratik.",
+          "classification": "useful_apply",
+          "reason": "applied Pratik",
+          "latency_ms": 0.5226100038271397,
+          "model_calls": 0,
+          "memory_ids_used": [
+            1
+          ]
+        },
+        {
+          "profile": "llm",
+          "status": "SKIPPED",
+          "expected_decision": "APPLY",
+          "actual_decision": null,
+          "expected_memory_aware": "Pratik asked Pratik to call Pratik.",
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    },
+    {
+      "id": "case_20_sentence_initial_case",
+      "family": "casing",
+      "memory_row_count": 1,
+      "profiles": [
+        {
+          "profile": "off",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Kiwi is our product.",
+          "actual_memory_aware": "Kiwi is our product.",
+          "classification": "expected_abstain",
+          "reason": "memory disabled",
+          "latency_ms": 0.00177200126927346,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "exact",
+          "status": "FAIL",
+          "expected_decision": "APPLY",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Kivi is our product.",
+          "actual_memory_aware": "Kiwi is our product.",
+          "classification": "unexpected_abstain",
+          "reason": "context_mismatch, no_memory",
+          "latency_ms": 0.5260340039967559,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "phonetic",
+          "status": "FAIL",
+          "expected_decision": "APPLY",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Kivi is our product.",
+          "actual_memory_aware": "Kiwi is our product.",
+          "classification": "unexpected_abstain",
+          "reason": "context_mismatch, no_memory",
+          "latency_ms": 0.40369299676967785,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "llm",
+          "status": "SKIPPED",
+          "expected_decision": "APPLY",
+          "actual_decision": null,
+          "expected_memory_aware": "Kivi is our product.",
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    },
+    {
+      "id": "case_21_short_token_phonetic_fp",
+      "family": "phonetic_guard",
+      "memory_row_count": 1,
+      "profiles": [
+        {
+          "profile": "off",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Robbie joined the engineering call.",
+          "actual_memory_aware": "Robbie joined the engineering call.",
+          "classification": "expected_abstain",
+          "reason": "memory disabled",
+          "latency_ms": 0.0011259980965405703,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "exact",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Robbie joined the engineering call.",
+          "actual_memory_aware": "Robbie joined the engineering call.",
+          "classification": "expected_abstain",
+          "reason": "no_memory",
+          "latency_ms": 0.3020090007339604,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "phonetic",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Robbie joined the engineering call.",
+          "actual_memory_aware": "Robbie joined the engineering call.",
+          "classification": "expected_abstain",
+          "reason": "no_memory",
+          "latency_ms": 0.38240200228756294,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "llm",
+          "status": "SKIPPED",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": null,
+          "expected_memory_aware": "Robbie joined the engineering call.",
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    },
+    {
+      "id": "case_22_merge_dictionary_forms",
+      "family": "form_merge",
+      "memory_row_count": 1,
+      "profiles": [
+        {
+          "profile": "off",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Test the Kivvy service.",
+          "actual_memory_aware": "Test the Kivvy service.",
+          "classification": "expected_abstain",
+          "reason": "memory disabled",
+          "latency_ms": 0.001963002432603389,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "exact",
+          "status": "PASS",
+          "expected_decision": "APPLY",
+          "actual_decision": "APPLY",
+          "expected_memory_aware": "Test the Kivi service.",
+          "actual_memory_aware": "Test the Kivi service.",
+          "classification": "useful_apply",
+          "reason": "applied Kivi",
+          "latency_ms": 0.7280210047611035,
+          "model_calls": 0,
+          "memory_ids_used": [
+            1
+          ]
+        },
+        {
+          "profile": "phonetic",
+          "status": "PASS",
+          "expected_decision": "APPLY",
+          "actual_decision": "APPLY",
+          "expected_memory_aware": "Test the Kivi service.",
+          "actual_memory_aware": "Test the Kivi service.",
+          "classification": "useful_apply",
+          "reason": "applied Kivi",
+          "latency_ms": 0.8023920017876662,
+          "model_calls": 0,
+          "memory_ids_used": [
+            1
+          ]
+        },
+        {
+          "profile": "llm",
+          "status": "SKIPPED",
+          "expected_decision": "APPLY",
+          "actual_decision": null,
+          "expected_memory_aware": "Test the Kivi service.",
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    },
+    {
+      "id": "case_23_reinforcement_crossing_threshold",
+      "family": "threshold_crossing",
+      "memory_row_count": 1,
+      "profiles": [
+        {
+          "profile": "off",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Choudhury approved the release.",
+          "actual_memory_aware": "Choudhury approved the release.",
+          "classification": "expected_abstain",
+          "reason": "memory disabled",
+          "latency_ms": 0.0013220051187090576,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "exact",
+          "status": "PASS",
+          "expected_decision": "APPLY",
+          "actual_decision": "APPLY",
+          "expected_memory_aware": "Chowdhury approved the release.",
+          "actual_memory_aware": "Chowdhury approved the release.",
+          "classification": "useful_apply",
+          "reason": "applied Chowdhury",
+          "latency_ms": 0.3780469996854663,
+          "model_calls": 0,
+          "memory_ids_used": [
+            1
+          ]
+        },
+        {
+          "profile": "phonetic",
+          "status": "PASS",
+          "expected_decision": "APPLY",
+          "actual_decision": "APPLY",
+          "expected_memory_aware": "Chowdhury approved the release.",
+          "actual_memory_aware": "Chowdhury approved the release.",
+          "classification": "useful_apply",
+          "reason": "applied Chowdhury",
+          "latency_ms": 0.421106000430882,
+          "model_calls": 0,
+          "memory_ids_used": [
+            1
+          ]
+        },
+        {
+          "profile": "llm",
+          "status": "SKIPPED",
+          "expected_decision": "APPLY",
+          "actual_decision": null,
+          "expected_memory_aware": "Chowdhury approved the release.",
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    },
+    {
+      "id": "case_24_formatter_introduced_error",
+      "family": "formatter_error",
+      "memory_row_count": 1,
+      "profiles": [
+        {
+          "profile": "off",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Ask Srinivas to join.",
+          "actual_memory_aware": "Ask Srinivas to join.",
+          "classification": "expected_abstain",
+          "reason": "memory disabled",
+          "latency_ms": 0.0014620018191635609,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "exact",
+          "status": "PASS",
+          "expected_decision": "APPLY",
+          "actual_decision": "APPLY",
+          "expected_memory_aware": "Ask Sreenivas to join.",
+          "actual_memory_aware": "Ask Sreenivas to join.",
+          "classification": "useful_apply",
+          "reason": "applied Sreenivas",
+          "latency_ms": 0.45921899436507374,
+          "model_calls": 0,
+          "memory_ids_used": [
+            1
+          ]
+        },
+        {
+          "profile": "phonetic",
+          "status": "PASS",
+          "expected_decision": "APPLY",
+          "actual_decision": "APPLY",
+          "expected_memory_aware": "Ask Sreenivas to join.",
+          "actual_memory_aware": "Ask Sreenivas to join.",
+          "classification": "useful_apply",
+          "reason": "applied Sreenivas",
+          "latency_ms": 0.38305299676721916,
+          "model_calls": 0,
+          "memory_ids_used": [
+            1
+          ]
+        },
+        {
+          "profile": "llm",
+          "status": "SKIPPED",
+          "expected_decision": "APPLY",
+          "actual_decision": null,
+          "expected_memory_aware": "Ask Sreenivas to join.",
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    },
+    {
+      "id": "case_25_confidence_boundary_075",
+      "family": "boundary",
+      "memory_row_count": 1,
+      "profiles": [
+        {
+          "profile": "off",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Test the Kiwi service.",
+          "actual_memory_aware": "Test the Kiwi service.",
+          "classification": "expected_abstain",
+          "reason": "memory disabled",
+          "latency_ms": 0.002157998096663505,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "exact",
+          "status": "PASS",
+          "expected_decision": "APPLY",
+          "actual_decision": "APPLY",
+          "expected_memory_aware": "Test the Kivi service.",
+          "actual_memory_aware": "Test the Kivi service.",
+          "classification": "useful_apply",
+          "reason": "applied Kivi",
+          "latency_ms": 0.5509120019269176,
+          "model_calls": 0,
+          "memory_ids_used": [
+            1
+          ]
+        },
+        {
+          "profile": "phonetic",
+          "status": "PASS",
+          "expected_decision": "APPLY",
+          "actual_decision": "APPLY",
+          "expected_memory_aware": "Test the Kivi service.",
+          "actual_memory_aware": "Test the Kivi service.",
+          "classification": "useful_apply",
+          "reason": "applied Kivi",
+          "latency_ms": 0.9360390031361021,
+          "model_calls": 0,
+          "memory_ids_used": [
+            1
+          ]
+        },
+        {
+          "profile": "llm",
+          "status": "SKIPPED",
+          "expected_decision": "APPLY",
+          "actual_decision": null,
+          "expected_memory_aware": "Test the Kivi service.",
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    },
+    {
+      "id": "case_26_refuse_homophone_grammar",
+      "family": "learner_gate",
+      "memory_row_count": 0,
+      "profiles": [
+        {
+          "profile": "off",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Look over there.",
+          "actual_memory_aware": "Look over there.",
+          "classification": "expected_abstain",
+          "reason": "memory disabled",
+          "latency_ms": 0.001401000190526247,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "exact",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Look over there.",
+          "actual_memory_aware": "Look over there.",
+          "classification": "expected_abstain",
+          "reason": "no_memory",
+          "latency_ms": 0.3052379979635589,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "phonetic",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Look over there.",
+          "actual_memory_aware": "Look over there.",
+          "classification": "expected_abstain",
+          "reason": "no_memory",
+          "latency_ms": 0.19321299623697996,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "llm",
+          "status": "SKIPPED",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": null,
+          "expected_memory_aware": "Look over there.",
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    },
+    {
+      "id": "case_27_invalid_profile_error",
+      "family": "profile_validation",
+      "memory_row_count": 0,
+      "profiles": [
+        {
+          "profile": "foo",
+          "status": "PASS",
+          "expected_decision": "ERROR",
+          "actual_decision": "ERROR",
+          "expected_memory_aware": null,
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "'foo' not in ('off', 'exact', 'phonetic', 'llm')",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    },
+    {
+      "id": "case_28_context_cues_apply",
+      "family": "context_cues",
+      "memory_row_count": 1,
+      "profiles": [
+        {
+          "profile": "off",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Ask Aditya to review the Sarvam Kiwi service.",
+          "actual_memory_aware": "Ask Aditya to review the Sarvam Kiwi service.",
+          "classification": "expected_abstain",
+          "reason": "memory disabled",
+          "latency_ms": 0.001710999640636146,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "exact",
+          "status": "PASS",
+          "expected_decision": "APPLY",
+          "actual_decision": "APPLY",
+          "expected_memory_aware": "Ask Aditya to review the Sarvam Kivi service.",
+          "actual_memory_aware": "Ask Aditya to review the Sarvam Kivi service.",
+          "classification": "useful_apply",
+          "reason": "applied Kivi",
+          "latency_ms": 0.566916998650413,
+          "model_calls": 0,
+          "memory_ids_used": [
+            1
+          ]
+        },
+        {
+          "profile": "phonetic",
+          "status": "PASS",
+          "expected_decision": "APPLY",
+          "actual_decision": "APPLY",
+          "expected_memory_aware": "Ask Aditya to review the Sarvam Kivi service.",
+          "actual_memory_aware": "Ask Aditya to review the Sarvam Kivi service.",
+          "classification": "useful_apply",
+          "reason": "applied Kivi",
+          "latency_ms": 0.7670420018257573,
+          "model_calls": 0,
+          "memory_ids_used": [
+            1
+          ]
+        },
+        {
+          "profile": "llm",
+          "status": "SKIPPED",
+          "expected_decision": "APPLY",
+          "actual_decision": null,
+          "expected_memory_aware": "Ask Aditya to review the Sarvam Kivi service.",
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    },
+    {
+      "id": "case_29_context_cues_abstain",
+      "family": "context_cues",
+      "memory_row_count": 1,
+      "profiles": [
+        {
+          "profile": "off",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Remind me to buy kiwi tomorrow.",
+          "actual_memory_aware": "Remind me to buy kiwi tomorrow.",
+          "classification": "expected_abstain",
+          "reason": "memory disabled",
+          "latency_ms": 0.0015319965314120054,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "exact",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Remind me to buy kiwi tomorrow.",
+          "actual_memory_aware": "Remind me to buy kiwi tomorrow.",
+          "classification": "expected_abstain",
+          "reason": "context_mismatch, no_memory",
+          "latency_ms": 0.4838919994654134,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "phonetic",
+          "status": "PASS",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": "ABSTAIN",
+          "expected_memory_aware": "Remind me to buy kiwi tomorrow.",
+          "actual_memory_aware": "Remind me to buy kiwi tomorrow.",
+          "classification": "expected_abstain",
+          "reason": "context_mismatch, no_memory",
+          "latency_ms": 0.5051129992352799,
+          "model_calls": 0,
+          "memory_ids_used": []
+        },
+        {
+          "profile": "llm",
+          "status": "SKIPPED",
+          "expected_decision": "ABSTAIN",
+          "actual_decision": null,
+          "expected_memory_aware": "Remind me to buy kiwi tomorrow.",
+          "actual_memory_aware": null,
+          "classification": null,
+          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
+          "latency_ms": 0.0,
+          "model_calls": 0,
+          "memory_ids_used": []
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "off": {
+      "PASS": 28,
+      "FAIL": 0,
+      "SKIPPED": 0,
+      "ERROR": 0,
+      "useful_apply": 0,
+      "unnecessary_apply": 0,
+      "incorrect_apply": 0,
+      "expected_abstain": 28,
+      "unexpected_abstain": 0,
+      "total_latency_ms": 0.03898599970852956,
+      "model_calls": 0
+    },
+    "exact": {
+      "PASS": 26,
+      "FAIL": 2,
+      "SKIPPED": 0,
+      "ERROR": 0,
+      "useful_apply": 11,
+      "unnecessary_apply": 0,
+      "incorrect_apply": 0,
+      "expected_abstain": 15,
+      "unexpected_abstain": 2,
+      "total_latency_ms": 11.881584003276657,
+      "model_calls": 0
+    },
+    "phonetic": {
+      "PASS": 26,
+      "FAIL": 2,
+      "SKIPPED": 0,
+      "ERROR": 0,
+      "useful_apply": 12,
+      "unnecessary_apply": 0,
+      "incorrect_apply": 0,
+      "expected_abstain": 14,
+      "unexpected_abstain": 2,
+      "total_latency_ms": 11.960392017499544,
+      "model_calls": 0
+    },
+    "llm": {
+      "PASS": 0,
+      "FAIL": 0,
+      "SKIPPED": 28,
+      "ERROR": 0,
+      "useful_apply": 0,
+      "unnecessary_apply": 0,
+      "incorrect_apply": 0,
+      "expected_abstain": 0,
+      "unexpected_abstain": 0,
+      "total_latency_ms": 0.0,
+      "model_calls": 0
+    },
+    "foo": {
+      "PASS": 1,
+      "FAIL": 0,
+      "SKIPPED": 0,
+      "ERROR": 0,
+      "useful_apply": 0,
+      "unnecessary_apply": 0,
+      "incorrect_apply": 0,
+      "expected_abstain": 0,
+      "unexpected_abstain": 0,
+      "total_latency_ms": 0.0,
+      "model_calls": 0
+    }
+  }
+}

@@ -145,6 +145,23 @@ def test_context_apply_on_work_sentence_abstain_on_grocery(store: MemoryStore) -
     assert kiwi_decision.reason == "context_mismatch"
 
 
+def test_sentence_final_word_correction_still_applies_later(store: MemoryStore) -> None:
+    correction(
+        store,
+        "demo",
+        formatted="This is a phaneer sandwitch.",
+        final="This is a paneer sandwich.",
+    )
+    trace = run(
+        store,
+        "demo",
+        asr="tis is a phaneer sandhwitch",
+        formatted="Tis is a phaneer sandwitch.",
+        profile="exact",
+    )
+    assert trace.memory_aware == "Tis is a paneer sandwich."
+
+
 def test_multiple_mentions_one_sentence_all_apply(store: MemoryStore) -> None:
     dictionary_add(store, "demo", "Aaditya", ["aditya"])
     trace = run(
@@ -169,6 +186,6 @@ def test_empty_input_no_crash(store: MemoryStore) -> None:
     assert trace.decisions == ()
 
 
-def test_unknown_profile_raises(store: MemoryStore) -> None:
+def test_unimplemented_profile_raises(store: MemoryStore) -> None:
     with pytest.raises(NotImplementedError):
-        run(store, "demo", asr="", formatted="hello", profile="phonetic")
+        run(store, "demo", asr="", formatted="hello", profile="llm")

@@ -106,6 +106,20 @@ def test_dictionary_add_confidence_not_lowered_by_later_correction(store: Memory
     assert learned.memory.confidence == 1.0
 
 
+def test_correction_strips_trailing_punctuation_from_sentence_final_word(store: MemoryStore) -> None:
+    outcomes = correction(
+        store,
+        "demo",
+        formatted="This is a phaneer sandwitch.",
+        final="This is a paneer sandwich.",
+    )
+    learned = {o.final_word.rstrip("."): o for o in outcomes if o.learned}
+    sandwich = learned["sandwich"].memory
+    assert sandwich is not None
+    assert sandwich.canonical == "sandwich"
+    assert set(sandwich.forms) == {"sandwich", "sandwitch"}
+
+
 def test_grapheme_gate_there_their_scores_higher_than_kiwi_kivi_but_still_refused() -> None:
     assert is_grapheme_similar("there", "their") is True
     assert is_grapheme_similar("kiwi", "kivi") is True

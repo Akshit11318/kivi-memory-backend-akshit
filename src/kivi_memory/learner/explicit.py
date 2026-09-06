@@ -14,7 +14,14 @@ from kivi_memory.config import (
     FIRST_CORRECTION_CONFIDENCE,
 )
 from kivi_memory.domain.models import Memory, Observation
-from kivi_memory.learner.align import diff_words, content_window, passes_grapheme_gate, tokenize_sentence
+from kivi_memory.learner.align import (
+    content_window,
+    diff_words,
+    normalize_word,
+    passes_grapheme_gate,
+    strip_punct,
+    tokenize_sentence,
+)
 from kivi_memory.store.db import MemoryStore, utc_now
 
 
@@ -92,9 +99,12 @@ def correction(
             )
             continue
 
-        canonical = word_correction.final_word.strip()
-        observed_form = word_correction.formatted_word.strip().lower()
-        canonical_form = canonical.lower()
+        # strip_punct, not .strip(): a sentence-final word like "sandwich."
+        # must not carry its period into the stored canonical, and the forms
+        # must be normalized the same way retrieval will look them up.
+        canonical = strip_punct(word_correction.final_word)
+        observed_form = normalize_word(word_correction.formatted_word)
+        canonical_form = normalize_word(canonical)
         cues = content_window(formatted_tokens, word_correction.index)
 
         existing = store.get_memory_by_canonical(user_id, canonical)

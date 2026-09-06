@@ -11,10 +11,11 @@ from kivi_memory.domain.models import RunTrace, TokenDecision
 from kivi_memory.learner.align import content_window, normalize_word
 from kivi_memory.pipeline.align import align_formatted_to_asr, match_keys, tokenize
 from kivi_memory.produce import passthrough, rewrite
-from kivi_memory.retrieve import exact
+from kivi_memory.retrieve import exact, phonetic
 from kivi_memory.store.db import MemoryStore
 
-_IMPLEMENTED_PROFILES = ("off", "exact")
+_RETRIEVERS = {"exact": exact.retrieve, "phonetic": phonetic.retrieve}
+_IMPLEMENTED_PROFILES = ("off", "exact", "phonetic")
 
 
 def run(store: MemoryStore, user_id: str, asr: str, formatted: str, profile: str) -> RunTrace:
@@ -40,6 +41,7 @@ def run(store: MemoryStore, user_id: str, asr: str, formatted: str, profile: str
     formatted_core_norm = [normalize_word(t.core) for t in formatted_tokens]
     alignment = align_formatted_to_asr(asr_tokens_norm, formatted_core_norm)
     formatted_cores_raw = [t.core for t in formatted_tokens]
+    retriever = _RETRIEVERS[profile]
 
     decisions: list[TokenDecision] = []
     memories_used: set[int] = set()
@@ -49,7 +51,7 @@ def run(store: MemoryStore, user_id: str, asr: str, formatted: str, profile: str
         for asr_index in alignment.get(index, []):
             surfaces.add(asr_tokens_norm[asr_index])
 
-        candidates = exact.retrieve(store, user_id, surfaces)
+        candidates = retriever(store, user_id, surfaces)
         window = content_window(formatted_cores_raw, index)
         result = decide_token(token.core, candidates, window)
 

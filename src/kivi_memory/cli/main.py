@@ -7,7 +7,7 @@ import json
 import sys
 from pathlib import Path
 
-from kivi_memory.cli.art import banner, command_bench, error_line, not_built, trace_frame
+from kivi_memory.cli.art import banner, command_bench, error_line, not_built
 from kivi_memory.cli.style import Ink, color_enabled
 from kivi_memory.config import (
     DEFAULT_DB_PATH,
@@ -19,6 +19,7 @@ from kivi_memory.config import (
 from kivi_memory.learner import explicit as explicit_learner
 from kivi_memory.pipeline.run import run as run_pipeline
 from kivi_memory.store.db import MemoryStore
+from kivi_memory.trace.format import overall_decision, trace_frame, trace_to_dict
 
 
 def _ink(args: argparse.Namespace) -> Ink:
@@ -102,28 +103,50 @@ def _cmd_run(args: argparse.Namespace, ink: Ink) -> int:
             print(error_line(ink, str(exc)), file=sys.stderr)
             return 2
 
-    applied = [d for d in trace.decisions if d.decision == "APPLY"]
-    if trace.profile == "off":
-        overall_decision, overall_reason = "ABSTAIN", "memory disabled"
-    elif applied:
-        canonicals = sorted({d.canonical for d in applied if d.canonical})
-        overall_decision, overall_reason = "APPLY", "applied " + ", ".join(canonicals)
-    else:
-        reasons = sorted({d.reason for d in trace.decisions}) or ["no_memory"]
-        overall_decision, overall_reason = "ABSTAIN", ", ".join(reasons)
+    if args.json:
+        print(json.dumps(trace_to_dict(trace), indent=2))
+        return 0
 
+    decision, reason = overall_decision(trace)
     print(
         trace_frame(
             ink,
             asr=trace.asr,
             formatted=trace.formatted,
-            decision=overall_decision,
+            decision=decision,
             memory_aware=trace.memory_aware,
-            reason=overall_reason,
+            reason=reason,
             profile=trace.profile,
         )
     )
     return 0
+
+
+def _cmd_eval(args: argparse.Namespace, ink: Ink) -> int:
+    profiles = [p.strip() for p in args.profiles.split(",") if p.strip()]
+    unknown = [p for p in profiles if p not in PROFILES]
+    if unknown:
+        print(
+            error_line(ink, f"unknown profile(s) {unknown}\nuse: {', '.join(PROFILES)}"),
+            file=sys.stderr,
+        )
+        return 2
+
+    from kivi_memory.eval_runner import run_eval, write_report
+
+    case_outcomes = run_eval(profiles)
+    report = write_report(case_outcomes, profiles)
+
+    print(f"eval: {len(case_outcomes)} cases x {len(profiles)} profiles")
+    print("wrote eval/results/latest.json and eval/results/latest.md")
+    total_bad = 0
+    for profile, row in report["summary"].items():
+        print(
+            f"  {profile:10} pass={row['PASS']} fail={row['FAIL']} "
+            f"skipped={row['SKIPPED']} error={row['ERROR']}"
+        )
+        total_bad += row["FAIL"] + row["ERROR"]
+    return 1 if total_bad else 0
 
 
 def _cmd_memories(args: argparse.Namespace) -> int:
@@ -179,6 +202,7 @@ def _parser() -> argparse.ArgumentParser:
     run.add_argument("--asr", default="")
     run.add_argument("--formatted", default="")
     run.add_argument("--user-id", dest="user_id", default=DEFAULT_USER_ID)
+    run.add_argument("--json", action="store_true", help="print the full inspectable trace as JSON")
     eval_p = sub.add_parser("eval", help="score fixtures")
     eval_p.add_argument("--profiles", default=",".join(PROFILES))
     reset = sub.add_parser("reset", help="clear the page; --seed to refill")
@@ -211,6 +235,8 @@ def main(argv: list[str] | None = None) -> int:
         return _cmd_observe(args)
     if args.command == "run":
         return _cmd_run(args, ink)
+    if args.command == "eval":
+        return _cmd_eval(args, ink)
     if args.command == "reset":
         return _cmd_reset(args)
     if args.command == "memories":
