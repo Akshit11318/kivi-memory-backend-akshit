@@ -10,11 +10,12 @@ Every row marked **[M]** was executed against the real pipeline
 throwaway SQLite store, for `--profile exact` and `--profile phonetic`. The
 "expected" columns are transcripts of observed output, not predictions.
 
-**Measured against your working copy, not `HEAD`.** At `c75e76e`,
-`retrieve/phonetic.py` is still a one-line stub; the real Metaphone retriever
-(with the `v↔w` swap) is uncommitted in `/home/akshit/Desktop/kivi@sarvam`. All
-phonetic numbers below come from that uncommitted file. Commit it before
-generating cases, or the `phonetic` column becomes fiction again.
+**Measured against `54ae390`.** The phonetic figures were taken while
+`retrieve/phonetic.py` (Metaphone plus the `v↔w` swap) was still uncommitted;
+that file has since landed in `54ae390` byte-identical to the version measured,
+so everything below reproduces on `main`. If the retriever changes — a real
+Double Metaphone, a different first-letter rule, a different length floor — then
+D3 and cases 03, 05, 06, 10, 11, 14–17 must be re-measured, not re-reasoned.
 
 ---
 
