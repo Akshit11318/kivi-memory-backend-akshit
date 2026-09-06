@@ -1,0 +1,21 @@
+name: ci
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.13"
+      - name: Install
+        run: uv sync --group dev --frozen
+      - name: Tests
+        run: uv run pytest -q
+      - name: CLI home
+        run: uv run kivi --plain
