@@ -1,0 +1,53 @@
+{
+  "id": "case_21_short_token_phonetic_fp",
+  "family": "phonetic_guard",
+  "title": "Phonetic Safeguard \u2014 Short Token Metaphone Collision (Ravi vs Robbie)",
+  "description": "Store has canonical 'Ravi' (Metaphone code RF). Utterance mentions English name 'Robbie' (also Metaphone code RF). Phonetic profile must NOT falsely rewrite Robbie -> Ravi.",
+  "mixture_of_thoughts": {
+    "acoustic_thought": "Speaker distinctly uttered English name 'Robbie'.",
+    "formatter_thought": "Formatter writes 'Robbie joined the engineering call.'",
+    "alignment_thought": "Double Metaphone of 'Robbie' is RF, which matches Double Metaphone of 'Ravi' (RF).",
+    "decision_thought": "Grapheme distance between 'Robbie' and 'Ravi' exceeds safeguard threshold for short tokens. Conservative decider must reject false match and ABSTAIN."
+  },
+  "setup": {
+    "observations": [
+      {
+        "source": "dictionary_add",
+        "canonical": "Ravi",
+        "forms": [
+          "ravi",
+          "Ravee"
+        ]
+      }
+    ]
+  },
+  "inputs": {
+    "asr": "robbie joined the engineering call",
+    "formatted": "Robbie joined the engineering call.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "ABSTAIN",
+    "memory_aware": "Robbie joined the engineering call.",
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Robbie joined the engineering call."
+      },
+      "exact": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Robbie joined the engineering call."
+      },
+      "phonetic": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Robbie joined the engineering call."
+      },
+      "llm": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Robbie joined the engineering call."
+      }
+    },
+    "reason": "Grapheme/length safeguard prevented false phonetic APPLY on Robbie.",
+    "affected_tokens": []
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "id": "case_33_theme_legal_suo_motu",
+  "family": "theme_legal",
+  "title": "Legal Dictation \u2014 Latin Judicial Term (Suo Motu)",
+  "description": "Lawyer dictating petition summary. ASR decodes Latin phrase as 'sue oh mow two'. Personal legal dictionary restores 'suo motu'.",
+  "mixture_of_thoughts": {
+    "acoustic_thought": "Latin judicial phrase /su\u02d0o\u028a mo\u028atu\u02d0/ segmented into English monosyllables 'sue oh mow two'.",
+    "formatter_thought": "Formatter writes 'The high court took sue oh mow two cognizance of the matter.'",
+    "alignment_thought": "Multi-token sequence 'sue oh mow two' matches legal dictionary entry.",
+    "decision_thought": "Canonical 'suo motu' stored with confidence 1.0 >= 0.75 -> APPLY."
+  },
+  "setup": {
+    "observations": [
+      {
+        "source": "dictionary_add",
+        "canonical": "suo motu",
+        "forms": [
+          "sue oh mow two",
+          "sue motu",
+          "suomotu"
+        ]
+      }
+    ]
+  },
+  "inputs": {
+    "asr": "the high court took sue oh mow two cognizance of the matter",
+    "formatted": "The high court took sue oh mow two cognizance of the matter.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "APPLY",
+    "memory_aware": "The high court took suo motu cognizance of the matter.",
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "The high court took sue oh mow two cognizance of the matter."
+      },
+      "exact": {
+        "decision": "APPLY",
+        "memory_aware": "The high court took suo motu cognizance of the matter."
+      },
+      "phonetic": {
+        "decision": "APPLY",
+        "memory_aware": "The high court took suo motu cognizance of the matter."
+      },
+      "llm": {
+        "decision": "APPLY",
+        "memory_aware": "The high court took suo motu cognizance of the matter."
+      }
+    },
+    "reason": "Restored multi-word Latin legal term suo motu from legal dictionary.",
+    "affected_tokens": [
+      {
+        "from": "sue oh mow two",
+        "to": "suo motu"
+      }
+    ]
+  }
+}

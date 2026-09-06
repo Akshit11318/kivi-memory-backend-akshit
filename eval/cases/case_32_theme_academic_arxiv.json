@@ -1,0 +1,58 @@
+{
+  "id": "case_32_theme_academic_arxiv",
+  "family": "theme_academic",
+  "title": "Academic Research Dictation \u2014 Preprint Archive Name (arXiv)",
+  "description": "Researcher dictating paper notes. ASR transcribes 'archive' instead of stylized casing 'arXiv'. Personal research dictionary enforces 'arXiv'.",
+  "mixture_of_thoughts": {
+    "acoustic_thought": "Speaker pronounces /\u0251\u02d0rka\u026av/ (homophonic with 'archive').",
+    "formatter_thought": "Formatter outputs common noun: 'We uploaded the preprint to archive yesterday.'",
+    "alignment_thought": "Token 'archive' aligned with research dictionary entry for 'arXiv'.",
+    "decision_thought": "Canonical 'arXiv' stored with confidence 0.85 >= 0.75. Rewriter produces stylized 'arXiv'."
+  },
+  "setup": {
+    "observations": [
+      {
+        "source": "dictionary_add",
+        "canonical": "arXiv",
+        "forms": [
+          "archive",
+          "arxiv"
+        ]
+      }
+    ]
+  },
+  "inputs": {
+    "asr": "we uploaded the preprint to archive yesterday",
+    "formatted": "We uploaded the preprint to archive yesterday.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "APPLY",
+    "memory_aware": "We uploaded the preprint to arXiv yesterday.",
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "We uploaded the preprint to archive yesterday."
+      },
+      "exact": {
+        "decision": "APPLY",
+        "memory_aware": "We uploaded the preprint to arXiv yesterday."
+      },
+      "phonetic": {
+        "decision": "APPLY",
+        "memory_aware": "We uploaded the preprint to arXiv yesterday."
+      },
+      "llm": {
+        "decision": "APPLY",
+        "memory_aware": "We uploaded the preprint to arXiv yesterday."
+      }
+    },
+    "reason": "Applied stylized scientific preprint repository canonical arXiv.",
+    "affected_tokens": [
+      {
+        "from": "archive",
+        "to": "arXiv"
+      }
+    ]
+  }
+}

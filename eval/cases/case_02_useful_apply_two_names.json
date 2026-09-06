@@ -1,0 +1,64 @@
+{
+  "id": "case_02_useful_apply_two_names",
+  "family": "two_names",
+  "title": "Useful APPLY \u2014 Two Distinct Indian Names (Gautham & Ananyaa)",
+  "description": "Utterance contains two distinct personal names with spelling variations (Gautam -> Gautham, Ananya -> Ananyaa).",
+  "mixture_of_thoughts": {
+    "acoustic_thought": "ASR emits common transliterations 'gautam' (/\u0261a\u028at\u032a\u0259m/) and 'ananya' (/\u0259n\u0259nj\u0251\u02d0/).",
+    "formatter_thought": "Formatter capitalizes both proper nouns: 'Ask Gautam and Ananya to join the sprint demo.'",
+    "alignment_thought": "SequenceMatcher maps 'Gautam' at index 1 and 'Ananya' at index 3. Both are target spans.",
+    "decision_thought": "Each name independently hits a distinct memory row with confidence 0.85 >= 0.75. Decider emits APPLY for both."
+  },
+  "setup": {
+    "observations": [
+      {
+        "source": "correction",
+        "formatted": "Gautam will lead.",
+        "final": "Gautham will lead."
+      },
+      {
+        "source": "correction",
+        "formatted": "Ananya approved.",
+        "final": "Ananyaa approved."
+      }
+    ]
+  },
+  "inputs": {
+    "asr": "ask gautam and ananya to join the sprint demo",
+    "formatted": "Ask Gautam and Ananya to join the sprint demo.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "APPLY",
+    "memory_aware": "Ask Gautham and Ananyaa to join the sprint demo.",
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Ask Gautam and Ananya to join the sprint demo."
+      },
+      "exact": {
+        "decision": "APPLY",
+        "memory_aware": "Ask Gautham and Ananyaa to join the sprint demo."
+      },
+      "phonetic": {
+        "decision": "APPLY",
+        "memory_aware": "Ask Gautham and Ananyaa to join the sprint demo."
+      },
+      "llm": {
+        "decision": "APPLY",
+        "memory_aware": "Ask Gautham and Ananyaa to join the sprint demo."
+      }
+    },
+    "reason": "Applied personal memories for Gautham and Ananyaa.",
+    "affected_tokens": [
+      {
+        "from": "Gautam",
+        "to": "Gautham"
+      },
+      {
+        "from": "Ananya",
+        "to": "Ananyaa"
+      }
+    ]
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "id": "case_22_merge_dictionary_forms",
+  "family": "form_merge",
+  "title": "Form Unioning \u2014 Merging Multiple Forms Under Single Canonical (Blinkit)",
+  "description": "Adding new forms ('blink it', then later 'blinkit') for the same canonical 'Blinkit' must merge observed_forms in a single database row.",
+  "mixture_of_thoughts": {
+    "acoustic_thought": "ASR emits split capture 'blink it'.",
+    "formatter_thought": "Formatter outputs 'Blink it'.",
+    "alignment_thought": "Store has single row for 'Blinkit' containing unioned observed_forms ['blink it', 'blinkit'].",
+    "decision_thought": "Lookup hits canonical 'Blinkit' (confidence 1.0). Mutates 'Blink it' -> 'Blinkit'."
+  },
+  "setup": {
+    "observations": [
+      {
+        "source": "dictionary_add",
+        "canonical": "Blinkit",
+        "forms": [
+          "blinkit"
+        ]
+      },
+      {
+        "source": "dictionary_add",
+        "canonical": "Blinkit",
+        "forms": [
+          "blink it"
+        ]
+      }
+    ]
+  },
+  "inputs": {
+    "asr": "order vegetables on blink it",
+    "formatted": "Order vegetables on blink it.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "APPLY",
+    "memory_aware": "Order vegetables on Blinkit.",
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Order vegetables on blink it."
+      },
+      "exact": {
+        "decision": "APPLY",
+        "memory_aware": "Order vegetables on Blinkit."
+      },
+      "phonetic": {
+        "decision": "APPLY",
+        "memory_aware": "Order vegetables on Blinkit."
+      },
+      "llm": {
+        "decision": "APPLY",
+        "memory_aware": "Order vegetables on Blinkit."
+      }
+    },
+    "reason": "Applied canonical Blinkit from merged multi-form dictionary entry.",
+    "affected_tokens": [
+      {
+        "from": "blink it",
+        "to": "Blinkit"
+      }
+    ]
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "id": "case_18_punctuation_attached_clitics",
+  "family": "punctuation",
+  "title": "Punctuation Attachment \u2014 Possessive Clitic on Postman ('Postman\\'s')",
+  "description": "Tech tool entity occurs with attached possessive clitic ('Postman\\'s'). Tokenizer must strip clitics for lookup and preserve them on output.",
+  "mixture_of_thoughts": {
+    "acoustic_thought": "Acoustic sequence contains possessive: 'post mans collection'.",
+    "formatter_thought": "Formatter adds apostrophe-s: 'Postman\\'s collection was shared.'",
+    "alignment_thought": "Tokenizer strips possessive clitic \"'s\" to extract base token 'Postman'. Matches memory canonical 'Postman'.",
+    "decision_thought": "Decider flags 'post man' / 'Postman'. Producer preserves clitic in output."
+  },
+  "setup": {
+    "observations": [
+      {
+        "source": "dictionary_add",
+        "canonical": "Postman",
+        "forms": [
+          "post man",
+          "postman"
+        ]
+      }
+    ]
+  },
+  "inputs": {
+    "asr": "post mans collection was shared",
+    "formatted": "Postman's collection was shared.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "ABSTAIN",
+    "memory_aware": "Postman's collection was shared.",
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Postman's collection was shared."
+      },
+      "exact": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Postman's collection was shared."
+      },
+      "phonetic": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Postman's collection was shared."
+      },
+      "llm": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Postman's collection was shared."
+      }
+    },
+    "reason": "Token is already canonical Postman; clitic stripped cleanly without false positive.",
+    "affected_tokens": []
+  }
+}

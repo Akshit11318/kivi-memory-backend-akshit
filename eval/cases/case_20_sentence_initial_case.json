@@ -1,0 +1,57 @@
+{
+  "id": "case_20_sentence_initial_case",
+  "family": "casing",
+  "title": "Casing Normalization \u2014 Sentence-Initial Capitalization (Notion)",
+  "description": "Sentence begins with 'Notion is our workspace'. Initial capitalization is normalized to match lower observed form.",
+  "mixture_of_thoughts": {
+    "acoustic_thought": "First acoustic token is 'notion'.",
+    "formatter_thought": "Formatter capitalizes the first word: 'Notion is our primary documentation workspace.'",
+    "alignment_thought": "Token 'Notion' lowercased matches observed form 'notion' in memory store.",
+    "decision_thought": "Normalized lookup matches 'Notion' (already canonical -> ABSTAIN or if correcting from 'notion' app)."
+  },
+  "setup": {
+    "observations": [
+      {
+        "source": "dictionary_add",
+        "canonical": "Notion",
+        "forms": [
+          "notion"
+        ]
+      }
+    ]
+  },
+  "inputs": {
+    "asr": "notion is our primary documentation workspace",
+    "formatted": "notion is our primary documentation workspace.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "APPLY",
+    "memory_aware": "Notion is our primary documentation workspace.",
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "notion is our primary documentation workspace."
+      },
+      "exact": {
+        "decision": "APPLY",
+        "memory_aware": "Notion is our primary documentation workspace."
+      },
+      "phonetic": {
+        "decision": "APPLY",
+        "memory_aware": "Notion is our primary documentation workspace."
+      },
+      "llm": {
+        "decision": "APPLY",
+        "memory_aware": "Notion is our primary documentation workspace."
+      }
+    },
+    "reason": "Capitalized personal brand canonical Notion applied to lowercase token.",
+    "affected_tokens": [
+      {
+        "from": "notion",
+        "to": "Notion"
+      }
+    ]
+  }
+}

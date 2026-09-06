@@ -1,0 +1,50 @@
+{
+  "id": "case_06_observe_no_assertion",
+  "family": "learner_gate",
+  "title": "Unasserted Observation \u2014 ASR + Formatted Without User Assertion",
+  "description": "Passing only ASR and formatted without explicit final assertion must NOT create a memory row.",
+  "mixture_of_thoughts": {
+    "acoustic_thought": "ASR raw transcript provided: 'ask prateek to check notion'.",
+    "formatter_thought": "Formatter LM output provided: 'Ask Prateek to check Notion.'",
+    "alignment_thought": "No correction diff exists (no user final text asserted).",
+    "decision_thought": "Learner must create 0 memories. Subsequent inference on the same token must ABSTAIN."
+  },
+  "setup": {
+    "observations": [
+      {
+        "source": "raw_pair",
+        "asr": "ask prateek to check notion",
+        "formatted": "Ask Prateek to check Notion."
+      }
+    ]
+  },
+  "inputs": {
+    "asr": "ask prateek to check notion",
+    "formatted": "Ask Prateek to check Notion.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "ABSTAIN",
+    "memory_aware": "Ask Prateek to check Notion.",
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Ask Prateek to check Notion."
+      },
+      "exact": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Ask Prateek to check Notion."
+      },
+      "phonetic": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Ask Prateek to check Notion."
+      },
+      "llm": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Ask Prateek to check Notion."
+      }
+    },
+    "reason": "No memory created without user assertion.",
+    "affected_tokens": []
+  }
+}

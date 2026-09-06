@@ -1,0 +1,50 @@
+{
+  "id": "case_07_content_edit_rejected",
+  "family": "learner_gate",
+  "title": "Content Edit Gate \u2014 Friday -> Thursday Rejected",
+  "description": "User edited a factual day of the week ('Friday' -> 'Thursday'). Grapheme distance gate must reject learning.",
+  "mixture_of_thoughts": {
+    "acoustic_thought": "User said 'friday', ASR transcribed 'friday'.",
+    "formatter_thought": "Formatted has 'Friday'. User later edited text to 'Thursday'.",
+    "alignment_thought": "Diff produces token replacement pair ('Friday', 'Thursday').",
+    "decision_thought": "Friday and Thursday fail the grapheme similarity gate (different initial letter, Levenshtein distance too large). Zero memories stored. Future 'Friday' must ABSTAIN."
+  },
+  "setup": {
+    "observations": [
+      {
+        "source": "correction",
+        "formatted": "The meeting is on Friday.",
+        "final": "The meeting is on Thursday."
+      }
+    ]
+  },
+  "inputs": {
+    "asr": "the meeting is on friday",
+    "formatted": "The meeting is on Friday.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "ABSTAIN",
+    "memory_aware": "The meeting is on Friday.",
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "The meeting is on Friday."
+      },
+      "exact": {
+        "decision": "ABSTAIN",
+        "memory_aware": "The meeting is on Friday."
+      },
+      "phonetic": {
+        "decision": "ABSTAIN",
+        "memory_aware": "The meeting is on Friday."
+      },
+      "llm": {
+        "decision": "ABSTAIN",
+        "memory_aware": "The meeting is on Friday."
+      }
+    },
+    "reason": "Content edit Friday->Thursday rejected by grapheme gate.",
+    "affected_tokens": []
+  }
+}

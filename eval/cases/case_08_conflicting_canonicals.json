@@ -1,0 +1,63 @@
+{
+  "id": "case_08_conflicting_canonicals",
+  "family": "conflict",
+  "title": "Conflicting Canonicals \u2014 Kavita vs Kaveeta for Single Surface",
+  "description": "Store contains two distinct canonicals for the normalized surface 'kavita'. System must refuse to guess and ABSTAIN.",
+  "mixture_of_thoughts": {
+    "acoustic_thought": "ASR outputs 'kavita'.",
+    "formatter_thought": "Formatter outputs 'Kavita'.",
+    "alignment_thought": "Token 'Kavita' normalized matches candidate memory 1 (canonical 'Kavita') and candidate memory 2 (canonical 'Kaveeta').",
+    "decision_thought": "Multiple candidate canonicals for the same surface. Contract mandates ABSTAIN with reason 'conflicting_canonicals' listing both memory IDs."
+  },
+  "setup": {
+    "seeded_memories": [
+      {
+        "id": "mem_conf_1",
+        "canonical": "Kavita",
+        "observed_forms": [
+          "kavita",
+          "Kavita"
+        ],
+        "confidence": 0.85
+      },
+      {
+        "id": "mem_conf_2",
+        "canonical": "Kaveeta",
+        "observed_forms": [
+          "kavita",
+          "Kavita"
+        ],
+        "confidence": 0.85
+      }
+    ]
+  },
+  "inputs": {
+    "asr": "please inform kavita about the release",
+    "formatted": "Please inform Kavita about the release.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "ABSTAIN",
+    "memory_aware": "Please inform Kavita about the release.",
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Please inform Kavita about the release."
+      },
+      "exact": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Please inform Kavita about the release."
+      },
+      "phonetic": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Please inform Kavita about the release."
+      },
+      "llm": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Please inform Kavita about the release."
+      }
+    },
+    "reason": "conflicting_canonicals: multiple active canonicals [Kavita, Kaveeta] for surface 'kavita'",
+    "affected_tokens": []
+  }
+}

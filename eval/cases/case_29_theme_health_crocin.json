@@ -1,0 +1,59 @@
+{
+  "id": "case_29_theme_health_crocin",
+  "family": "theme_healthcare",
+  "title": "Clinical Dictation \u2014 Regional Indian Brand Drug (Crocin)",
+  "description": "Doctor dictating patient discharge instructions. ASR mishears Indian paracetamol brand 'Crocin' as 'crow seen'. Personal medical dictionary repairs it.",
+  "mixture_of_thoughts": {
+    "acoustic_thought": "Acoustic sequence /kro\u028as\u026an/ captures as phonetically similar English words 'crow seen' or 'cross in'.",
+    "formatter_thought": "Formatter outputs 'Take one crow seen tablet after food if fever persists.'",
+    "alignment_thought": "Aligned span 'crow seen' matches observed form in medical dictionary row.",
+    "decision_thought": "Canonical 'Crocin' stored with high confidence (1.0). Confidence >= 0.75 -> APPLY 'Crocin'."
+  },
+  "setup": {
+    "observations": [
+      {
+        "source": "dictionary_add",
+        "canonical": "Crocin",
+        "forms": [
+          "crow seen",
+          "crowseen",
+          "crossin"
+        ]
+      }
+    ]
+  },
+  "inputs": {
+    "asr": "take one crow seen tablet after food if fever persists",
+    "formatted": "Take one crow seen tablet after food if fever persists.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "APPLY",
+    "memory_aware": "Take one Crocin tablet after food if fever persists.",
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Take one crow seen tablet after food if fever persists."
+      },
+      "exact": {
+        "decision": "APPLY",
+        "memory_aware": "Take one Crocin tablet after food if fever persists."
+      },
+      "phonetic": {
+        "decision": "APPLY",
+        "memory_aware": "Take one Crocin tablet after food if fever persists."
+      },
+      "llm": {
+        "decision": "APPLY",
+        "memory_aware": "Take one Crocin tablet after food if fever persists."
+      }
+    },
+    "reason": "Repaired acoustic brand mishearing 'crow seen' to pharmaceutical canonical Crocin.",
+    "affected_tokens": [
+      {
+        "from": "crow seen",
+        "to": "Crocin"
+      }
+    ]
+  }
+}

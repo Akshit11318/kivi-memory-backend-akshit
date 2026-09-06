@@ -1,0 +1,44 @@
+{
+  "id": "case_12_cold_start_reset",
+  "family": "reset_state",
+  "title": "Cold Start Verification \u2014 Post-Reset Empty State",
+  "description": "Immediately following 'kivi reset', memories table is empty. Dictation with Zepto must yield ABSTAIN.",
+  "mixture_of_thoughts": {
+    "acoustic_thought": "Audio transcript contains 'zepto'.",
+    "formatter_thought": "Formatted text: 'Order groceries on Zepto.'",
+    "alignment_thought": "Store query returns 0 rows.",
+    "decision_thought": "Cold start condition: zero memory records exist -> ABSTAIN."
+  },
+  "setup": {
+    "observations": []
+  },
+  "inputs": {
+    "asr": "order groceries on zepto",
+    "formatted": "Order groceries on Zepto.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "ABSTAIN",
+    "memory_aware": "Order groceries on Zepto.",
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Order groceries on Zepto."
+      },
+      "exact": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Order groceries on Zepto."
+      },
+      "phonetic": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Order groceries on Zepto."
+      },
+      "llm": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Order groceries on Zepto."
+      }
+    },
+    "reason": "Empty database after reset.",
+    "affected_tokens": []
+  }
+}

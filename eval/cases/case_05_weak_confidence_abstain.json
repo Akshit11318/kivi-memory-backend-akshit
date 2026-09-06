@@ -1,0 +1,54 @@
+{
+  "id": "case_05_weak_confidence_abstain",
+  "family": "abstain_weak",
+  "title": "Weak Evidence \u2014 Sub-threshold Confidence Memory (0.40) on Siddharth",
+  "description": "Memory exists for Siddharth but has low confidence (0.40 < 0.75). System must strictly ABSTAIN.",
+  "mixture_of_thoughts": {
+    "acoustic_thought": "ASR outputs 'sidharth'.",
+    "formatter_thought": "Formatter writes 'Sidharth'.",
+    "alignment_thought": "Retriever hits candidate memory 'Siddharth', but confidence is 0.40.",
+    "decision_thought": "APPLY threshold is strictly >= 0.75. Confidence 0.40 fails threshold gate -> ABSTAIN with reason 'confidence_below_threshold'."
+  },
+  "setup": {
+    "seeded_memories": [
+      {
+        "canonical": "Siddharth",
+        "observed_forms": [
+          "sidharth",
+          "Sidharth"
+        ],
+        "confidence": 0.4,
+        "evidence_count": 1
+      }
+    ]
+  },
+  "inputs": {
+    "asr": "sidharth will verify the pull request",
+    "formatted": "Sidharth will verify the pull request.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "ABSTAIN",
+    "memory_aware": "Sidharth will verify the pull request.",
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Sidharth will verify the pull request."
+      },
+      "exact": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Sidharth will verify the pull request."
+      },
+      "phonetic": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Sidharth will verify the pull request."
+      },
+      "llm": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Sidharth will verify the pull request."
+      }
+    },
+    "reason": "Confidence 0.40 is below threshold 0.75.",
+    "affected_tokens": []
+  }
+}

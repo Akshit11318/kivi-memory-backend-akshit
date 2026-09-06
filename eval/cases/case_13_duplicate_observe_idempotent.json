@@ -1,0 +1,60 @@
+{
+  "id": "case_13_duplicate_observe_idempotent",
+  "family": "idempotency",
+  "title": "Learner Idempotency \u2014 Replaying Duplicate Observations (Laxmi)",
+  "description": "Replaying the exact same observation for Lakshmi -> Laxmi multiple times must be idempotent: confidence caps at 1.0, single row maintained.",
+  "mixture_of_thoughts": {
+    "acoustic_thought": "Identical audio input: 'ask lakshmi to deploy'.",
+    "formatter_thought": "Identical formatted input: 'Ask Lakshmi to deploy.'",
+    "alignment_thought": "Repeated observe calls update evidence count and reinforce confidence without creating duplicate canonical rows.",
+    "decision_thought": "Single row in store with confidence capped at 1.0. Decider emits clean APPLY."
+  },
+  "setup": {
+    "observations": [
+      {
+        "source": "correction",
+        "formatted": "Ask Lakshmi to deploy.",
+        "final": "Ask Laxmi to deploy."
+      },
+      {
+        "source": "correction",
+        "formatted": "Ask Lakshmi to deploy.",
+        "final": "Ask Laxmi to deploy."
+      }
+    ]
+  },
+  "inputs": {
+    "asr": "ask lakshmi to deploy",
+    "formatted": "Ask Lakshmi to deploy.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "APPLY",
+    "memory_aware": "Ask Laxmi to deploy.",
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Ask Lakshmi to deploy."
+      },
+      "exact": {
+        "decision": "APPLY",
+        "memory_aware": "Ask Laxmi to deploy."
+      },
+      "phonetic": {
+        "decision": "APPLY",
+        "memory_aware": "Ask Laxmi to deploy."
+      },
+      "llm": {
+        "decision": "APPLY",
+        "memory_aware": "Ask Laxmi to deploy."
+      }
+    },
+    "reason": "Applied reinforced Laxmi memory; store maintains single consolidated row.",
+    "affected_tokens": [
+      {
+        "from": "Lakshmi",
+        "to": "Laxmi"
+      }
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "id": "case_03_deliberate_noop_empty_store",
+  "family": "noop",
+  "title": "Deliberate No-Op \u2014 Standard English with Empty Store",
+  "description": "Clean standard dictation against an empty memory store. System must abstain cleanly without errors.",
+  "mixture_of_thoughts": {
+    "acoustic_thought": "Clean acoustic capture of everyday vocabulary.",
+    "formatter_thought": "Standard sentence formatting with correct grammar and casing.",
+    "alignment_thought": "Tokens align cleanly; zero candidates retrieved from store.",
+    "decision_thought": "No memories exist. System must ABSTAIN; formatted output must be preserved byte-for-byte."
+  },
+  "setup": {
+    "observations": []
+  },
+  "inputs": {
+    "asr": "please schedule the quarterly planning call for next monday morning",
+    "formatted": "Please schedule the quarterly planning call for next Monday morning.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "ABSTAIN",
+    "memory_aware": "Please schedule the quarterly planning call for next Monday morning.",
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Please schedule the quarterly planning call for next Monday morning."
+      },
+      "exact": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Please schedule the quarterly planning call for next Monday morning."
+      },
+      "phonetic": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Please schedule the quarterly planning call for next Monday morning."
+      },
+      "llm": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Please schedule the quarterly planning call for next Monday morning."
+      }
+    },
+    "reason": "No relevant memories found.",
+    "affected_tokens": []
+  }
+}

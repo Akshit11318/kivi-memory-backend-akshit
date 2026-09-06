@@ -1,0 +1,58 @@
+{
+  "id": "case_10_phonetic_only_retrieval",
+  "family": "phonetic_only",
+  "title": "Phonetic-Only Win \u2014 Stored Canonical 'Zerodha', Unseen Form 'zero da'",
+  "description": "Store has canonical 'Zerodha' with only form 'zerodha'. ASR emits 'zeroda' never logged in observed_forms. Exact misses; Phonetic retrieves via Double Metaphone.",
+  "mixture_of_thoughts": {
+    "acoustic_thought": "ASR emits dental variation 'zeroda'.",
+    "formatter_thought": "Formatter emits 'Zeroda'.",
+    "alignment_thought": "Token 'Zeroda' is not in exact observed_forms. Double Metaphone key of 'Zeroda' matches 'Zerodha' (SRT).",
+    "decision_thought": "Exact profile must ABSTAIN (unseen surface). Phonetic profile must retrieve 'Zerodha' and emit APPLY."
+  },
+  "setup": {
+    "seeded_memories": [
+      {
+        "canonical": "Zerodha",
+        "observed_forms": [
+          "zerodha",
+          "Zerodha"
+        ],
+        "confidence": 0.85
+      }
+    ]
+  },
+  "inputs": {
+    "asr": "check account on zeroda",
+    "formatted": "Check account on Zeroda.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "APPLY",
+    "memory_aware": "Check account on Zerodha.",
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Check account on Zeroda."
+      },
+      "exact": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Check account on Zeroda."
+      },
+      "phonetic": {
+        "decision": "APPLY",
+        "memory_aware": "Check account on Zerodha."
+      },
+      "llm": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Check account on Zeroda."
+      }
+    },
+    "reason": "Phonetic profile matches Double Metaphone key; exact profile abstains.",
+    "affected_tokens": [
+      {
+        "from": "Zeroda",
+        "to": "Zerodha"
+      }
+    ]
+  }
+}

@@ -1,0 +1,1 @@
+"""Retriever slot. exact | phonetic."""

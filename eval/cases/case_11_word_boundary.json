@@ -1,0 +1,53 @@
+{
+  "id": "case_11_word_boundary",
+  "family": "boundary",
+  "title": "Word Boundary Protection \u2014 Substring Inside Compound Name (Hasura vs Hasuranga)",
+  "description": "Memory contains GraphQL engine 'Hasura'. Transcript mentions Sri Lankan cricketer 'Hasuranga'. Substring match must NOT trigger.",
+  "mixture_of_thoughts": {
+    "acoustic_thought": "ASR transcribes proper noun 'Hasuranga'.",
+    "formatter_thought": "Formatter outputs 'Hasuranga took three wickets.'",
+    "alignment_thought": "Token boundary isolation ensures 'Hasura' is not treated as a match for 'Hasuranga'.",
+    "decision_thought": "Token equality check fails ('hasuranga' != 'hasura'). System must ABSTAIN."
+  },
+  "setup": {
+    "observations": [
+      {
+        "source": "dictionary_add",
+        "canonical": "Hasura",
+        "forms": [
+          "hasura",
+          "Hasura"
+        ]
+      }
+    ]
+  },
+  "inputs": {
+    "asr": "hasuranga took three wickets",
+    "formatted": "Hasuranga took three wickets.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "ABSTAIN",
+    "memory_aware": "Hasuranga took three wickets.",
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Hasuranga took three wickets."
+      },
+      "exact": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Hasuranga took three wickets."
+      },
+      "phonetic": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Hasuranga took three wickets."
+      },
+      "llm": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Hasuranga took three wickets."
+      }
+    },
+    "reason": "Token boundary respected; no substring match inside Hasuranga.",
+    "affected_tokens": []
+  }
+}

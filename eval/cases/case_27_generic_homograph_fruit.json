@@ -1,0 +1,57 @@
+{
+  "id": "case_27_generic_homograph_fruit",
+  "family": "contextual_limit",
+  "title": "Contextual Limitation Test \u2014 Genuine Generic Noun vs Workplace Tool (Slack)",
+  "description": "Memory contains workplace messaging tool 'Slack'. Utterance is an everyday physical phrase ('take up the slack in the rope'). Evaluates lexical baseline behavior without context classifier.",
+  "mixture_of_thoughts": {
+    "acoustic_thought": "Acoustic token 'slack' matches everyday adjective/noun and enterprise brand.",
+    "formatter_thought": "Formatter writes 'Please take up the slack in the rope.'",
+    "alignment_thought": "Token 'slack' matches observed forms of brand 'Slack'.",
+    "decision_thought": "In pure lexical V0 without semantic context classification, the exact/phonetic profile hits 'Slack' and mutates. This fixture explicitly documents the known limitation specified in plan.md."
+  },
+  "setup": {
+    "observations": [
+      {
+        "source": "dictionary_add",
+        "canonical": "Slack",
+        "forms": [
+          "slack"
+        ]
+      }
+    ]
+  },
+  "inputs": {
+    "asr": "please take up the slack in the rope",
+    "formatted": "Please take up the slack in the rope.",
+    "user_id": "demo_user"
+  },
+  "expected": {
+    "decision": "APPLY",
+    "memory_aware": "Please take up the Slack in the rope.",
+    "expected_profile_results": {
+      "off": {
+        "decision": "ABSTAIN",
+        "memory_aware": "Please take up the slack in the rope."
+      },
+      "exact": {
+        "decision": "APPLY",
+        "memory_aware": "Please take up the Slack in the rope."
+      },
+      "phonetic": {
+        "decision": "APPLY",
+        "memory_aware": "Please take up the Slack in the rope."
+      },
+      "llm": {
+        "decision": "APPLY",
+        "memory_aware": "Please take up the Slack in the rope."
+      }
+    },
+    "reason": "Evaluates known V0 lexical limitation: brand matches generic noun without semantic context gate.",
+    "affected_tokens": [
+      {
+        "from": "slack",
+        "to": "Slack"
+      }
+    ]
+  }
+}
