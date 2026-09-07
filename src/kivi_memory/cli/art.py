@@ -75,9 +75,7 @@ def not_built(ink: Ink, command: str) -> str:
     return plate(
         ink,
         "later",
-        f"{command} is not wired yet.\n"
-        "the notebook skin is here; the engine lands in stages.\n"
-        "see HANDOFF.md if you are implementing.",
+        f"{command} is not a known command.",
         kind="warn",
     )
 

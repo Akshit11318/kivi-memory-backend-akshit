@@ -1,4 +1,4 @@
-"""MemoryStore: SQLite migrate, read/write, reset. plan.md: store.
+"""MemoryStore: SQLite migrate, read/write, reset.
 
 Learning writes this store. Inference only reads it.
 """

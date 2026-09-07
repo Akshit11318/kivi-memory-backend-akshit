@@ -1,5 +1,5 @@
 """Inference orchestration: Gate -> Retrieve -> Align(ASR,formatted) -> Decide ->
-Produce -> Trace. One place. plan.md: pipeline. Never positional token index.
+Produce -> Trace. One place. Never positional token index.
 """
 
 from __future__ import annotations

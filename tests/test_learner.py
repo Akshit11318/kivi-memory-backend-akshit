@@ -1,4 +1,4 @@
-"""Stage 2: explicit learner — dictionary_add, correction gate, cues, confidence."""
+"""Explicit learner — dictionary_add, correction gate, cues, confidence."""
 
 from pathlib import Path
 from typing import Iterator

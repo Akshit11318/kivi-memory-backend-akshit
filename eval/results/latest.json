@@ -2,8 +2,7 @@
   "profiles": [
     "off",
     "exact",
-    "phonetic",
-    "llm"
+    "phonetic"
   ],
   "cases": [
     {
@@ -29,7 +28,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.00048599758883938193,
+          "latency_ms": 0.0005750007403548807,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -69,7 +68,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.20707499788841233,
+          "latency_ms": 0.23148400032368954,
           "model_calls": 0,
           "memory_ids_used": [
             1,
@@ -112,30 +111,12 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.2900440013036132,
+          "latency_ms": 0.3206209985364694,
           "model_calls": 0,
           "memory_ids_used": [
             1,
             2
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "Ask Aaditya to review the Sarvam Kivi service.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -162,73 +143,73 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.00034300319384783506,
+          "latency_ms": 0.00029299917514435947,
           "model_calls": 0,
           "memory_ids_used": []
         },
         {
           "profile": "exact",
-          "status": "FAIL",
+          "status": "PASS",
           "expected_decision": "APPLY",
-          "actual_decision": "ABSTAIN",
+          "actual_decision": "APPLY",
           "expected_memory_aware": "Ask Gautham and Ananyaa to join the sprint demo.",
-          "actual_memory_aware": "Ask Gautam and Ananya to join the sprint demo.",
-          "classification": "unexpected_abstain",
-          "reason": "context_mismatch, no_memory",
+          "actual_memory_aware": "Ask Gautham and Ananyaa to join the sprint demo.",
+          "classification": "useful_apply",
+          "reason": "applied Ananyaa, Gautham",
           "expected_reasons": null,
           "actual_reasons": [
-            "context_mismatch"
+            "ok"
           ],
           "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [
-            "decision expected APPLY, got ABSTAIN",
-            "memory_aware text mismatch"
+          "actual_affected_tokens": [
+            {
+              "from": "Gautam",
+              "to": "Gautham"
+            },
+            {
+              "from": "Ananya",
+              "to": "Ananyaa"
+            }
           ],
-          "latency_ms": 0.2618060025270097,
+          "assertion_failures": [],
+          "latency_ms": 0.20954700084985234,
           "model_calls": 0,
-          "memory_ids_used": []
+          "memory_ids_used": [
+            1,
+            2
+          ]
         },
         {
           "profile": "phonetic",
-          "status": "FAIL",
+          "status": "PASS",
           "expected_decision": "APPLY",
-          "actual_decision": "ABSTAIN",
+          "actual_decision": "APPLY",
           "expected_memory_aware": "Ask Gautham and Ananyaa to join the sprint demo.",
-          "actual_memory_aware": "Ask Gautam and Ananya to join the sprint demo.",
-          "classification": "unexpected_abstain",
-          "reason": "context_mismatch, no_memory",
+          "actual_memory_aware": "Ask Gautham and Ananyaa to join the sprint demo.",
+          "classification": "useful_apply",
+          "reason": "applied Ananyaa, Gautham",
           "expected_reasons": null,
           "actual_reasons": [
-            "context_mismatch"
+            "ok"
           ],
           "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [
-            "decision expected APPLY, got ABSTAIN",
-            "memory_aware text mismatch"
+          "actual_affected_tokens": [
+            {
+              "from": "Gautam",
+              "to": "Gautham"
+            },
+            {
+              "from": "Ananya",
+              "to": "Ananyaa"
+            }
           ],
-          "latency_ms": 0.43200000072829425,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "Ask Gautham and Ananyaa to join the sprint demo.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.32906900014495477,
           "model_calls": 0,
-          "memory_ids_used": []
+          "memory_ids_used": [
+            1,
+            2
+          ]
         }
       ]
     },
@@ -255,7 +236,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.00044099579099565744,
+          "latency_ms": 0.0002349988790228963,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -277,7 +258,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.29646600160049275,
+          "latency_ms": 0.1726020000205608,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -299,25 +280,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.24567199579905719,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Please schedule the quarterly planning call for next Monday morning.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.1385609994031256,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -346,7 +309,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.000371997884940356,
+          "latency_ms": 0.00029299917514435947,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -368,7 +331,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.3482939937384799,
+          "latency_ms": 0.23260099987965077,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -390,25 +353,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.7246829991345294,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "We need to buy two cartons of milk and brown bread from the store.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.44447100117395166,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -437,7 +382,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0004530011210590601,
+          "latency_ms": 0.0003289987944299355,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -459,7 +404,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.28997899789828807,
+          "latency_ms": 0.18823999926098622,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -481,25 +426,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.4590340031427331,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Sidharth will verify the pull request.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.21651300085068215,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -528,7 +455,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0007479975465685129,
+          "latency_ms": 0.0003010009095305577,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -550,7 +477,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.35671699879458174,
+          "latency_ms": 0.1336679997621104,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -572,25 +499,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.21929899958195165,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Ask Prateek to check Notion.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.09425200005352963,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -619,7 +528,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0007089984137564898,
+          "latency_ms": 0.00028999966161791235,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -641,7 +550,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.48207399959210306,
+          "latency_ms": 0.15858999904594384,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -663,25 +572,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.2757740003289655,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "The meeting is on Friday.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.08714300020074006,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -710,7 +601,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0008019997039809823,
+          "latency_ms": 0.0003220011421944946,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -732,7 +623,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.5727649986511096,
+          "latency_ms": 0.23533999956271145,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -754,25 +645,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.8842809984344058,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Please inform Kavita about the release.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.30251600037445314,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -801,7 +674,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0009459981811232865,
+          "latency_ms": 0.00030800038075540215,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -823,7 +696,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.053638999816030264,
+          "latency_ms": 0.02387500171607826,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -845,25 +718,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.025417997676413506,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.009023000529850833,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -892,7 +747,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0012680029612965882,
+          "latency_ms": 0.0003310015017632395,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -914,7 +769,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.6105860011302866,
+          "latency_ms": 0.15490699843212496,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -946,29 +801,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.8392439995077439,
+          "latency_ms": 0.19265999981143977,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Deploy the Kiwi service.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -995,7 +832,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0010320000001229346,
+          "latency_ms": 0.00034199911169707775,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -1017,7 +854,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.5179920044611208,
+          "latency_ms": 0.17941500118467957,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -1039,25 +876,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.6282859976636246,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Mika Kivimaki published a new paper.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.23588499971083365,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -1086,7 +905,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0011750016710720956,
+          "latency_ms": 0.0002910001057898626,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -1108,7 +927,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.4492389998631552,
+          "latency_ms": 0.1485880002292106,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -1130,25 +949,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.3173020013491623,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Deploy the service tomorrow.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.09409599988430273,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -1177,7 +978,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0007659982657060027,
+          "latency_ms": 0.00026500129024498165,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -1209,7 +1010,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.41334599518449977,
+          "latency_ms": 0.13931299872638192,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -1243,29 +1044,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.6045930058462545,
+          "latency_ms": 0.11853300020447932,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "Ask Laxmi to deploy.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -1292,7 +1075,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0008470015018247068,
+          "latency_ms": 0.00022899985197000206,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -1314,7 +1097,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.4858679967583157,
+          "latency_ms": 0.14890700003888924,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -1336,25 +1119,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.5102539944346063,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Ask Niharika to review the changes.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.15881299987086095,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -1383,7 +1148,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0011120064300484955,
+          "latency_ms": 0.000254998667514883,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -1405,7 +1170,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.3909840015694499,
+          "latency_ms": 0.12405200141074602,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -1427,25 +1192,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.2733069995883852,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Run the Kiwi benchmark.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.07710499994573183,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -1474,7 +1221,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0007299968274310231,
+          "latency_ms": 0.0002449996827635914,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -1506,7 +1253,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.485393000417389,
+          "latency_ms": 0.17229299919563346,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -1540,29 +1287,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.4410229958011769,
+          "latency_ms": 0.1613040003576316,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "Yaar Diksha suno, check the PR.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -1589,7 +1318,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0009189971024170518,
+          "latency_ms": 0.00023099892132449895,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -1621,7 +1350,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.6730559980496764,
+          "latency_ms": 0.18715599981078412,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -1655,29 +1384,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.6140330006019212,
+          "latency_ms": 0.16071699974418152,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "I'm going to ping Tanmaay.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -1704,7 +1415,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0006679983926005661,
+          "latency_ms": 0.00020900006347801536,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -1736,7 +1447,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.4395039941300638,
+          "latency_ms": 0.151928999912343,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -1770,29 +1481,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.37769800110254437,
+          "latency_ms": 0.12425500062818173,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "Kivi's latency is low.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -1819,7 +1512,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0007130001904442906,
+          "latency_ms": 0.0002610013325465843,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -1867,7 +1560,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.8591190053266473,
+          "latency_ms": 0.2054070009762654,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -1917,122 +1610,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.7755339975119568,
+          "latency_ms": 0.16857500122569036,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "Pratik asked Pratik to call Pratik.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
-        }
-      ]
-    },
-    {
-      "id": "case_20_sentence_initial_case",
-      "family": "casing",
-      "memory_row_count": 1,
-      "expected_memory_row_count": null,
-      "setup_ok": true,
-      "profiles": [
-        {
-          "profile": "off",
-          "status": "PASS",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": "ABSTAIN",
-          "expected_memory_aware": "Kiwi is our product.",
-          "actual_memory_aware": "Kiwi is our product.",
-          "classification": "expected_abstain",
-          "reason": "memory disabled",
-          "expected_reasons": null,
-          "actual_reasons": [
-            "no_memory"
-          ],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.00020800507627427578,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "exact",
-          "status": "FAIL",
-          "expected_decision": "APPLY",
-          "actual_decision": "ABSTAIN",
-          "expected_memory_aware": "Kivi is our product.",
-          "actual_memory_aware": "Kiwi is our product.",
-          "classification": "unexpected_abstain",
-          "reason": "context_mismatch, no_memory",
-          "expected_reasons": null,
-          "actual_reasons": [
-            "context_mismatch"
-          ],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [
-            "decision expected APPLY, got ABSTAIN",
-            "memory_aware text mismatch"
-          ],
-          "latency_ms": 0.11332099529681727,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "phonetic",
-          "status": "FAIL",
-          "expected_decision": "APPLY",
-          "actual_decision": "ABSTAIN",
-          "expected_memory_aware": "Kivi is our product.",
-          "actual_memory_aware": "Kiwi is our product.",
-          "classification": "unexpected_abstain",
-          "reason": "context_mismatch, no_memory",
-          "expected_reasons": null,
-          "actual_reasons": [
-            "context_mismatch"
-          ],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [
-            "decision expected APPLY, got ABSTAIN",
-            "memory_aware text mismatch"
-          ],
-          "latency_ms": 0.1015860034385696,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "Kivi is our product.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -2059,7 +1641,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.00024300243239849806,
+          "latency_ms": 0.00023199936549644917,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -2081,7 +1663,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.12145900109317154,
+          "latency_ms": 0.11347500003466848,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -2103,25 +1685,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.15163100033532828,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Robbie joined the engineering call.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.16193500050576404,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -2150,7 +1714,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.00031600211514160037,
+          "latency_ms": 0.00022600033844355494,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -2182,7 +1746,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.22317699767882004,
+          "latency_ms": 0.14365199967869557,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -2216,29 +1780,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.29886699485359713,
+          "latency_ms": 0.14650400044047274,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "Test the Kivi service.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -2265,7 +1811,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.00023699976736679673,
+          "latency_ms": 0.0002149990905309096,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -2297,7 +1843,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.12620600318768993,
+          "latency_ms": 0.13387400031206198,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -2331,29 +1877,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.12482600141083822,
+          "latency_ms": 0.13606900029117242,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "Chowdhury approved the release.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -2380,7 +1908,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.00022500171326100826,
+          "latency_ms": 0.0002750002749962732,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -2412,7 +1940,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.14065700088394806,
+          "latency_ms": 0.19654899915622082,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -2446,29 +1974,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.12030999641865492,
+          "latency_ms": 0.15412600077979732,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "Ask Sreenivas to join.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -2495,7 +2005,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.00024699693312868476,
+          "latency_ms": 0.0004960002115694806,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -2527,7 +2037,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.12859999696956947,
+          "latency_ms": 0.42036999911942985,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -2561,29 +2071,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.12755000352626666,
+          "latency_ms": 0.47154999992926605,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "Test the Kivi service.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -2610,7 +2102,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0002129963831976056,
+          "latency_ms": 0.0004230005288263783,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -2632,7 +2124,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.07716999971307814,
+          "latency_ms": 0.1914429994940292,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -2654,25 +2146,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.05103099829284474,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Look over there.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.16980899999907706,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -2693,7 +2167,7 @@
           "expected_memory_aware": null,
           "actual_memory_aware": null,
           "classification": null,
-          "reason": "'foo' not in ('off', 'exact', 'phonetic', 'llm')",
+          "reason": "'foo' not in ('off', 'exact', 'phonetic')",
           "expected_reasons": null,
           "actual_reasons": [],
           "expected_affected_tokens": null,
@@ -2728,7 +2202,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.00025599729269742966,
+          "latency_ms": 0.0003250006557209417,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -2760,7 +2234,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.1587899969308637,
+          "latency_ms": 0.2371540012973128,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -2794,29 +2268,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.1989660013350658,
+          "latency_ms": 0.2770119990600506,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "Ask Aditya to review the Sarvam Kivi service.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -2843,7 +2299,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.00022500171326100826,
+          "latency_ms": 0.0004929988790536299,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -2865,7 +2321,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.13947099796496332,
+          "latency_ms": 0.46285600001283456,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -2887,25 +2343,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.14164900494506583,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Remind me to buy kiwi tomorrow.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.49342399870511144,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -2934,7 +2372,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.00024700420908629894,
+          "latency_ms": 0.000478999936603941,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -2966,7 +2404,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.11506400187499821,
+          "latency_ms": 0.33847600025183056,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -3000,29 +2438,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.12070899538230151,
+          "latency_ms": 0.21114800074428786,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "Rajkummar shared the deck.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -3049,7 +2469,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.00022000313038006425,
+          "latency_ms": 0.0003120003384537995,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -3071,7 +2491,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.09988999954657629,
+          "latency_ms": 0.2263669994135853,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -3103,29 +2523,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.1188910027849488,
+          "latency_ms": 0.2750450003077276,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Ayushman is joining the call.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -3152,7 +2554,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.00025200279196724296,
+          "latency_ms": 0.00029900002118665725,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -3184,7 +2586,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.12186700041638687,
+          "latency_ms": 0.21484100034285802,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -3218,29 +2620,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.11458500375738367,
+          "latency_ms": 0.1901969990285579,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "Devgn sir approved it.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -3267,7 +2651,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0002399974619038403,
+          "latency_ms": 0.0003730001481017098,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -3289,7 +2673,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.09853400115389377,
+          "latency_ms": 0.29245600126159843,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -3321,29 +2705,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.12127299851272255,
+          "latency_ms": 0.26267800058121793,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Mira sent the invoice.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -3370,7 +2736,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.00030500086722895503,
+          "latency_ms": 0.0003059994924115017,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -3392,7 +2758,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.15850499767111614,
+          "latency_ms": 0.163081000209786,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -3424,29 +2790,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.24301499797729775,
+          "latency_ms": 0.2527899996493943,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Murthy will sign off.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -3473,7 +2821,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.00030700175557285547,
+          "latency_ms": 0.00037800054997205734,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -3505,7 +2853,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.14168800407787785,
+          "latency_ms": 0.33939599961740896,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -3539,29 +2887,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.13840600149706006,
+          "latency_ms": 0.3516139986459166,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "Laxmi handled the audit.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -3588,7 +2918,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0005660040187649429,
+          "latency_ms": 0.0005279998731566593,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -3620,7 +2950,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.2598889986984432,
+          "latency_ms": 0.3679270012071356,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -3654,29 +2984,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.2800919974106364,
+          "latency_ms": 0.2296959992236225,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "Choudhury signed the lease.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -3703,7 +3015,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0005690017133019865,
+          "latency_ms": 0.00044099942897446454,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -3735,7 +3047,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.3641680013970472,
+          "latency_ms": 0.3216260010958649,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -3769,29 +3081,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.2888040035031736,
+          "latency_ms": 0.2550429999246262,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "I moved my SIP to Groww.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -3818,7 +3112,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0006850023055449128,
+          "latency_ms": 0.00024099972506519407,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -3840,7 +3134,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.32047800050349906,
+          "latency_ms": 0.17552600002090912,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -3872,29 +3166,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.3630010032793507,
+          "latency_ms": 0.16226700063270982,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Book a lift to the airport.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -3921,7 +3197,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0007740018190816045,
+          "latency_ms": 0.00047399953473359346,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -3943,7 +3219,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.3090719983447343,
+          "latency_ms": 0.18880399875342846,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -3975,29 +3251,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.3073370025958866,
+          "latency_ms": 0.19453400091151707,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Upload them to flicker.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -4024,7 +3282,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0007550042937509716,
+          "latency_ms": 0.000612000803812407,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -4056,7 +3314,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.4253449951647781,
+          "latency_ms": 0.3813919993262971,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -4090,29 +3348,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.38175599911483005,
+          "latency_ms": 0.28860900056315586,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "The paper is on arXiv.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -4139,7 +3379,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0009060022421181202,
+          "latency_ms": 0.00032999923860188574,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -4171,7 +3411,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.48396599595434964,
+          "latency_ms": 0.25084399931074586,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -4205,29 +3445,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.43721700058085844,
+          "latency_ms": 0.22878200070408639,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "Migrate the Chitragupt queue.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -4254,7 +3476,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0008039933163672686,
+          "latency_ms": 0.0003759996616281569,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -4276,7 +3498,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.45637400035047904,
+          "latency_ms": 0.17337300050712656,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -4298,25 +3520,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.6409679990611039,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Lakshmi handled the audit.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.2139510015695123,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -4345,7 +3549,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0012029995559714735,
+          "latency_ms": 0.0005639994924422354,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -4367,7 +3571,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.459426999441348,
+          "latency_ms": 0.25743100013642106,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -4389,25 +3593,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.5023760022595525,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Akash owns the migration.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.33667499883449636,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -4436,7 +3622,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.000785999873187393,
+          "latency_ms": 0.0006559985195053741,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -4458,7 +3644,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.3596880051190965,
+          "latency_ms": 0.25179200019920245,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -4480,25 +3666,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.4783380063599907,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Gautam reviewed the PR.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.26178100051765796,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -4527,7 +3695,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0006739937816746533,
+          "latency_ms": 0.0005350011633709073,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -4549,7 +3717,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.30191800033207983,
+          "latency_ms": 0.26337300005252473,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -4571,25 +3739,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.2801529990392737,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Om joined the standup.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.24004100123420358,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -4618,7 +3768,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0005499969120137393,
+          "latency_ms": 0.0008189999789465219,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -4650,7 +3800,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.367693995940499,
+          "latency_ms": 0.6480020001617959,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -4684,29 +3834,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.31430000672116876,
+          "latency_ms": 0.5280830009724014,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "Ask Sreenivas to join.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -4733,7 +3865,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0008659990271553397,
+          "latency_ms": 0.0005890015017939731,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -4765,7 +3897,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.6680930018774234,
+          "latency_ms": 0.33408699891879223,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -4799,29 +3931,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.5332109940354712,
+          "latency_ms": 0.31351399957202375,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "The Fiverr invoice is ready.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -4848,7 +3962,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0008810020517557859,
+          "latency_ms": 0.0005509991751750931,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -4880,7 +3994,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.4533399987849407,
+          "latency_ms": 0.3455770001892233,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -4914,29 +4028,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.4884119989583269,
+          "latency_ms": 0.28572800147230737,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "Sofia joins from Berlin.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -4963,7 +4059,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.00036100391298532486,
+          "latency_ms": 0.0006739992386428639,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -4995,7 +4091,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.38089099689386785,
+          "latency_ms": 0.7258440000441624,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -5029,29 +4125,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.37943999632261693,
+          "latency_ms": 0.7815590015525231,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "I'm going to ping Karthick.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -5078,7 +4156,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0002770029823295772,
+          "latency_ms": 0.000672000169288367,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -5110,7 +4188,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.2189189981436357,
+          "latency_ms": 0.4795910008397186,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -5144,29 +4222,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.23873100144555792,
+          "latency_ms": 0.46438600111287087,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "I will ask Priyaa.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -5193,7 +4253,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.00030899536795914173,
+          "latency_ms": 0.0003469995135674253,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -5225,7 +4285,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.2435890055494383,
+          "latency_ms": 0.24725999901420437,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -5259,29 +4319,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.32220400316873565,
+          "latency_ms": 0.24936400041042361,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "Ask Deeksha for the file.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -5308,7 +4350,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0003079985617659986,
+          "latency_ms": 0.0005019992386223748,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -5340,7 +4382,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.2250990000902675,
+          "latency_ms": 0.30500600041705184,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -5374,29 +4416,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.21879200357943773,
+          "latency_ms": 0.25902500055963174,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "Priyaa's laptop is slow.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -5423,7 +4447,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0002489978214725852,
+          "latency_ms": 0.00037600148061756045,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -5455,7 +4479,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.14106600428931415,
+          "latency_ms": 0.24150999888661318,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -5489,29 +4513,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.13122100062901154,
+          "latency_ms": 0.21201900017331354,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "The Sarvam-Kivi rollout.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -5538,7 +4544,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0002929955371655524,
+          "latency_ms": 0.0004140001692576334,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -5570,7 +4576,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.2208320001955144,
+          "latency_ms": 0.24198299979616422,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -5604,29 +4610,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.21211800049059093,
+          "latency_ms": 0.19366999913472682,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "\"Neel\" said, \"ship it.\"",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -5653,7 +4641,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.00026100315153598785,
+          "latency_ms": 0.0003770001058001071,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -5701,7 +4689,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.17998999828705564,
+          "latency_ms": 0.3106839994870825,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -5751,29 +4739,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.18106000061379746,
+          "latency_ms": 0.26584700026432984,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "Pooja told Pooja to call Pooja.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -5800,7 +4770,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0002679953468032181,
+          "latency_ms": 0.0005749989213654771,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -5840,7 +4810,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.16791500092949718,
+          "latency_ms": 0.553818999833311,
           "model_calls": 0,
           "memory_ids_used": [
             1,
@@ -5883,30 +4853,12 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.2525000018067658,
+          "latency_ms": 0.8795539997663582,
           "model_calls": 0,
           "memory_ids_used": [
             1,
             2
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "Sreenivas checked the Groww dashboard.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -5933,7 +4885,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.00028700014809146523,
+          "latency_ms": 0.0006949994713068008,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -5955,7 +4907,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.1876840033219196,
+          "latency_ms": 0.46604099952674005,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -5977,25 +4929,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.22161500237416476,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Ria sent the deck.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.6152370006020647,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -6024,7 +4958,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0004479952622205019,
+          "latency_ms": 0.00043499858293216676,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -6046,7 +4980,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.2821480011334643,
+          "latency_ms": 0.2875119989766972,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -6068,25 +5002,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.3635340035543777,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Buy two steel tumbler for the kitchen.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.35762500010605436,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -6115,7 +5031,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0007440030458383262,
+          "latency_ms": 0.00033899959817063063,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -6147,7 +5063,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.43247400026302785,
+          "latency_ms": 0.2327879992662929,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -6181,29 +5097,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.47624099534004927,
+          "latency_ms": 2.6123619991267333,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "Post the update on Tumblr tonight.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -6230,7 +5128,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0008780043572187424,
+          "latency_ms": 0.0002800006768666208,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -6262,7 +5160,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.8190789958462119,
+          "latency_ms": 0.15840100058994722,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -6296,29 +5194,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 1.0007710006902926,
+          "latency_ms": 0.18876499962061644,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "The plants will Groww faster now.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -6345,7 +5225,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0009420036803930998,
+          "latency_ms": 0.0003450004442129284,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -6367,7 +5247,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.4027319955639541,
+          "latency_ms": 0.14202099919202738,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -6389,25 +5269,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.43273300252621993,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Meera approved it.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.09283999861509074,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -6436,7 +5298,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0007490016287192702,
+          "latency_ms": 0.000285999703919515,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -6458,7 +5320,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.45882599806645885,
+          "latency_ms": 0.14424099936150014,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -6480,25 +5342,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.3143560024909675,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "sarvam AI is hiring.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.09747800140758045,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -6527,7 +5371,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.00045200431486591697,
+          "latency_ms": 0.0002729993866523728,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -6559,7 +5403,7 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.27389900060370564,
+          "latency_ms": 0.20541400044749025,
           "model_calls": 0,
           "memory_ids_used": [
             1
@@ -6593,29 +5437,11 @@
             }
           ],
           "assertion_failures": [],
-          "latency_ms": 0.3683119939523749,
+          "latency_ms": 0.2530999990995042,
           "model_calls": 0,
           "memory_ids_used": [
             1
           ]
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "APPLY",
-          "actual_decision": null,
-          "expected_memory_aware": "Ask Karthick for the invoice. Thanks for watching!",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
-          "model_calls": 0,
-          "memory_ids_used": []
         }
       ]
     },
@@ -6642,7 +5468,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0007580019882880151,
+          "latency_ms": 0.00028999966161791235,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -6664,7 +5490,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.3256660056649707,
+          "latency_ms": 0.1303689987253165,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -6686,25 +5512,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.4124240003875457,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "The papers will be signed.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.16155899902514648,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -6733,7 +5541,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0009750001481734216,
+          "latency_ms": 0.000254998667514883,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -6755,7 +5563,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.48839100054465234,
+          "latency_ms": 0.10597600157780107,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -6777,25 +5585,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.618926998868119,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Ditya will confirm.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.11481399997137487,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -6824,7 +5614,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0005889960448257625,
+          "latency_ms": 0.00024700057110749185,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -6846,7 +5636,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.2345000029890798,
+          "latency_ms": 0.11959199946431909,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -6868,25 +5658,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.10377099533798173,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "\u092a\u094d\u0930\u093f\u092f\u093e \u0928\u0947 \u092d\u0947\u091c\u093e.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.06192699947860092,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -6915,7 +5687,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0007970011211000383,
+          "latency_ms": 0.0002359993231948465,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -6937,7 +5709,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.3916139976354316,
+          "latency_ms": 0.12091999997210223,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -6959,25 +5731,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.3890899970429018,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Order it on blink it.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.09862600018095691,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -7006,7 +5760,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0011499942047521472,
+          "latency_ms": 0.0002490014594513923,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -7028,7 +5782,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.514715000463184,
+          "latency_ms": 0.14663799993286375,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -7050,25 +5804,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.48554499517194927,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Traffic near h s r layout.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.13308300003700424,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -7097,7 +5833,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0006169939297251403,
+          "latency_ms": 0.00024100154405459762,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -7119,7 +5855,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.3302199984318577,
+          "latency_ms": 0.11115800043626223,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -7141,25 +5877,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.1769640002748929,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Ship it on Friday.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.07545599873992614,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -7188,7 +5906,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0007499984349124134,
+          "latency_ms": 0.0002730012056417763,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -7210,7 +5928,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.3764450011658482,
+          "latency_ms": 0.13294800010044128,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -7232,25 +5950,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.24026000028243288,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Send it to there team.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.09000200043374207,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -7279,7 +5979,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0012379969120956957,
+          "latency_ms": 0.00040099985199049115,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -7301,7 +6001,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.5326439932105131,
+          "latency_ms": 0.19070000053034164,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -7323,25 +6023,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.3998300016974099,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "Patient reports mild fever since Monday.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.14148100126476493,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -7370,7 +6052,7 @@
           "expected_affected_tokens": null,
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.0006970003596507013,
+          "latency_ms": 0.0003579989424906671,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -7392,7 +6074,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.5840849989908747,
+          "latency_ms": 0.2272120000270661,
           "model_calls": 0,
           "memory_ids_used": []
         },
@@ -7414,25 +6096,7 @@
           "expected_affected_tokens": [],
           "actual_affected_tokens": [],
           "assertion_failures": [],
-          "latency_ms": 0.947032000112813,
-          "model_calls": 0,
-          "memory_ids_used": []
-        },
-        {
-          "profile": "llm",
-          "status": "SKIPPED",
-          "expected_decision": "ABSTAIN",
-          "actual_decision": null,
-          "expected_memory_aware": "The truck will reach the warehouse by six.",
-          "actual_memory_aware": null,
-          "classification": null,
-          "reason": "no KIVI_LLM_API_KEY / llm producer not wired up yet",
-          "expected_reasons": null,
-          "actual_reasons": [],
-          "expected_affected_tokens": null,
-          "actual_affected_tokens": [],
-          "assertion_failures": [],
-          "latency_ms": 0.0,
+          "latency_ms": 0.48894999963522423,
           "model_calls": 0,
           "memory_ids_used": []
         }
@@ -7441,64 +6105,49 @@
   ],
   "summary": {
     "off": {
-      "PASS": 71,
+      "PASS": 70,
       "FAIL": 0,
       "SKIPPED": 0,
       "ERROR": 0,
       "useful_apply": 0,
       "unnecessary_apply": 0,
       "incorrect_apply": 0,
-      "expected_abstain": 71,
+      "expected_abstain": 70,
       "unexpected_abstain": 0,
-      "total_latency_ms": 0.04268699558451772,
+      "total_latency_ms": 0.026292995244148187,
       "model_calls": 0,
       "asserts_reasons": 0,
       "asserts_tokens": 0
     },
     "exact": {
-      "PASS": 69,
-      "FAIL": 2,
+      "PASS": 70,
+      "FAIL": 0,
       "SKIPPED": 0,
       "ERROR": 0,
-      "useful_apply": 32,
+      "useful_apply": 33,
       "unnecessary_apply": 0,
       "incorrect_apply": 0,
       "expected_abstain": 37,
-      "unexpected_abstain": 2,
-      "total_latency_ms": 23.801175972039346,
+      "unexpected_abstain": 0,
+      "total_latency_ms": 16.659285996865947,
       "model_calls": 0,
       "asserts_reasons": 69,
       "asserts_tokens": 69
     },
     "phonetic": {
-      "PASS": 69,
-      "FAIL": 2,
+      "PASS": 70,
+      "FAIL": 0,
       "SKIPPED": 0,
       "ERROR": 0,
-      "useful_apply": 38,
+      "useful_apply": 39,
       "unnecessary_apply": 0,
       "incorrect_apply": 0,
       "expected_abstain": 31,
-      "unexpected_abstain": 2,
-      "total_latency_ms": 25.294210005085915,
+      "unexpected_abstain": 0,
+      "total_latency_ms": 19.415446007769788,
       "model_calls": 0,
       "asserts_reasons": 69,
       "asserts_tokens": 69
-    },
-    "llm": {
-      "PASS": 0,
-      "FAIL": 0,
-      "SKIPPED": 71,
-      "ERROR": 0,
-      "useful_apply": 0,
-      "unnecessary_apply": 0,
-      "incorrect_apply": 0,
-      "expected_abstain": 0,
-      "unexpected_abstain": 0,
-      "total_latency_ms": 0.0,
-      "model_calls": 0,
-      "asserts_reasons": 0,
-      "asserts_tokens": 0
     },
     "foo": {
       "PASS": 1,
@@ -7517,14 +6166,13 @@
     }
   },
   "assertion_coverage": {
-    "cases": 72,
+    "cases": 71,
     "asserting_reasons": 69,
     "asserting_affected_tokens": 69,
     "asserting_memory_row_count": 69,
     "setup_mismatches": 0,
     "cases_asserting_decision_and_text_only": [
       "case_02_useful_apply_two_names",
-      "case_20_sentence_initial_case",
       "case_27_invalid_profile_error"
     ]
   }

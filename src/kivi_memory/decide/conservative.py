@@ -1,6 +1,5 @@
 """Per-token APPLY iff confidence >= 0.75, unique canonical, disagrees, and
-(if the memory has cues) the sentence window overlaps them. plan.md pinned
-contracts #2, #3, #8.
+(if the memory cleared MIN_CUES_FOR_GATE) the sentence window overlaps them.
 """
 
 from __future__ import annotations
@@ -8,7 +7,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Iterable
 
-from kivi_memory.config import APPLY_THRESHOLD
+from kivi_memory.config import APPLY_THRESHOLD, MIN_CUES_FOR_GATE
 from kivi_memory.domain.models import Memory
 
 
@@ -39,7 +38,9 @@ def decide_token(
     if token_core.lower() == memory.canonical.lower():
         return DecideResult("ABSTAIN", "already_canonical")
 
-    if memory.context_cues and not (set(memory.context_cues) & set(context_window)):
+    if len(memory.context_cues) >= MIN_CUES_FOR_GATE and not (
+        set(memory.context_cues) & set(context_window)
+    ):
         return DecideResult("ABSTAIN", "context_mismatch")
 
     return DecideResult("APPLY", "ok", memory)

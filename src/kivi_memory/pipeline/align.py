@@ -1,4 +1,4 @@
-"""SequenceMatcher ASR<->formatted. Never positional 1:1. plan.md pinned contracts #1, #5.
+"""SequenceMatcher ASR<->formatted. Never positional 1:1.
 
 Decide only runs on formatted tokens; alignment's job is to hand decide extra
 candidate surfaces from the ASR side of a matched span. A formatter-only
@@ -60,7 +60,7 @@ def tokenize(text: str) -> list[DecomposedToken]:
 def match_keys(token: DecomposedToken) -> list[str]:
     """Normalized candidate surfaces for this token: the whole core, and (for a
     hyphenated core) each segment — `Sarvam-Kivi` checks as itself and as
-    `sarvam` / `kivi` (plan.md #5)."""
+    `sarvam` / `kivi`."""
     core_norm = normalize_word(token.core)
     if not core_norm:
         return []

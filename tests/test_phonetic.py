@@ -1,5 +1,5 @@
 """--profile phonetic: retrieves what exact misses, without over-firing on
-short-token collisions (plan.md families 10, 21)."""
+short-token collisions."""
 
 from pathlib import Path
 from typing import Iterator

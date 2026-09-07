@@ -1,4 +1,4 @@
-"""Word-diff + grapheme gate + REFUSE_HOMOPHONE_PAIRS. plan.md pinned contracts #4, #8.
+"""Word-diff + grapheme gate + REFUSE_HOMOPHONE_PAIRS.
 
 `there`/`their` (ratio 0.8) scores *higher* than `kiwi`/`kivi` (ratio 0.75) under
 plain SequenceMatcher similarity — edit distance alone cannot tell a personal
@@ -36,8 +36,8 @@ REFUSE_HOMOPHONE_PAIRS: frozenset[frozenset[str]] = frozenset(
     )
 )
 
-# Closed-class words: skipped when building context_cues windows (plan.md #8),
-# and a same-both-sides veto in the grapheme gate (plan.md #4 rule 4).
+# Closed-class words: skipped when building context_cues windows,
+# and a same-both-sides veto in the grapheme gate.
 COMMON_FUNCTION_WORDS: frozenset[str] = frozenset(
     """
     the a an to of and or but for on in at is was were be been being
@@ -112,7 +112,7 @@ def is_grapheme_similar(norm_a: str, norm_b: str) -> bool:
 
 
 def passes_grapheme_gate(formatted_word: str, final_word: str) -> tuple[bool, str]:
-    """All four gate rules from plan.md pinned contract #4. Returns (passed, reason)."""
+    """Grapheme gate. Returns (passed, reason)."""
     raw_formatted, raw_final = strip_punct(formatted_word), strip_punct(final_word)
     norm_formatted, norm_final = raw_formatted.lower(), raw_final.lower()
 

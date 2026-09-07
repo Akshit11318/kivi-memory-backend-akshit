@@ -9,7 +9,7 @@ INSERT OR IGNORE INTO meta(key, value) VALUES ('schema_version', '1');
 
 -- One memory = one per-user lexical belief: canonical spelling + confidence.
 -- context_cues: JSON array of ±2 content-token neighbors unioned at correction
--- time (plan.md pinned contract #8). '[]' = no gate, not sentence memory.
+-- time. '[]' = no gate, not sentence memory.
 CREATE TABLE IF NOT EXISTS memories (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id TEXT NOT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS memory_forms (
 CREATE INDEX IF NOT EXISTS idx_memory_forms_form ON memory_forms(form);
 
 -- Raw teach events. memory_id is set once an observation results in a memory
--- upsert — the pointer to evidence the plan.md contract asks for.
+-- upsert — pointer to the observation that created or reinforced the row.
 CREATE TABLE IF NOT EXISTS observations (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id TEXT NOT NULL,

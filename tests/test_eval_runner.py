@@ -179,11 +179,3 @@ def test_assertion_coverage_names_cases_that_only_check_decision_and_text() -> N
     assert coverage["asserting_reasons"] == 1
     assert coverage["cases_asserting_decision_and_text_only"] == ["t"]
 
-
-def test_llm_profile_is_skipped_not_failed() -> None:
-    case = _case(
-        inputs={"asr": "", "formatted": "hello", "user_id": "demo_user"},
-        expected={"expected_profile_results": {"llm": {"decision": "APPLY", "memory_aware": "hello"}}},
-    )
-    outcome = run_case(case, ["llm"])
-    assert outcome.profiles[0].status == "SKIPPED"

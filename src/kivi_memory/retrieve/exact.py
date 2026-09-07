@@ -1,4 +1,4 @@
-"""Exact / normalized overlap retriever. plan.md: retrieve.
+"""Exact / normalized overlap retriever.
 
 Word-boundary safety is structural, not a rule to enforce: this only ever
 does exact dict lookups against whole normalized surfaces, never a substring

@@ -1,4 +1,4 @@
-"""Deterministic rewrite of APPLY tokens only. plan.md: produce.
+"""Deterministic rewrite of APPLY tokens only.
 
 Degenerates to passthrough automatically when nothing APPLYs — no separate
 all-abstain special case needed.

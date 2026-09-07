@@ -29,9 +29,9 @@ class Memory:
     wording of a personal term, it is not this memory.
 
     `context_cues` is a small unioned bag of ±2 content-token neighbors seen at
-    correction time (plan.md pinned contract #8) — a decide-time disambiguation
-    gate for surfaces like `kiwi`/`Kivi`, not sentence memory. Empty means no
-    gate: a dictionary_add with no sentence leaves it empty on purpose.
+    correction time — a decide-time disambiguation gate for surfaces like
+    `kiwi`/`Kivi`, not sentence memory. Empty means no gate: a dictionary_add
+    with no sentence leaves it empty on purpose.
     """
 
     id: int

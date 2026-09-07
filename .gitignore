@@ -18,6 +18,7 @@ dist/
 
 # Internal build instructions to the coding agent — not part of the submission.
 HANDOFF.md
+plan.md
 
 # Local Claude Code session state (permissions, worktrees) — machine-specific.
 .claude/

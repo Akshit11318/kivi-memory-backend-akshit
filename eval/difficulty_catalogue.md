@@ -1,9 +1,11 @@
 # Post-ASR Difficulty Catalogue — measured, not imagined
 
-**Status:** this file replaces `eval/topics.list` and `eval/user_themes.md` as the
-source of truth for what goes into `eval/cases/`. Those two were written from a
-model's *idea* of ASR failure. This one was written by running the difficulties
-through `src/kivi_memory/` and writing down what the code actually did.
+**Status:** this file is the source of truth for what goes into `eval/cases/`.
+It replaced two earlier drafts (`eval/topics.list`, `eval/user_themes.md`), which
+were written from a model's *idea* of ASR failure and have been deleted from the
+repo — §0 records what was wrong with them, because the reasoning is why this
+file exists. This one was written by running the difficulties through
+`src/kivi_memory/` and writing down what the code actually did.
 
 Every row marked **[M]** was executed against the real pipeline
 (`learner.explicit` → `store` → `retrieve` → `decide` → `produce.rewrite`) on a
@@ -19,7 +21,7 @@ D3 and cases 03, 05, 06, 10, 11, 14–17 must be re-measured, not re-reasoned.
 
 ---
 
-## 0. Why the previous two files cannot be used
+## 0. Why the two earlier drafts were thrown out
 
 Not a style complaint. Four concrete problems, in order of cost.
 
@@ -259,9 +261,11 @@ a sentence with no personal vocabulary, `--profile off`. This is the majority of
 real utterances and it was 2 of 29 cases.
 → **`formatted == memory_aware`, byte for byte.**
 
-**D19. Teaching a name in a short sentence context-locks it.** Measured, and it
-is the cause of the only two failures in the current suite
-(`kivi eval --profiles off,exact,phonetic` → `exact 26/28`, `phonetic 26/28`).
+**D19. Teaching a name in a short sentence context-locks it.** Measured — and
+when first measured it was the cause of the only two failures in the suite
+(`exact 26/28`, `phonetic 26/28`). **Since fixed** by `MIN_CUES_FOR_GATE = 2`
+(§5 Q3); the suite is now green. The analysis below is what drove that fix and
+is kept because it is the reasoning, not a live defect report.
 
 Every `correction` stores cues, and a short teach line stores almost none:
 
@@ -382,7 +386,12 @@ Already correct and cheap — copy, don't rewrite:
 `case_11_word_boundary` (keep the `Kivimaki` substring test, but re-teach it
 from a §4 entity so it stops being a third `Kivi` case).
 
-That gives **44 new + 11 ported = 55** cases, with `Aaditya`/`Kivi` asserted in 2.
+That gave the current committed set of **71 cases** (`eval/cases/case_*.json`),
+with `Aaditya`/`Kivi` asserted in 2. `case_20_sentence_initial_case` from the old
+set was retired rather than ported: it taught `kiwi` from a lowercase,
+4-cue homograph sentence and then asserted a blanket APPLY on an unrelated line,
+which the cue gate correctly refuses. Its actual concern (case-insensitive
+retrieval) is covered by cases 33 and 34.
 
 ---
 
@@ -447,56 +456,62 @@ used once.
 
 ---
 
-## 5. Decisions I need from you
+## 5. Decisions taken
 
-**Q1 — D16/D17 are measured false APPLYs. Bug or documented limitation?**
-- `Sanjay → Sanjeev` gets learned as a spelling correction (grapheme gate cannot
-  see that these are two people).
-- `Karan → Karen` gets rewritten under `--profile phonetic` (`KRN == KRN`).
+The four questions this section used to ask were answered and shipped. Recorded
+here with the reasoning, because two of them were answered *against* the
+recommendation this file originally made, on evidence gathered afterwards.
 
-Three options: (a) write them as **known-limitation** cases whose expected value
-is today's wrong output — honest but ships a footgun; (b) write them as expected
-**ABSTAIN** and add the guard, roughly *if both surfaces are ≥ 4 chars and their
-edit distance ≥ 2 and neither is a stored form of the other, refuse* — 5 lines in
-`decide` plus a config constant; (c) restrict `phonetic` to surfaces that differ
-only by the vowel-length / doubling operations in D3. **My recommendation: (b)**,
-because a per-user notebook that renames colleagues is worse than one that
-abstains, and the eval already has the vocabulary for a new refuse reason.
+**Q1 — D16/D17 false APPLYs: guard, or document?** → **Documented as
+limitations. No guard shipped.** The originally recommended guard ("both
+surfaces >= 4 chars and edit distance >= 2, refuse") does not survive
+measurement:
 
-**Q2 — case 32: should `dictionary_add` be cue-gated?** Today `dict(Groww)` will
-rewrite "the plants will grow faster". The README says this is intentional
-("Empty cues → no gate. That word applies anywhere."). Keep as documented, or add
-an optional `--context "…"` to `observe --dictionary-add`?
-
-**Q3 — D19: should the cue gate key off homograph risk instead of teach source?**
-This is the one I'd fix first; it is currently failing 2 of 29 cases and it
-breaks the "teach once, works later" demo journey for names.
-
-The signal is already in the data: **was the surface the formatter handed us
-capitalized mid-sentence?**
-
-| Teach line | Formatted surface | Formatter's read | Gate |
+| Pair | Levenshtein | ratio | Must |
 | --- | --- | --- | --- |
-| `Gautam will lead.` | `Gautam` | proper noun | **no cue gate** — a name applies everywhere |
-| `we use the kiwi app daily` | `kiwi` (lowercase, mid-sentence) | common noun | **keep cue gate** — homograph risk is real |
+| `sanjay` / `sanjeev` (D16, two people) | 3 | 0.62 | REJECT |
+| `lakshmi` / `laxmi` (case 07, one person) | 3 | 0.67 | ACCEPT |
+| `shrey` / `shreyas` (two people) | 2 | 0.83 | REJECT |
+| `gautam` / `gautham` (one person) | 1 | 0.92 | ACCEPT |
+| `karan` / `karen` (D17, two people) | 1 | 0.80 | REJECT |
+| `aditya` / `aaditya` (one person) | 1 | 0.92 | ACCEPT |
 
-So: store cues as today, but have `decide` consult them only when the memory was
-created from a surface the formatter did *not* treat as a proper noun. That is a
-one-boolean column on `memories` plus one clause in `decide_token`, it keeps
-case 30/31 (`Tumblr`/`tumbler`) passing, and it makes cases 02 and 20 pass for
-the right reason instead of being deleted. Alternatives: require ≥2 cue overlap
-only for lowercase surfaces; or add `observe --scope word|context` and make the
-user say. **Recommendation: the capitalization signal**, with `--scope` as the
-manual override.
+No threshold on edit distance, similarity ratio, or prefix/suffix anchoring
+separates the REJECT rows from the ACCEPT rows — `shrey`/`shreyas` scores
+*better* on both metrics than `lakshmi`/`laxmi`, and `karan`/`karen` has the
+same distance as every legitimate respelling in the set. The proposed guard
+would have silently broken case 07 while still missing D17. This is D9 again:
+the discriminating signal is speaker identity, which this system does not
+have. Shipping a threshold that looks like a fix is worse than naming the
+limitation, so the limitation is named — in `README.md` and here.
 
-**Q4 — where do D14's out-of-reach cases live?** They pass trivially (everything
-ABSTAINs on `no_memory`), so they measure nothing about *this* system, but they
-are the honest record of what a word notebook cannot do. Keep all 4 in the main
-set, or move them to a separate `eval/cases/out_of_scope/` folder that the
-reported score does not average over? **Recommendation: separate folder**, so
-the headline pass rate is not inflated by cases that cannot fail.
+**Q2 — should `dictionary_add` be cue-gated?** → **Optional `--context`
+shipped.** Default is unchanged (no context, no cues, applies everywhere) so
+the pinned "strong asserted evidence" contract holds. Passing
+`--context "check the Groww SIP dashboard"` feeds the *same* `content_window`
+used by corrections, so a brand that collides with an ordinary word can be
+scoped without inventing a second mechanism. Recommended practice, now in the
+README: teach homograph-risk words through `correction` on a real sentence —
+that path is conservative on day one and widens only as real corrections
+accumulate, because cues union and never shrink.
 
----
+**Q3 — should the cue gate key off homograph risk instead of teach source?**
+→ **Yes, but not via capitalization.** The capitalization signal this file
+proposed fails on its own case 30: `Tumbler` in the teach line
+`Post the update on Tumbler.` is capitalized mid-sentence, identical in signal
+to `Gautam` in `Gautam will lead.`, so "capitalized => proper noun => no gate"
+would have stripped the gate from the flagship homograph case it was designed
+to protect. Shipped instead: `MIN_CUES_FOR_GATE = 2`, a floor on evidence
+rather than a proper-noun detector. It follows directly from this file's own
+measured cue counts — `{lead}` and `{approved}` (1 cue, too thin to gate on)
+versus `{post, update}` (2 cues, a real context). Effect: D19 resolved, case
+02 passes for the right reason, cases 30/31 keep passing.
+
+**Q4 — where do the out-of-reach D14 cases live?** → **Kept in the main set.**
+They cannot fail, so they do not measure the retriever, but they are the honest
+record of the capability envelope, and the per-case table shows every reason
+string, so an inflated headline is visible rather than hidden.
+
 
 ## 6. Generation contract for the case-writing model
 

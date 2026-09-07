@@ -1,1 +1,1 @@
-"""Producer slot. passthrough | rewrite | llm."""
+"""Producer slot. passthrough | rewrite."""

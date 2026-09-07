@@ -52,7 +52,9 @@ def _cmd_observe(args: argparse.Namespace) -> int:
                 return 2
             forms = [f.strip() for f in args.forms.split(",")] if args.forms else []
             forms = [f for f in forms if f]
-            memory = explicit_learner.dictionary_add(store, args.user_id, args.canonical, forms)
+            memory = explicit_learner.dictionary_add(
+                store, args.user_id, args.canonical, forms, args.context
+            )
             print(
                 json.dumps(
                     {
@@ -60,6 +62,7 @@ def _cmd_observe(args: argparse.Namespace) -> int:
                         "canonical": memory.canonical,
                         "forms": list(memory.forms),
                         "confidence": memory.confidence,
+                        "context_cues": list(memory.context_cues),
                     },
                     indent=2,
                 )
@@ -179,7 +182,7 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--profile",
         default=DEFAULT_PROFILE,
-        help="off | exact | phonetic | llm (default exact)",
+        help="off | exact | phonetic (default exact)",
     )
     parser.add_argument(
         "--plain",
@@ -193,6 +196,11 @@ def _parser() -> argparse.ArgumentParser:
     observe.add_argument("--user-id", dest="user_id", default=DEFAULT_USER_ID)
     observe.add_argument("--canonical", default=None, help="dictionary_add: the written form")
     observe.add_argument("--forms", default=None, help="dictionary_add: comma-separated surfaces")
+    observe.add_argument(
+        "--context",
+        default=None,
+        help="dictionary_add: optional example sentence to scope the word (adds context_cues)",
+    )
     observe.add_argument("--formatted", default=None, help="correction: formatter output")
     observe.add_argument("--final", default=None, help="correction: the user's corrected text")
     observe.add_argument("--asr", default=None, help="correction: optional raw ASR, stored not mined")

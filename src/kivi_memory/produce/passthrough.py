@@ -1,4 +1,4 @@
-"""Return formatted unchanged. Profile off — no decide, no rewrite, no LLM call."""
+"""Return formatted unchanged. Profile off — no decide, no rewrite."""
 
 from __future__ import annotations
 

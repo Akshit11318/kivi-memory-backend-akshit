@@ -1,1 +1,1 @@
-"""Records and protocols. plan.md: domain."""
+"""Records and protocols."""

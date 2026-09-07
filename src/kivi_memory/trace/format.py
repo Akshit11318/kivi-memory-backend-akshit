@@ -1,4 +1,4 @@
-"""Builds the inspectable run record. plan.md: trace.
+"""Builds the inspectable run record.
 
 Pretty traces use the CLI plate so the lab looks the same everywhere. JSON
 traces are the full record: ASR, formatted, per-token decisions, reasons,

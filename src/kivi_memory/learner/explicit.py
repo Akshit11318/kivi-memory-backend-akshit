@@ -1,4 +1,4 @@
-"""ExplicitLearner: dictionary_add and correction. plan.md: explicit only.
+"""ExplicitLearner: dictionary_add and correction.
 
 No unusual-word harvest, no ASR mining. Every write here is one of the two
 named sources; the store never learns anything the learner didn't hand it.
@@ -15,6 +15,7 @@ from kivi_memory.config import (
 )
 from kivi_memory.domain.models import Memory, Observation
 from kivi_memory.learner.align import (
+    STOPLIST,
     content_window,
     diff_words,
     normalize_word,
@@ -46,17 +47,36 @@ def _next_correction_confidence(existing: Memory | None, prior_corrections: int)
     return min(1.0, base + CORRECTION_BUMP)
 
 
+def _cues_from_context(context: str | None) -> set[str]:
+    """Optional dictionary_add scoping hint. Same STOPLIST as correction's
+    content_window, just not windowed around a diff span -- there is no
+    correction here to center on, only a few words the user typed on purpose."""
+    if not context:
+        return set()
+    return {
+        normalize_word(word)
+        for word in tokenize_sentence(context)
+        if normalize_word(word) and normalize_word(word) not in STOPLIST
+    }
+
+
 def dictionary_add(
-    store: MemoryStore, user_id: str, canonical: str, forms: list[str]
+    store: MemoryStore,
+    user_id: str,
+    canonical: str,
+    forms: list[str],
+    context: str | None = None,
 ) -> Memory:
-    """Strong observation. Confidence always 1.0. No sentence -> empty context_cues."""
+    """Strong observation. Confidence always 1.0. No context -> empty
+    context_cues (applies everywhere, unchanged default). An optional
+    `context` hint scopes it the same way a correction's teach sentence does."""
     all_forms = {canonical.strip().lower(), *(f.strip().lower() for f in forms if f.strip())}
     memory = store.upsert_memory(
         user_id=user_id,
         canonical=canonical,
         forms=all_forms,
         confidence=DICTIONARY_ADD_CONFIDENCE,
-        context_cues=(),
+        context_cues=_cues_from_context(context),
     )
     store.add_observation(
         Observation(
@@ -149,7 +169,9 @@ def replay(store: MemoryStore, entry: dict) -> Memory | list[CorrectionOutcome] 
     source = entry.get("source")
     user_id = entry.get("user_id", "demo")
     if source == "dictionary_add":
-        return dictionary_add(store, user_id, entry["canonical"], entry.get("forms", []))
+        return dictionary_add(
+            store, user_id, entry["canonical"], entry.get("forms", []), entry.get("context")
+        )
     if source == "correction":
         return correction(
             store,

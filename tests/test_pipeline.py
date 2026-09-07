@@ -188,4 +188,4 @@ def test_empty_input_no_crash(store: MemoryStore) -> None:
 
 def test_unimplemented_profile_raises(store: MemoryStore) -> None:
     with pytest.raises(NotImplementedError):
-        run(store, "demo", asr="", formatted="hello", profile="llm")
+        run(store, "demo", asr="", formatted="hello", profile="foo")

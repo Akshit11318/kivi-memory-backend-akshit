@@ -1,1 +1,1 @@
-"""SQLite persist, migrate, reset. plan.md: store."""
+"""SQLite persist, migrate, reset."""

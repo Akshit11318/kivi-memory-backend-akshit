@@ -1,1 +1,1 @@
-"""Learner slot. plan.md: explicit only."""
+"""Learner slot. Explicit dictionary_add and correction only."""

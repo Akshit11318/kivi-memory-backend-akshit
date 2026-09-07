@@ -1,8 +1,8 @@
 """Eval runner: loads cases, isolates DB, runs profiles, writes results.
 
-plan.md: eval. Same fixtures x profiles, isolated SQLite per case, compared
-against `off` as the control. Missing/unbuilt profiles SKIP, they never fail
-the other rows. No hidden benchmark: every case here is a committed file.
+Same fixtures x profiles, isolated SQLite per case, compared against
+`off` as the control. No hidden benchmark: every case here is a
+committed file.
 """
 
 from __future__ import annotations
@@ -94,8 +94,6 @@ def _apply_setup(store: MemoryStore, case: dict[str, Any], user_id: str) -> None
 
 
 def _run_one_profile(store: MemoryStore, user_id: str, inputs: dict[str, Any], profile: str):
-    if profile == "llm":
-        return None, "SKIPPED", "no KIVI_LLM_API_KEY / llm producer not wired up yet"
     try:
         trace = run(store, user_id, inputs.get("asr", ""), inputs.get("formatted", ""), profile)
         return trace, "RAN", "ok"

@@ -1,4 +1,4 @@
-"""Metaphone retriever (jellyfish). plan.md: retrieve, profile phonetic.
+"""Metaphone retriever (jellyfish). Profile phonetic.
 
 `jellyfish` only implements classic single-code Metaphone, not true Double
 Metaphone's primary/secondary codes. Plain Metaphone maps `v` -> F but keeps a

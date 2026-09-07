@@ -1,4 +1,4 @@
-"""Stage 1: MemoryStore migrate / upsert / list / reset contract."""
+"""MemoryStore migrate / upsert / list / reset."""
 
 from pathlib import Path
 from typing import Iterator
