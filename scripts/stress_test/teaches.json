@@ -1,0 +1,311 @@
+[
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Lakshmi",
+    "forms": [
+      "laxmi"
+    ],
+    "context": null
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Gautam",
+    "forms": [
+      "gautham"
+    ],
+    "context": null
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Kubernetes",
+    "forms": [
+      "kubernets",
+      "kubernetis"
+    ],
+    "context": null
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Postgres",
+    "forms": [
+      "postgress"
+    ],
+    "context": null
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Applee",
+    "forms": [
+      "apple"
+    ],
+    "context": "The new Applee update finally fixed the battery drain bug."
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Divyaa",
+    "forms": [
+      "divya"
+    ],
+    "context": null
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Dockerr",
+    "forms": [
+      "docker"
+    ],
+    "context": "Deploy the payments service using Dockerr so environments stay consistent."
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Arjunn",
+    "forms": [
+      "arjun"
+    ],
+    "context": null
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Varoon",
+    "forms": [
+      "varun"
+    ],
+    "context": null
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Snowflake",
+    "forms": [
+      "snowflak"
+    ],
+    "context": null
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Megna",
+    "forms": [
+      "meghna"
+    ],
+    "context": null
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Ayesha",
+    "forms": [
+      "aisha"
+    ],
+    "context": null
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Jenkins",
+    "forms": [
+      "jenkings"
+    ],
+    "context": null
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Mintt",
+    "forms": [
+      "mint"
+    ],
+    "context": "He tracks every monthly expense using Mintt."
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Slicee",
+    "forms": [
+      "slice"
+    ],
+    "context": "The Slicee card gives cashback on every online purchase."
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Deeksha",
+    "forms": [
+      "diksha"
+    ],
+    "context": null
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Grafana",
+    "forms": [
+      "grafanna",
+      "graffana"
+    ],
+    "context": null
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Chowdhury",
+    "forms": [
+      "choudhury"
+    ],
+    "context": null
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Ravi",
+    "forms": [
+      "ravee"
+    ],
+    "context": null
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Postmann",
+    "forms": [
+      "postman"
+    ],
+    "context": "We test every new API endpoint with Postmann before merging."
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Ankita",
+    "forms": [
+      "ankeeta"
+    ],
+    "context": null
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Slackk",
+    "forms": [
+      "slack"
+    ],
+    "context": "Ping the on-call engineer on Slackk if the alert doesn't clear."
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Terraform",
+    "forms": [
+      "terrafrom"
+    ],
+    "context": null
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Windowss",
+    "forms": [
+      "windows"
+    ],
+    "context": "Update the Windowss drivers before the client demo tomorrow."
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Figma",
+    "forms": [
+      "figmaa"
+    ],
+    "context": null
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Nginx",
+    "forms": [
+      "enginx"
+    ],
+    "context": null
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Groww",
+    "forms": [
+      "grow",
+      "groww"
+    ],
+    "context": "He opened a mutual fund SIP on Groww last month."
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Uberr",
+    "forms": [
+      "uber"
+    ],
+    "context": "Book an Uberr for the airport run first thing tomorrow."
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Vikramm",
+    "forms": [
+      "vikram"
+    ],
+    "context": null
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Ringg",
+    "forms": [
+      "ring"
+    ],
+    "context": "The Ringg doorbell camera caught the delivery on video this morning."
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Snehaa",
+    "forms": [
+      "sneha"
+    ],
+    "context": null
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Priya",
+    "forms": [
+      "priyaa"
+    ],
+    "context": null
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Srinivas",
+    "forms": [
+      "sreenivas"
+    ],
+    "context": null
+  },
+  {
+    "user_id": "stress",
+    "source": "dictionary_add",
+    "canonical": "Kaviya",
+    "forms": [
+      "kavya"
+    ],
+    "context": null
+  }
+]

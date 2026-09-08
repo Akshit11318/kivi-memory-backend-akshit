@@ -40,7 +40,10 @@ def test_llm_abstains_on_fruit_sense(store: MemoryStore, monkeypatch) -> None:
 
     with patch(
         _PATCH_TARGET,
-        return_value='{"occurrences": [{"occurrence": 1, "score": 5, "reason": "fruit_vs_brand"}]}',
+        return_value=(
+            '{"occurrences": [{"occurrence": 1, "score": 5, "reason": "fruit_vs_brand"}]}',
+            {"prompt_tokens": 120, "completion_tokens": 18},
+        ),
     ):
         trace = run(
             store,
@@ -57,6 +60,8 @@ def test_llm_abstains_on_fruit_sense(store: MemoryStore, monkeypatch) -> None:
     assert decision.reason == "fruit_vs_brand"
     assert decision.llm_score == 5
     assert trace.model_calls == 1
+    assert trace.prompt_tokens == 120
+    assert trace.completion_tokens == 18
 
 
 def test_llm_applies_on_staging_sense_with_no_shared_neighbor_words(
@@ -75,7 +80,10 @@ def test_llm_applies_on_staging_sense_with_no_shared_neighbor_words(
 
     with patch(
         _PATCH_TARGET,
-        return_value='{"occurrences": [{"occurrence": 1, "score": 95, "reason": "same_product"}]}',
+        return_value=(
+            '{"occurrences": [{"occurrence": 1, "score": 95, "reason": "same_product"}]}',
+            {"prompt_tokens": 130, "completion_tokens": 15},
+        ),
     ):
         trace = run(
             store,
@@ -99,7 +107,10 @@ def test_llm_abstains_on_groww_grow_with_no_teach_text(store: MemoryStore, monke
 
     with patch(
         _PATCH_TARGET,
-        return_value='{"occurrences": [{"occurrence": 1, "score": 5, "reason": "common_word"}]}',
+        return_value=(
+            '{"occurrences": [{"occurrence": 1, "score": 5, "reason": "common_word"}]}',
+            {"prompt_tokens": 90, "completion_tokens": 12},
+        ),
     ):
         trace = run(
             store, "demo", asr="", formatted="The plants will grow faster in the sun.", profile="auto"
@@ -146,7 +157,7 @@ def test_llm_unparseable_response_falls_through_to_ungated_apply(
     monkeypatch.setenv("KIVI_LLM_API_KEY", "test-key")
     dictionary_add(store, "demo", "Groww", ["grow"])
 
-    with patch(_PATCH_TARGET, return_value="not json at all"):
+    with patch(_PATCH_TARGET, return_value=("not json at all", {})):
         trace = run(
             store, "demo", asr="", formatted="The plants will grow faster in the sun.", profile="auto"
         )
@@ -192,12 +203,13 @@ def test_same_word_twice_different_sense_in_one_sentence_gets_independent_verdic
 
     def fake_call(base_url, api_key, model, prompt):
         assert "[[#1: grow]]" in prompt and "[[#2: grow]]" in prompt
-        return (
+        content = (
             '{"occurrences": ['
             '{"occurrence": 1, "score": 95, "reason": "brand: moved funds from it"}, '
             '{"occurrence": 2, "score": 5, "reason": "ordinary verb: profits growing"}'
             "]}"
         )
+        return content, {"prompt_tokens": 150, "completion_tokens": 30}
 
     with patch(_PATCH_TARGET, side_effect=fake_call) as mock_call:
         trace = run(
@@ -217,6 +229,10 @@ def test_same_word_twice_different_sense_in_one_sentence_gets_independent_verdic
     assert grow_decisions[0].decision == "APPLY"
     assert grow_decisions[1].decision == "ABSTAIN"
     assert trace.model_calls == 1  # one HTTP call scored both occurrences
+    assert trace.prompt_tokens == 150  # attributed once, not double-counted per occurrence
+    assert trace.completion_tokens == 30
+    assert grow_decisions[0].prompt_tokens == 150
+    assert grow_decisions[1].prompt_tokens is None
 
 
 def test_batch_falls_through_to_ungated_on_occurrence_count_mismatch(
@@ -230,7 +246,10 @@ def test_batch_falls_through_to_ungated_on_occurrence_count_mismatch(
 
     with patch(
         _PATCH_TARGET,
-        return_value='{"occurrences": [{"occurrence": 1, "score": 5, "reason": "only one"}]}',
+        return_value=(
+            '{"occurrences": [{"occurrence": 1, "score": 5, "reason": "only one"}]}',
+            {"prompt_tokens": 80, "completion_tokens": 10},
+        ),
     ):
         trace = run(
             store,
@@ -256,7 +275,10 @@ def test_score_is_blended_with_memory_confidence_not_used_alone(store: MemorySto
 
     with patch(
         _PATCH_TARGET,
-        return_value='{"occurrences": [{"occurrence": 1, "score": 60, "reason": "leaning brand"}]}',
+        return_value=(
+            '{"occurrences": [{"occurrence": 1, "score": 60, "reason": "leaning brand"}]}',
+            {"prompt_tokens": 70, "completion_tokens": 10},
+        ),
     ):
         trace = run(store, "demo", asr="", formatted="I moved my SIP to grow.", profile="auto")
     decision = next(d for d in trace.decisions if d.token == "grow")
@@ -267,7 +289,8 @@ def test_score_is_blended_with_memory_confidence_not_used_alone(store: MemorySto
     with patch(
         _PATCH_TARGET,
         return_value=(
-            '{"occurrences": [{"occurrence": 1, "score": 55, "reason": "leaning apply, low confidence"}]}'
+            '{"occurrences": [{"occurrence": 1, "score": 55, "reason": "leaning apply, low confidence"}]}',
+            {"prompt_tokens": 70, "completion_tokens": 10},
         ),
     ):
         trace = run(store, "demo", asr="", formatted="Tell Aditya later.", profile="auto")

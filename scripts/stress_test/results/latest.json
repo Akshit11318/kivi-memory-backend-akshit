@@ -1,0 +1,1308 @@
+{
+  "paragraphs": 183,
+  "tokens_seen": 10526,
+  "candidates_found": 402,
+  "corrections_applied": 381,
+  "tp": 240,
+  "fp": 141,
+  "fn": 0,
+  "precision": 0.6299212598425197,
+  "recall": 1.0,
+  "latency_ms_sum": 2989.431410074758,
+  "latency_ms_mean": 16.335690765435835,
+  "latency_ms_median": 16.220722995058168,
+  "latency_ms_p95": 21.573257595446194,
+  "latency_ms_max": 30.912348003766965,
+  "wall_ms": 16926.639664001414,
+  "model_calls": 0,
+  "helper_llm": 0,
+  "helper_ungated": 381,
+  "model": null,
+  "prompt_tokens": 0,
+  "completion_tokens": 0,
+  "total_tokens": 0,
+  "estimated_cost_usd": null,
+  "per_paragraph": [
+    {
+      "paragraph": 0,
+      "tp": 3,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 17.353661001834553
+    },
+    {
+      "paragraph": 1,
+      "tp": 1,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 15.134797999053262
+    },
+    {
+      "paragraph": 2,
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 15.104063000762835
+    },
+    {
+      "paragraph": 3,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 16.567005004617386
+    },
+    {
+      "paragraph": 4,
+      "tp": 2,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 20.46365300338948
+    },
+    {
+      "paragraph": 5,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 12.377535997075029
+    },
+    {
+      "paragraph": 6,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 29.749116001767106
+    },
+    {
+      "paragraph": 7,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 21.371366005041637
+    },
+    {
+      "paragraph": 8,
+      "tp": 2,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 16.133067998453043
+    },
+    {
+      "paragraph": 9,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 12.771720001182985
+    },
+    {
+      "paragraph": 10,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 20.95599699532613
+    },
+    {
+      "paragraph": 11,
+      "tp": 1,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 13.584581996838097
+    },
+    {
+      "paragraph": 12,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 10.22681900212774
+    },
+    {
+      "paragraph": 13,
+      "tp": 2,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 16.711884003598243
+    },
+    {
+      "paragraph": 14,
+      "tp": 2,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 19.260344000940677
+    },
+    {
+      "paragraph": 15,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 20.85453999461606
+    },
+    {
+      "paragraph": 16,
+      "tp": 0,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 11.550270995940082
+    },
+    {
+      "paragraph": 17,
+      "tp": 1,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 14.117024002189282
+    },
+    {
+      "paragraph": 18,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 16.549316002056003
+    },
+    {
+      "paragraph": 19,
+      "tp": 0,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 19.92599900404457
+    },
+    {
+      "paragraph": 20,
+      "tp": 0,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 14.570223996997811
+    },
+    {
+      "paragraph": 21,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 13.686780002899468
+    },
+    {
+      "paragraph": 22,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 18.849935004254803
+    },
+    {
+      "paragraph": 23,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 13.937617004557978
+    },
+    {
+      "paragraph": 24,
+      "tp": 3,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 14.049993005755823
+    },
+    {
+      "paragraph": 25,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 15.513923994149081
+    },
+    {
+      "paragraph": 26,
+      "tp": 0,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 16.35509899642784
+    },
+    {
+      "paragraph": 27,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 10.845509001228493
+    },
+    {
+      "paragraph": 28,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 13.218398002209142
+    },
+    {
+      "paragraph": 29,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 17.731795996951405
+    },
+    {
+      "paragraph": 30,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 13.41263599897502
+    },
+    {
+      "paragraph": 31,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 13.585931003035512
+    },
+    {
+      "paragraph": 32,
+      "tp": 2,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 30.912348003766965
+    },
+    {
+      "paragraph": 33,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 20.063635995029472
+    },
+    {
+      "paragraph": 34,
+      "tp": 0,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 11.906603998795617
+    },
+    {
+      "paragraph": 35,
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 18.109852004272398
+    },
+    {
+      "paragraph": 36,
+      "tp": 1,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 16.199375000724103
+    },
+    {
+      "paragraph": 37,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 14.402626002265606
+    },
+    {
+      "paragraph": 38,
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 16.479370999149978
+    },
+    {
+      "paragraph": 39,
+      "tp": 0,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 20.82791599968914
+    },
+    {
+      "paragraph": 40,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 18.82044200465316
+    },
+    {
+      "paragraph": 41,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 15.548900999419857
+    },
+    {
+      "paragraph": 42,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 18.809079003403895
+    },
+    {
+      "paragraph": 43,
+      "tp": 0,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 18.135669000912458
+    },
+    {
+      "paragraph": 44,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 13.510210999811534
+    },
+    {
+      "paragraph": 45,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 11.687176003761124
+    },
+    {
+      "paragraph": 46,
+      "tp": 3,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 18.052157000056468
+    },
+    {
+      "paragraph": 47,
+      "tp": 2,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 17.813295999076217
+    },
+    {
+      "paragraph": 48,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 11.742678005248308
+    },
+    {
+      "paragraph": 49,
+      "tp": 0,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 11.126040000817738
+    },
+    {
+      "paragraph": 50,
+      "tp": 1,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 21.973743998387363
+    },
+    {
+      "paragraph": 51,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 12.250213003426325
+    },
+    {
+      "paragraph": 52,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 15.943468002660666
+    },
+    {
+      "paragraph": 53,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 9.26390899985563
+    },
+    {
+      "paragraph": 54,
+      "tp": 0,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 17.17830500274431
+    },
+    {
+      "paragraph": 55,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 17.13514299626695
+    },
+    {
+      "paragraph": 56,
+      "tp": 1,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 10.85417700232938
+    },
+    {
+      "paragraph": 57,
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 16.446579997136723
+    },
+    {
+      "paragraph": 58,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 11.017011005606037
+    },
+    {
+      "paragraph": 59,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 14.689275994896889
+    },
+    {
+      "paragraph": 60,
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 19.800159003352746
+    },
+    {
+      "paragraph": 61,
+      "tp": 2,
+      "fp": 3,
+      "fn": 0,
+      "latency_ms": 14.797137999266852
+    },
+    {
+      "paragraph": 62,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 16.290369996568188
+    },
+    {
+      "paragraph": 63,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 17.42361200012965
+    },
+    {
+      "paragraph": 64,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 21.395618001406547
+    },
+    {
+      "paragraph": 65,
+      "tp": 2,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 17.389455002557952
+    },
+    {
+      "paragraph": 66,
+      "tp": 3,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 17.13871300307801
+    },
+    {
+      "paragraph": 67,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 19.1093820030801
+    },
+    {
+      "paragraph": 68,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 12.900321002234705
+    },
+    {
+      "paragraph": 69,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 12.473233000491746
+    },
+    {
+      "paragraph": 70,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 12.645981994864997
+    },
+    {
+      "paragraph": 71,
+      "tp": 2,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 18.357745997491293
+    },
+    {
+      "paragraph": 72,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 11.428385005274322
+    },
+    {
+      "paragraph": 73,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 15.209413999400567
+    },
+    {
+      "paragraph": 74,
+      "tp": 2,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 21.41951399971731
+    },
+    {
+      "paragraph": 75,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 13.36740000260761
+    },
+    {
+      "paragraph": 76,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 19.426126003963873
+    },
+    {
+      "paragraph": 77,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 15.01701199595118
+    },
+    {
+      "paragraph": 78,
+      "tp": 3,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 18.013829001574777
+    },
+    {
+      "paragraph": 79,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 15.050943002279382
+    },
+    {
+      "paragraph": 80,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 13.504746995749883
+    },
+    {
+      "paragraph": 81,
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 19.071743001404684
+    },
+    {
+      "paragraph": 82,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 18.153974000597373
+    },
+    {
+      "paragraph": 83,
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 17.150496001704596
+    },
+    {
+      "paragraph": 84,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 21.847667994734365
+    },
+    {
+      "paragraph": 85,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 16.452666000986937
+    },
+    {
+      "paragraph": 86,
+      "tp": 2,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 18.066061995341443
+    },
+    {
+      "paragraph": 87,
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 17.279959000006784
+    },
+    {
+      "paragraph": 88,
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 19.842594003421254
+    },
+    {
+      "paragraph": 89,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 21.56295799795771
+    },
+    {
+      "paragraph": 90,
+      "tp": 0,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 16.14400300604757
+    },
+    {
+      "paragraph": 91,
+      "tp": 3,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 18.34321200294653
+    },
+    {
+      "paragraph": 92,
+      "tp": 3,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 16.034950996981934
+    },
+    {
+      "paragraph": 93,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 15.401701995870098
+    },
+    {
+      "paragraph": 94,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 15.818277002836112
+    },
+    {
+      "paragraph": 95,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 18.06763099739328
+    },
+    {
+      "paragraph": 96,
+      "tp": 3,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 14.706960006151348
+    },
+    {
+      "paragraph": 97,
+      "tp": 0,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 21.517184999538586
+    },
+    {
+      "paragraph": 98,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 19.497214001603425
+    },
+    {
+      "paragraph": 99,
+      "tp": 0,
+      "fp": 3,
+      "fn": 0,
+      "latency_ms": 15.536227998381946
+    },
+    {
+      "paragraph": 100,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 13.327116997970734
+    },
+    {
+      "paragraph": 101,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 12.201568002637941
+    },
+    {
+      "paragraph": 102,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 12.20560799993109
+    },
+    {
+      "paragraph": 103,
+      "tp": 3,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 18.00217900017742
+    },
+    {
+      "paragraph": 104,
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 17.16010700329207
+    },
+    {
+      "paragraph": 105,
+      "tp": 0,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 12.885347001429182
+    },
+    {
+      "paragraph": 106,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 18.391294994216878
+    },
+    {
+      "paragraph": 107,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 23.800841998308897
+    },
+    {
+      "paragraph": 108,
+      "tp": 2,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 19.544980001228396
+    },
+    {
+      "paragraph": 109,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 13.544131004891824
+    },
+    {
+      "paragraph": 110,
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 20.63351399556268
+    },
+    {
+      "paragraph": 111,
+      "tp": 0,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 11.937748997297604
+    },
+    {
+      "paragraph": 112,
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 13.02693000616273
+    },
+    {
+      "paragraph": 113,
+      "tp": 1,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 13.935173003119417
+    },
+    {
+      "paragraph": 114,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 16.361768000933807
+    },
+    {
+      "paragraph": 115,
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 16.86034500016831
+    },
+    {
+      "paragraph": 116,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 13.931664005212951
+    },
+    {
+      "paragraph": 117,
+      "tp": 2,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 15.701698997872882
+    },
+    {
+      "paragraph": 118,
+      "tp": 0,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 15.15300000028219
+    },
+    {
+      "paragraph": 119,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 17.085270999814384
+    },
+    {
+      "paragraph": 120,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 18.54322000144748
+    },
+    {
+      "paragraph": 121,
+      "tp": 2,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 19.529447999957483
+    },
+    {
+      "paragraph": 122,
+      "tp": 3,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 14.075111001147889
+    },
+    {
+      "paragraph": 123,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 18.545037004514597
+    },
+    {
+      "paragraph": 124,
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 14.680112995847594
+    },
+    {
+      "paragraph": 125,
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 14.270839004893787
+    },
+    {
+      "paragraph": 126,
+      "tp": 1,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 12.120776998926885
+    },
+    {
+      "paragraph": 127,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 11.15880499855848
+    },
+    {
+      "paragraph": 128,
+      "tp": 3,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 18.353068000578787
+    },
+    {
+      "paragraph": 129,
+      "tp": 2,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 21.76197500375565
+    },
+    {
+      "paragraph": 130,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 20.110245000978466
+    },
+    {
+      "paragraph": 131,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 16.345779004041106
+    },
+    {
+      "paragraph": 132,
+      "tp": 1,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 16.376963001675904
+    },
+    {
+      "paragraph": 133,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 17.112244000600185
+    },
+    {
+      "paragraph": 134,
+      "tp": 2,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 18.102989997714758
+    },
+    {
+      "paragraph": 135,
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 14.314265994471498
+    },
+    {
+      "paragraph": 136,
+      "tp": 1,
+      "fp": 4,
+      "fn": 0,
+      "latency_ms": 20.946254997397773
+    },
+    {
+      "paragraph": 137,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 18.13872299680952
+    },
+    {
+      "paragraph": 138,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 16.55285600281786
+    },
+    {
+      "paragraph": 139,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 13.645860002725385
+    },
+    {
+      "paragraph": 140,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 22.3143280018121
+    },
+    {
+      "paragraph": 141,
+      "tp": 1,
+      "fp": 3,
+      "fn": 0,
+      "latency_ms": 16.15227499860339
+    },
+    {
+      "paragraph": 142,
+      "tp": 2,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 16.326311000739224
+    },
+    {
+      "paragraph": 143,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 16.017765003198292
+    },
+    {
+      "paragraph": 144,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 12.995396005862858
+    },
+    {
+      "paragraph": 145,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 14.886769997247029
+    },
+    {
+      "paragraph": 146,
+      "tp": 0,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 11.309955996694043
+    },
+    {
+      "paragraph": 147,
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 16.79431599768577
+    },
+    {
+      "paragraph": 148,
+      "tp": 0,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 16.220722995058168
+    },
+    {
+      "paragraph": 149,
+      "tp": 0,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 21.5237390002585
+    },
+    {
+      "paragraph": 150,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 20.664916999521665
+    },
+    {
+      "paragraph": 151,
+      "tp": 0,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 14.864860000670888
+    },
+    {
+      "paragraph": 152,
+      "tp": 1,
+      "fp": 5,
+      "fn": 0,
+      "latency_ms": 22.24318599473918
+    },
+    {
+      "paragraph": 153,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 11.937449999095406
+    },
+    {
+      "paragraph": 154,
+      "tp": 2,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 18.721323998761363
+    },
+    {
+      "paragraph": 155,
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 11.50562099792296
+    },
+    {
+      "paragraph": 156,
+      "tp": 3,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 13.288980000652373
+    },
+    {
+      "paragraph": 157,
+      "tp": 0,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 16.39709700248204
+    },
+    {
+      "paragraph": 158,
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 16.147608002938796
+    },
+    {
+      "paragraph": 159,
+      "tp": 2,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 15.583735999825876
+    },
+    {
+      "paragraph": 160,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 16.812121000839397
+    },
+    {
+      "paragraph": 161,
+      "tp": 0,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 14.739663994987495
+    },
+    {
+      "paragraph": 162,
+      "tp": 2,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 17.12458000110928
+    },
+    {
+      "paragraph": 163,
+      "tp": 1,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 13.765609997790307
+    },
+    {
+      "paragraph": 164,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 16.598550995695405
+    },
+    {
+      "paragraph": 165,
+      "tp": 2,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 17.094208000344224
+    },
+    {
+      "paragraph": 166,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 12.002592004137114
+    },
+    {
+      "paragraph": 167,
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 12.990841001737863
+    },
+    {
+      "paragraph": 168,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 11.930075997952372
+    },
+    {
+      "paragraph": 169,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 13.900575999286957
+    },
+    {
+      "paragraph": 170,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 13.537833001464605
+    },
+    {
+      "paragraph": 171,
+      "tp": 1,
+      "fp": 3,
+      "fn": 0,
+      "latency_ms": 15.58227300120052
+    },
+    {
+      "paragraph": 172,
+      "tp": 2,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 21.574401995167136
+    },
+    {
+      "paragraph": 173,
+      "tp": 2,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 17.361073005304206
+    },
+    {
+      "paragraph": 174,
+      "tp": 0,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 14.299041999038309
+    },
+    {
+      "paragraph": 175,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 12.196572999528144
+    },
+    {
+      "paragraph": 176,
+      "tp": 0,
+      "fp": 2,
+      "fn": 0,
+      "latency_ms": 18.18428100523306
+    },
+    {
+      "paragraph": 177,
+      "tp": 2,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 15.543206995062064
+    },
+    {
+      "paragraph": 178,
+      "tp": 2,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 15.20988300035242
+    },
+    {
+      "paragraph": 179,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 11.407512000005227
+    },
+    {
+      "paragraph": 180,
+      "tp": 2,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 19.44496200303547
+    },
+    {
+      "paragraph": 181,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "latency_ms": 15.756783999677282
+    },
+    {
+      "paragraph": 182,
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "latency_ms": 26.02915800525807
+    }
+  ]
+}

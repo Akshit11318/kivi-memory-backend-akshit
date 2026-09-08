@@ -60,6 +60,8 @@ class HelperResult:
     latency_ms: float
     model_calls: int  # 1 on exactly one HelperResult per batch, 0 on the rest
     score: float | None = None  # raw 0-100 LLM sense score; None when helper == "ungated"
+    prompt_tokens: int | None = None  # usage from the one HTTP call, on that same result only
+    completion_tokens: int | None = None
 
 
 def _build_prompt(marked_sentence: str, token: str, memory: Memory, count: int) -> str:
@@ -98,10 +100,11 @@ def _build_prompt(marked_sentence: str, token: str, memory: Memory, count: int) 
     return "\n".join(lines)
 
 
-def _post_chat_completion(base_url: str, api_key: str, model: str, prompt: str) -> str:
+def _post_chat_completion(base_url: str, api_key: str, model: str, prompt: str) -> tuple[str, dict]:
     """One OpenAI-compatible chat completion call. Returns the assistant's raw
-    text content. Isolated here so tests mock this one seam instead of urllib,
-    and so the eval CSV runner never needs its own HTTP client."""
+    text content and the provider's `usage` dict (prompt_tokens/completion_tokens,
+    or {} if the provider omits it). Isolated here so tests mock this one seam
+    instead of urllib, and so the eval CSV runner never needs its own HTTP client."""
     url = base_url.rstrip("/") + "/chat/completions"
     payload = json.dumps(
         {
@@ -124,7 +127,7 @@ def _post_chat_completion(base_url: str, api_key: str, model: str, prompt: str) 
     )
     with urllib.request.urlopen(request, timeout=LLM_TIMEOUT_SECONDS) as response:
         body = json.loads(response.read().decode("utf-8"))
-    return body["choices"][0]["message"]["content"]
+    return body["choices"][0]["message"]["content"], body.get("usage") or {}
 
 
 def _parse_batch(content: str, count: int) -> list[tuple[float, str]]:
@@ -171,31 +174,35 @@ def decide_with_helper(
 
     start = time.perf_counter()
     try:
-        content = _post_chat_completion(base_url, api_key, model, prompt)
+        content, usage = _post_chat_completion(base_url, api_key, model, prompt)
         scored = _parse_batch(content, count)
         latency_ms = (time.perf_counter() - start) * 1000
+        prompt_tokens = usage.get("prompt_tokens")
+        completion_tokens = usage.get("completion_tokens")
         results = []
         for i, (score, reason) in enumerate(scored):
             combined = memory.confidence * (score / 100.0)
-            model_calls = 1 if i == 0 else 0  # one HTTP call total for the whole batch
-            if combined >= LLM_COMBINED_APPLY_THRESHOLD:
-                results.append(
-                    HelperResult(
-                        "APPLY", reason or _LLM_APPLY_REASON, "llm", model, latency_ms, model_calls, score
-                    )
+            # One HTTP call total for the whole batch -- attribute its call
+            # count and token usage to the first result only, so summing
+            # across a RunTrace's decisions counts the real call once.
+            model_calls = 1 if i == 0 else 0
+            call_prompt_tokens = prompt_tokens if i == 0 else None
+            call_completion_tokens = completion_tokens if i == 0 else None
+            decision = "APPLY" if combined >= LLM_COMBINED_APPLY_THRESHOLD else "ABSTAIN"
+            default_reason = _LLM_APPLY_REASON if decision == "APPLY" else _LLM_ABSTAIN_DEFAULT_REASON
+            results.append(
+                HelperResult(
+                    decision,
+                    reason or default_reason,
+                    "llm",
+                    model,
+                    latency_ms,
+                    model_calls,
+                    score,
+                    call_prompt_tokens,
+                    call_completion_tokens,
                 )
-            else:
-                results.append(
-                    HelperResult(
-                        "ABSTAIN",
-                        reason or _LLM_ABSTAIN_DEFAULT_REASON,
-                        "llm",
-                        model,
-                        latency_ms,
-                        model_calls,
-                        score,
-                    )
-                )
+            )
         return results
     except Exception:
         # Timeout, network error, non-2xx, or a malformed/mismatched-count

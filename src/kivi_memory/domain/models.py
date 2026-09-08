@@ -59,6 +59,8 @@ class TokenDecision:
     model: str | None = None  # model id, only set when helper == "llm"
     llm_latency_ms: float | None = None  # only set when helper == "llm"
     llm_score: float | None = None  # raw 0-100 sense score, only set when helper == "llm"
+    prompt_tokens: int | None = None  # usage for the one real call a batch made; None elsewhere
+    completion_tokens: int | None = None
 
 
 @dataclass(frozen=True)
@@ -73,3 +75,5 @@ class RunTrace:
     memories_used: tuple[int, ...]
     latency_ms: float
     model_calls: int = 0
+    prompt_tokens: int = 0
+    completion_tokens: int = 0

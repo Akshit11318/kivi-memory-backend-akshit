@@ -84,6 +84,8 @@ def run(store: MemoryStore, user_id: str, asr: str, formatted: str, profile: str
     decisions_by_index: dict[int, TokenDecision] = {}
     memories_used: set[int] = set()
     total_model_calls = 0
+    total_prompt_tokens = 0
+    total_completion_tokens = 0
     pending_by_memory: dict[int, list[_Pending]] = {}
 
     for index, token in enumerate(formatted_tokens):
@@ -119,6 +121,8 @@ def run(store: MemoryStore, user_id: str, asr: str, formatted: str, profile: str
         marked_sentence = mark_occurrences(formatted_tokens, indices)
         results = decide_with_helper(marked_sentence, group[0].token_core, memory, len(group))
         total_model_calls += sum(r.model_calls for r in results)
+        total_prompt_tokens += sum(r.prompt_tokens or 0 for r in results)
+        total_completion_tokens += sum(r.completion_tokens or 0 for r in results)
 
         for item, result in zip(group, results):
             canonical = None
@@ -141,6 +145,8 @@ def run(store: MemoryStore, user_id: str, asr: str, formatted: str, profile: str
                 model=result.model,
                 llm_latency_ms=result.latency_ms,
                 llm_score=result.score,
+                prompt_tokens=result.prompt_tokens,
+                completion_tokens=result.completion_tokens,
             )
 
     decisions = [decisions_by_index[i] for i in range(len(formatted_tokens))]
@@ -155,4 +161,6 @@ def run(store: MemoryStore, user_id: str, asr: str, formatted: str, profile: str
         memories_used=tuple(sorted(memories_used)),
         latency_ms=(time.perf_counter() - start) * 1000,
         model_calls=total_model_calls,
+        prompt_tokens=total_prompt_tokens,
+        completion_tokens=total_completion_tokens,
     )
