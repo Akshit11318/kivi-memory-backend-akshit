@@ -5,8 +5,8 @@ from kivi_memory.config import DEFAULT_PROFILE, PROFILES
 
 
 def test_profiles_locked() -> None:
-    assert DEFAULT_PROFILE == "exact"
-    assert PROFILES == ("off", "exact", "phonetic")
+    assert DEFAULT_PROFILE == "auto"
+    assert PROFILES == ("off", "exact", "phonetic", "auto")
 
 
 def test_cli_help() -> None:

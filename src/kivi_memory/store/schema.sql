@@ -1,21 +1,24 @@
--- V001. observations, memories, memory_forms, meta. Reset must wipe rows, keep schema.
+-- V002. observations, memories, memory_forms, meta. Reset must wipe rows, keep schema.
+-- V002 drops context_cues (the cue gate is deleted) and adds teach_text
+-- (LLM-prompt evidence only, never a gate). MemoryStore.migrate() applies
+-- that column change to already-existing databases at open time.
 
 CREATE TABLE IF NOT EXISTS meta (
     key TEXT PRIMARY KEY,
     value TEXT NOT NULL
 );
 
-INSERT OR IGNORE INTO meta(key, value) VALUES ('schema_version', '1');
+INSERT OR IGNORE INTO meta(key, value) VALUES ('schema_version', '2');
 
 -- One memory = one per-user lexical belief: canonical spelling + confidence.
--- context_cues: JSON array of ±2 content-token neighbors unioned at correction
--- time. '[]' = no gate, not sentence memory.
+-- teach_text: the correction sentence, or an optional dictionary_add example
+-- sentence, kept solely as evidence for the LLM sense helper's prompt.
 CREATE TABLE IF NOT EXISTS memories (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id TEXT NOT NULL,
     canonical TEXT NOT NULL,
     confidence REAL NOT NULL,
-    context_cues TEXT NOT NULL DEFAULT '[]',
+    teach_text TEXT,
     created_at TEXT NOT NULL,
     updated_at TEXT NOT NULL,
     UNIQUE (user_id, canonical)

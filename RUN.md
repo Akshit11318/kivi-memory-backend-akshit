@@ -1,6 +1,6 @@
 Completely local application. Python 3.13+ via uv. SQLite file on disk.
-Default profile (`exact`) needs no environment variables. No hosted URL.
-No API key.
+Default profile (`auto`) needs no environment variables — it runs ungated
+without a key. No hosted URL.
 
 ## 1. Runtimes
 
@@ -9,15 +9,29 @@ No API key.
 
 ## 2. Environment variables
 
-None. `off`, `exact`, and `phonetic` are local only.
+All optional. Unset entirely, `auto` runs the full retrieve cascade and
+cheap decide doors, then APPLYs ungated (no sense check) once a candidate
+survives — see README "LLM sense helper".
+
+| Variable            | Default                                            | Purpose                                  |
+| -------------------- | --------------------------------------------------- | ------------------------------------------ |
+| `KIVI_LLM_API_KEY`    | unset                                                | enables the LLM sense helper (last vote for APPLY vs ABSTAIN) |
+| `KIVI_LLM_BASE_URL`   | `https://openrouter.ai/api/v1`                       | OpenAI-compatible chat completions host  |
+| `KIVI_LLM_MODEL`      | `mistralai/mistral-small-3.2-24b-instruct:free`      | model id                                  |
+
+Copy `.env.example` to `.env` and fill in a key to try the gated demos in
+§7.2. Never commit a real key.
+
+```
+cp .env.example .env
+export $(grep -v '^#' .env | xargs)
+```
 
 ## 3. Install
 
 ```
 uv sync
 ```
-
-
 
 ## 4. Create, migrate, and seed
 
@@ -52,8 +66,6 @@ or
 uv run kivi --help
 ```
 
-
-
 ## 6. Interface
 
 Terminal. No URL. The CLI prints the notebook skin. Set `NO_COLOR=1` if you want it off.
@@ -87,8 +99,9 @@ uv run kivi memories
 Expect `Akshit` (form `akshith`), `Postgres` (`postgress`), `Grafana`
 (`graffana`).
 
-**Run** a *new* line (same terms, different sentence). Expected: APPLY
-and written `Ping Akshit after the Postgres and Grafana deploy.`
+**Run** a *new* line (same terms, different sentence, default `--profile
+auto`). Expected: APPLY on all three, written
+`Ping Akshit after the Postgres and Grafana deploy.`
 
 ```
 uv run kivi run \
@@ -115,61 +128,54 @@ uv run kivi --profile off run \
 
 **Reset** and repeat the same journey.
 
-Optional Dictionary teach (no sentence → no cue gate; add `--context`
-to scope a risky brand the same way a correction does):
+Optional dictionary teach (`--context` stores an example sentence as
+`teach_text` — evidence for the LLM sense helper's prompt, not a gate):
 
 ```
 uv run kivi observe --source dictionary_add --canonical Terraform --forms terrafrom
-uv run kivi observe --source dictionary_add --canonical Groww --forms grow --context "check the Groww SIP dashboard"
+uv run kivi observe --source dictionary_add --canonical Groww --forms grow --context "I moved my SIP to Groww."
 ```
 
-`run --json` prints the full inspectable trace.
+`run --json` prints the full inspectable trace, including `matched_via`
+(`exact` | `phonetic` | `null`) and `helper` (`llm` | `ungated` | `null`)
+per token.
 
-### 7.1 Five demos that show the range
+### 7.1 Demos that run with no key
 
 All of these use the live store `data/kivi.sqlite` (created on first
-open). Do not pass `--db`. Start each block with `uv run kivi reset`
-so leftover rows from the last demo do not leak in.
+open). Do not pass `--db`. Start each block with `uv run kivi reset` so
+leftover rows from the last demo do not leak in.
 
-**A. Alignment, not position.** The formatter turned 4 ASR tokens into
-5 (`im gonna` → `I'm going to`). A positional `token[i] → token[i]`
-system corrupts `I'm`. This one rewrites only the target.
+**A. Alignment, not position — the Akshit paragraph.** The formatter turned
+4 ASR tokens into 5 (`im gonna` → `I'm going to`). A positional
+`token[i] → token[i]` system corrupts `I'm`. This one rewrites only the
+target, across three different names in one line.
 
 ```
 uv run kivi reset
-uv run kivi observe --source dictionary_add --canonical Akshit --forms akshith
+uv run kivi observe --source correction \
+  --asr "ask akshith to bump postgress and graffana" \
+  --formatted "Ask Akshith to bump postgress and graffana." \
+  --final "Ask Akshit to bump Postgres and Grafana."
 uv run kivi run --asr "im gonna ask akshith" --formatted "I'm going to ask Akshith."
 ```
 
-Expected: APPLY, written `I'm going to ask Akshit.`, why `applied Akshit`.
+Expected: APPLY, written `I'm going to ask Akshit.`
 
-**B. A brand that is also an ordinary word, and how it learns.** Taught
-from one work line, the memory refuses the grocery line. Correct that
-one grocery line and a *new* grocery-shaped line starts working —
-cues grow by union from real use, they are never guessed.
+**B. `exact` vs `auto` — the graffana paragraph.** `Grafana` is stored with
+no `graffana` form. `exact` cannot find it; `auto` falls through to the
+phonetic retriever in the same cascade.
 
 ```
 uv run kivi reset
-uv run kivi observe --source correction \
-  --formatted "Please review the Sarvam Kiwi rollout." \
-  --final "Please review the Sarvam Kivi rollout."
-
-uv run kivi run --formatted "Buy kiwi at the store."
+uv run kivi observe --source dictionary_add --canonical Grafana --forms grafana
+uv run kivi --profile exact run --formatted "Please restart the graffana pod."
+uv run kivi --profile auto run --formatted "Please restart the graffana pod."
 ```
 
-Expected: ABSTAIN, why includes `context_mismatch`.
-
-```
-uv run kivi observe --source correction \
-  --formatted "Buy kiwi at the store." \
-  --final "Buy Kivi at the store."
-
-uv run kivi run --formatted "Buy kiwi for the office."
-uv run kivi run --formatted "Pack some kiwi and mango for the picnic."
-```
-
-Expected: office line APPLY `Buy Kivi for the office.`; picnic line
-ABSTAIN (still the fruit).
+Expected: `exact` ABSTAIN `no_memory` (formatted unchanged); `auto` APPLY,
+written `Please restart the Grafana pod.` (`matched_via: "phonetic"` in
+`--json`).
 
 **C. The learner refusing to learn.** A content edit and a grammar
 homophone both look like small spelling fixes to edit distance.
@@ -189,20 +195,7 @@ uv run kivi memories
 Expected: both observes `learned: false` (`not_grapheme_similar`,
 `refused_homophone`). `memories` is `[]`.
 
-**D. `exact` and `phonetic` are not redundant.** `Grafana` is stored
-with no `graffana` form. Metaphone keys match; exact lookup does not.
-
-```
-uv run kivi reset
-uv run kivi observe --source dictionary_add --canonical Grafana --forms grafana
-uv run kivi --profile exact run --formatted "Please restart the graffana pod."
-uv run kivi --profile phonetic run --formatted "Please restart the graffana pod."
-```
-
-Expected: `exact` ABSTAIN `no_memory`; `phonetic` APPLY, written
-`Please restart the Grafana pod.`
-
-**E. Two real people, one surface — and the full trace.** Both rows
+**D. Two real people, one surface — and the full trace.** Both rows
 match `Ria`, they disagree, so the token is refused and both memory
 ids are named in the trace.
 
@@ -214,19 +207,76 @@ uv run kivi run --formatted "Ria sent the deck." --json
 ```
 
 In the JSON, the `Ria` token is ABSTAIN `conflicting_canonicals` with
-`memory_ids` listing both rows.
+`memory_ids` listing both rows, `helper: null` — the LLM is never called
+once a cheap door has already closed.
 
-Every token in a run carries a row like this: what was decided, why,
-and which memories were consulted.
+**E. No key, documented: a homograph rewrites everywhere.** Without
+`KIVI_LLM_API_KEY`, `kiwi`/`Kivi` has no sense check, so it rewrites the
+grocery sentence too, not just the work one.
+
+```
+uv run kivi reset
+uv run kivi observe --source correction \
+  --formatted "Please review the Sarvam Kiwi rollout." \
+  --final "Please review the Sarvam Kivi rollout."
+uv run kivi run --formatted "Remind me to buy kiwi tomorrow."
+```
+
+Expected: APPLY, written `Remind me to buy Kivi tomorrow.` (`helper:
+"ungated"` in `--json`). This is the default, not a bug — see README
+"LLM sense helper".
+
+### 7.2 Demos that need `KIVI_LLM_API_KEY`
+
+Set a real key first (§2). These show the sense check §7.1E documents the
+absence of.
+
+**F. Fruit vs brand.** Same `Kivi` memory as demo E. With a key, the
+grocery sentence now correctly ABSTAINs.
+
+```
+uv run kivi reset
+uv run kivi observe --source correction \
+  --formatted "Please review the Sarvam Kiwi rollout." \
+  --final "Please review the Sarvam Kivi rollout."
+uv run kivi run --formatted "Buy kiwi at the store this weekend if the fruit looks good."
+uv run kivi run --formatted "Restart the Kiwi pod in staging before the client demo tomorrow."
+```
+
+Expected: the grocery line ABSTAINs (`helper: "llm"`, `reason` names a
+sense mismatch); the staging line APPLYs (`Restart the Kivi pod in
+staging before the client demo tomorrow.`) even though it shares **no**
+neighbor words with the teach sentence — the deleted cue gate could never
+have applied it from lexical overlap alone.
+
+**G. Common word vs product.** `Groww`/`grow` with no `teach_text` — the
+gardening sentence should ABSTAIN.
+
+```
+uv run kivi reset
+uv run kivi observe --source dictionary_add --canonical Groww --forms grow
+uv run kivi run --formatted "The plants will grow faster in the sun."
+```
+
+Expected: ABSTAIN (`helper: "llm"`). Compare to demo B-style behavior with
+no key, where this would APPLY ungated instead.
 
 ## 8. Evaluation
 
 ```
-uv run kivi eval --profiles off,exact,phonetic
+uv run kivi eval
 ```
 
-Isolated SQLite per case. Exit status is non-zero if any requested
-profile has FAIL or ERROR. Currently 70/70 pass on `off`/`exact`/`phonetic`.
+Reads `eval/dataset/teaches.csv` + `eval/dataset/cases.csv` only — no JSON
+eval tree. Isolated SQLite per case row. Headline is hits, not a pass
+count: expected vs actual APPLY hits, TP/FP/FN, precision/recall, per
+profile and overall. Rows marked `requires_llm=true` SKIP (not FAIL) when
+no key is set. Exit status is non-zero on any string mismatch or run
+error.
+
+With no key: `31` rows run (`4` SKIPPED), `25/25` expected hits, 0 FP/FN,
+precision 1.00, recall 1.00. Set `KIVI_LLM_API_KEY` first to also run the
+4 `requires_llm` rows.
 
 ## 9. Where results are written
 

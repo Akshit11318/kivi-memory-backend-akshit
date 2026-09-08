@@ -36,8 +36,8 @@ REFUSE_HOMOPHONE_PAIRS: frozenset[frozenset[str]] = frozenset(
     )
 )
 
-# Closed-class words: skipped when building context_cues windows,
-# and a same-both-sides veto in the grapheme gate.
+# Closed-class words: a same-both-sides veto in the grapheme gate, so a
+# grammar correction like "its" -> "it's" is never mistaken for a respelling.
 COMMON_FUNCTION_WORDS: frozenset[str] = frozenset(
     """
     the a an to of and or but for on in at is was were be been being
@@ -49,9 +49,6 @@ COMMON_FUNCTION_WORDS: frozenset[str] = frozenset(
     me my mine us our ours him her hers them their theirs
     """.split()
 )
-
-STOPLIST = COMMON_FUNCTION_WORDS
-
 
 def strip_punct(token: str) -> str:
     return token.strip(_STRIP_CHARS)
@@ -129,31 +126,3 @@ def passes_grapheme_gate(formatted_word: str, final_word: str) -> tuple[bool, st
     if not is_grapheme_similar(norm_formatted, norm_final):
         return False, "not_grapheme_similar"
     return True, "ok"
-
-
-def content_window(tokens: list[str], index: int, radius: int = 2) -> set[str]:
-    """±radius normalized content tokens around index, skipping the stoplist.
-
-    Walks outward past stoplist tokens so the window always tries to reach
-    `radius` real content words rather than counting stopwords against it.
-    """
-    normalized = [normalize_word(t) for t in tokens]
-    cues: set[str] = set()
-
-    i, taken = index - 1, 0
-    while i >= 0 and taken < radius:
-        tok = normalized[i]
-        if tok and tok not in STOPLIST:
-            cues.add(tok)
-            taken += 1
-        i -= 1
-
-    i, taken = index + 1, 0
-    while i < len(normalized) and taken < radius:
-        tok = normalized[i]
-        if tok and tok not in STOPLIST:
-            cues.add(tok)
-            taken += 1
-        i += 1
-
-    return cues

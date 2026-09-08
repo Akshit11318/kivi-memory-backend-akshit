@@ -1,46 +1,44 @@
-"""Per-token APPLY iff confidence >= 0.75, unique canonical, disagrees, and
-(if the memory cleared MIN_CUES_FOR_GATE) the sentence window overlaps them.
+"""Cheap doors, first no wins. No cue gate, no context window — sense
+disambiguation for a surviving single candidate is the LLM helper's job
+(decide/llm_helper.py), not this module's.
+
+Order: no candidates -> conflicting canonicals -> low confidence -> already
+canonical. Any of these is a definitive ABSTAIN. If none fire, this returns
+a pending result (decision=None) carrying the single surviving memory —
+the caller hands that to the LLM helper (or, with no key, ungated APPLY).
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Iterable
 
-from kivi_memory.config import APPLY_THRESHOLD, MIN_CUES_FOR_GATE
+from kivi_memory.config import APPLY_THRESHOLD
 from kivi_memory.domain.models import Memory
 
 
 @dataclass(frozen=True)
-class DecideResult:
-    decision: str  # "APPLY" | "ABSTAIN"
-    reason: str
+class GateResult:
+    decision: str | None  # "ABSTAIN", or None meaning "no cheap door closed"
+    reason: str | None
     memory: Memory | None = None
 
 
-def decide_token(
-    token_core: str, candidates: list[Memory], context_window: Iterable[str]
-) -> DecideResult:
+def cheap_gate(token_core: str, candidates: list[Memory]) -> GateResult:
     if not candidates:
-        return DecideResult("ABSTAIN", "no_memory")
+        return GateResult("ABSTAIN", "no_memory")
 
     canonicals = {m.canonical for m in candidates}
     if len(canonicals) > 1:
-        return DecideResult("ABSTAIN", "conflicting_canonicals")
+        return GateResult("ABSTAIN", "conflicting_canonicals")
 
     memory = candidates[0]
 
     if memory.confidence < APPLY_THRESHOLD:
-        return DecideResult("ABSTAIN", "low_confidence")
+        return GateResult("ABSTAIN", "low_confidence")
 
-    # Case is not a correction signal (family 20): a token that already spells
-    # the canonical, modulo case, needs no rewrite.
+    # Case is not a correction signal: a token that already spells the
+    # canonical, modulo case, needs no rewrite.
     if token_core.lower() == memory.canonical.lower():
-        return DecideResult("ABSTAIN", "already_canonical")
+        return GateResult("ABSTAIN", "already_canonical")
 
-    if len(memory.context_cues) >= MIN_CUES_FOR_GATE and not (
-        set(memory.context_cues) & set(context_window)
-    ):
-        return DecideResult("ABSTAIN", "context_mismatch")
-
-    return DecideResult("APPLY", "ok", memory)
+    return GateResult(None, None, memory)

@@ -28,10 +28,9 @@ class Memory:
     Admission test: if deleting this row cannot change a future transcript's
     wording of a personal term, it is not this memory.
 
-    `context_cues` is a small unioned bag of ±2 content-token neighbors seen at
-    correction time — a decide-time disambiguation gate for surfaces like
-    `kiwi`/`Kivi`, not sentence memory. Empty means no gate: a dictionary_add
-    with no sentence leaves it empty on purpose.
+    `teach_text` is the correction sentence (or an optional example sentence
+    passed to dictionary_add) kept solely as evidence for the LLM sense
+    helper's prompt. It is never a token-overlap gate — decide never reads it.
     """
 
     id: int
@@ -41,7 +40,7 @@ class Memory:
     confidence: float
     created_at: str
     updated_at: str
-    context_cues: tuple[str, ...] = ()
+    teach_text: str | None = None
 
 
 @dataclass(frozen=True)
@@ -55,6 +54,10 @@ class TokenDecision:
     canonical: str | None = None
     memory_ids: tuple[int, ...] = ()
     matched_surface: str | None = None
+    matched_via: str | None = None  # "exact" | "phonetic" | None (no candidates)
+    helper: str | None = None  # "llm" | "ungated" | None (a cheap door closed first)
+    model: str | None = None  # model id, only set when helper == "llm"
+    llm_latency_ms: float | None = None  # only set when helper == "llm"
 
 
 @dataclass(frozen=True)

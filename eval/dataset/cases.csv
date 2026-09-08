@@ -1,0 +1,36 @@
+id,family,user_id,profile,asr,formatted,expected_memory_aware,expected_hits,requires_llm
+akshit_paragraph,alignment,demo,auto,ping akshith after the postgress and graffana deploy,Ping Akshith after the postgress and graffana deploy.,Ping Akshit after the Postgres and Grafana deploy.,"[{""from"": ""Akshith"", ""to"": ""Akshit""}, {""from"": ""postgress"", ""to"": ""Postgres""}, {""from"": ""graffana"", ""to"": ""Grafana""}]",false
+akshit_off,off_control,demo,off,ping akshith after the postgress and graffana deploy,Ping Akshith after the postgress and graffana deploy.,Ping Akshith after the postgress and graffana deploy.,[],false
+akshit_contraction,alignment,demo,auto,im gonna ask akshith,I'm going to ask Akshith.,I'm going to ask Akshit.,"[{""from"": ""Akshith"", ""to"": ""Akshit""}]",false
+graffana_exact,retrieve_cascade,demo,exact,,Please restart the graffana pod.,Please restart the graffana pod.,[],false
+graffana_auto,retrieve_cascade,demo,auto,,Please restart the graffana pod.,Please restart the Grafana pod.,"[{""from"": ""graffana"", ""to"": ""Grafana""}]",false
+phonetic_grafana_zeroshot,retrieve_cascade,demo,phonetic,,Please restart the graffana pod.,Please restart the Grafana pod.,"[{""from"": ""graffana"", ""to"": ""Grafana""}]",false
+two_names_paragraph,multi_entity,demo,auto,,Aditya asked Priya to send the deck. Priya said she would ping Aditya after lunch.,Aaditya asked Priyaa to send the deck. Priyaa said she would ping Aaditya after lunch.,"[{""from"": ""Aditya"", ""to"": ""Aaditya""}, {""from"": ""Priya"", ""to"": ""Priyaa""}, {""from"": ""Priya"", ""to"": ""Priyaa""}, {""from"": ""Aditya"", ""to"": ""Aaditya""}]",false
+noop_paragraph,deliberate_noop,demo,auto,,Ship the invoice on Friday and confirm with the vendor.,Ship the invoice on Friday and confirm with the vendor.,[],false
+riya_ria_conflict,conflicting_canonicals,demo,auto,,Ria sent the deck yesterday.,Ria sent the deck yesterday.,[],false
+kiwi_fruit_abstain,llm_sense,demo,auto,,Buy kiwi at the store this weekend if the fruit looks good.,Buy kiwi at the store this weekend if the fruit looks good.,[],true
+kiwi_staging_apply,llm_sense,demo,auto,,Restart the Kiwi pod in staging before the client demo tomorrow.,Restart the Kivi pod in staging before the client demo tomorrow.,"[{""from"": ""Kiwi"", ""to"": ""Kivi""}]",true
+groww_grow_abstain,llm_sense,demo,auto,,The plants will grow faster in the sun.,The plants will grow faster in the sun.,[],true
+groww_grow_apply,llm_sense,demo,auto,,I moved my SIP to grow.,I moved my SIP to Groww.,"[{""from"": ""grow"", ""to"": ""Groww""}]",true
+karan_karen_limitation,documented_limitation,demo,phonetic,,Karen joined the call today.,Karan joined the call today.,"[{""from"": ""Karen"", ""to"": ""Karan""}]",false
+already_canonical,cheap_doors,demo,auto,,Meera sent the report yesterday.,Meera sent the report yesterday.,[],false
+conflicting_two_people,conflicting_canonicals,demo,auto,,Ask Aditya to send the invoice.,Ask Aditya to send the invoice.,[],false
+word_boundary,cheap_doors,demo,auto,deploy on kivimaki,Deploy on Kivimaki.,Deploy on Kivimaki.,[],false
+possessive_clitic,tokenize,demo,auto,,Check Kiwi's throughput.,Check Kivi's throughput.,"[{""from"": ""Kiwi"", ""to"": ""Kivi""}]",false
+hyphen_segment,tokenize,demo,auto,,Restart the Sarvam-Kiwi service.,Restart the Sarvam-Kivi service.,"[{""from"": ""Sarvam-Kiwi"", ""to"": ""Kivi""}]",false
+multi_mention,multi_entity,demo,auto,,Aditya asked Aditya to call Aditya.,Aaditya asked Aaditya to call Aaditya.,"[{""from"": ""Aditya"", ""to"": ""Aaditya""}, {""from"": ""Aditya"", ""to"": ""Aaditya""}, {""from"": ""Aditya"", ""to"": ""Aaditya""}]",false
+multi_user_isolation,isolation,user_b,auto,,Buy some kiwi.,Buy some kiwi.,[],false
+learner_refuse_grammar,learner_refuse,demo,auto,i left my keys over there,I left my keys over there.,I left my keys over there.,[],false
+learner_refuse_content,learner_refuse,demo,auto,ship it on friday,Ship it on Friday.,Ship it on Friday.,[],false
+formatter_regressed_name,formatter_regression,demo,auto,,Please loop in Srinivas on this thread.,Please loop in Sreenivas on this thread.,"[{""from"": ""Srinivas"", ""to"": ""Sreenivas""}]",false
+formatter_regressed_brand,formatter_regression,demo,auto,,Check the archive submission deadline.,Check the arXiv submission deadline.,"[{""from"": ""archive"", ""to"": ""arXiv""}]",false
+sanjay_sanjeev_limitation,documented_limitation,demo,auto,,Sanjay will join the call.,Sanjeev will join the call.,"[{""from"": ""Sanjay"", ""to"": ""Sanjeev""}]",false
+ravi_robbie_no_fp,phonetic_guard,demo,phonetic,,Robbie joined the call.,Robbie joined the call.,[],false
+kavi_covey_no_fp,phonetic_guard,demo,phonetic,,Covey led the review.,Covey led the review.,[],false
+brand_dropped_vowel_zeroshot,phonetic_only,demo,phonetic,,Upload it to Flikr before the meeting.,Upload it to Flickr before the meeting.,"[{""from"": ""Flikr"", ""to"": ""Flickr""}]",false
+bengali_surname_variant,exact_retrieval,demo,exact,,Please cc Choudhury on this email.,Please cc Chowdhury on this email.,"[{""from"": ""Choudhury"", ""to"": ""Chowdhury""}]",false
+stylized_lowercase_apply,tokenize,demo,auto,,priya will present first.,Priyaa will present first.,"[{""from"": ""priya"", ""to"": ""Priyaa""}]",false
+merge_dictionary_forms,learner_merge,demo,auto,,Please review the film benchmark.,Please review the vLLM benchmark.,"[{""from"": ""film"", ""to"": ""vLLM""}]",false
+hinglish_code_switch,code_switch,demo,auto,,Aditya ne kal deck bhej diya tha.,Aaditya ne kal deck bhej diya tha.,"[{""from"": ""Aditya"", ""to"": ""Aaditya""}]",false
+empty_garbage_input,robustness,demo,auto,,,,[],false
+punct_quoted_token,tokenize,demo,auto,,"He said ""Kiwi"" is broken.","He said ""Kivi"" is broken.","[{""from"": ""Kiwi"", ""to"": ""Kivi""}]",false

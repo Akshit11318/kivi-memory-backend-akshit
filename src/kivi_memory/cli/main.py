@@ -62,7 +62,7 @@ def _cmd_observe(args: argparse.Namespace) -> int:
                         "canonical": memory.canonical,
                         "forms": list(memory.forms),
                         "confidence": memory.confidence,
-                        "context_cues": list(memory.context_cues),
+                        "teach_text": memory.teach_text,
                     },
                     indent=2,
                 )
@@ -126,30 +126,26 @@ def _cmd_run(args: argparse.Namespace, ink: Ink) -> int:
 
 
 def _cmd_eval(args: argparse.Namespace, ink: Ink) -> int:
-    profiles = [p.strip() for p in args.profiles.split(",") if p.strip()]
-    unknown = [p for p in profiles if p not in PROFILES]
-    if unknown:
-        print(
-            error_line(ink, f"unknown profile(s) {unknown}\nuse: {', '.join(PROFILES)}"),
-            file=sys.stderr,
-        )
-        return 2
-
     from kivi_memory.eval_runner import run_eval, write_report
 
-    case_outcomes = run_eval(profiles)
-    report = write_report(case_outcomes, profiles)
+    results = run_eval()
+    report = write_report(results)
+    totals = report["summary"]["totals"]
 
-    print(f"eval: {len(case_outcomes)} cases x {len(profiles)} profiles")
+    print(
+        f"eval: {len(results)} rows -> "
+        f"expected_hits={totals['expected_hits']} actual_hits={totals['actual_hits']} "
+        f"TP={totals['tp']} FP={totals['fp']} FN={totals['fn']} "
+        f"precision={totals['precision']:.2f} recall={totals['recall']:.2f}"
+    )
+    print(
+        f"  ran={totals['ran']} skipped={totals['skipped']} errors={totals['errors']} "
+        f"string_mismatches={totals['string_mismatches']} "
+        f"model_calls={totals['model_calls']} helper_llm={totals['helper_llm']} "
+        f"helper_ungated={totals['helper_ungated']}"
+    )
     print("wrote eval/results/latest.json and eval/results/latest.md")
-    total_bad = 0
-    for profile, row in report["summary"].items():
-        print(
-            f"  {profile:10} pass={row['PASS']} fail={row['FAIL']} "
-            f"skipped={row['SKIPPED']} error={row['ERROR']}"
-        )
-        total_bad += row["FAIL"] + row["ERROR"]
-    return 1 if total_bad else 0
+    return 1 if (totals["string_mismatches"] or totals["errors"]) else 0
 
 
 def _cmd_memories(args: argparse.Namespace) -> int:
@@ -162,6 +158,7 @@ def _cmd_memories(args: argparse.Namespace) -> int:
                 "canonical": memory.canonical,
                 "forms": list(memory.forms),
                 "confidence": memory.confidence,
+                "teach_text": memory.teach_text,
             }
             for memory in memories
         ]
@@ -182,7 +179,7 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--profile",
         default=DEFAULT_PROFILE,
-        help="off | exact | phonetic (default exact)",
+        help="off | exact | phonetic | auto (default auto)",
     )
     parser.add_argument(
         "--plain",
@@ -199,7 +196,8 @@ def _parser() -> argparse.ArgumentParser:
     observe.add_argument(
         "--context",
         default=None,
-        help="dictionary_add: optional example sentence to scope the word (adds context_cues)",
+        help="dictionary_add: optional example sentence, stored as teach_text evidence "
+        "for the LLM sense helper (not a gate)",
     )
     observe.add_argument("--formatted", default=None, help="correction: formatter output")
     observe.add_argument("--final", default=None, help="correction: the user's corrected text")
@@ -211,8 +209,7 @@ def _parser() -> argparse.ArgumentParser:
     run.add_argument("--formatted", default="")
     run.add_argument("--user-id", dest="user_id", default=DEFAULT_USER_ID)
     run.add_argument("--json", action="store_true", help="print the full inspectable trace as JSON")
-    eval_p = sub.add_parser("eval", help="score fixtures")
-    eval_p.add_argument("--profiles", default=",".join(PROFILES))
+    sub.add_parser("eval", help="score eval/dataset/*.csv, write eval/results/latest.{json,md}")
     reset = sub.add_parser("reset", help="clear the page; --seed to refill")
     reset.add_argument("--seed", action="store_true")
     reset.add_argument("--seed-path", default=str(SEED_PATH))

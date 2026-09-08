@@ -15,13 +15,10 @@ from kivi_memory.config import (
 )
 from kivi_memory.domain.models import Memory, Observation
 from kivi_memory.learner.align import (
-    STOPLIST,
-    content_window,
     diff_words,
     normalize_word,
     passes_grapheme_gate,
     strip_punct,
-    tokenize_sentence,
 )
 from kivi_memory.store.db import MemoryStore, utc_now
 
@@ -47,19 +44,6 @@ def _next_correction_confidence(existing: Memory | None, prior_corrections: int)
     return min(1.0, base + CORRECTION_BUMP)
 
 
-def _cues_from_context(context: str | None) -> set[str]:
-    """Optional dictionary_add scoping hint. Same STOPLIST as correction's
-    content_window, just not windowed around a diff span -- there is no
-    correction here to center on, only a few words the user typed on purpose."""
-    if not context:
-        return set()
-    return {
-        normalize_word(word)
-        for word in tokenize_sentence(context)
-        if normalize_word(word) and normalize_word(word) not in STOPLIST
-    }
-
-
 def dictionary_add(
     store: MemoryStore,
     user_id: str,
@@ -67,16 +51,16 @@ def dictionary_add(
     forms: list[str],
     context: str | None = None,
 ) -> Memory:
-    """Strong observation. Confidence always 1.0. No context -> empty
-    context_cues (applies everywhere, unchanged default). An optional
-    `context` hint scopes it the same way a correction's teach sentence does."""
+    """Strong observation. Confidence always 1.0. `context` is an optional
+    example sentence stored verbatim as `teach_text` — evidence for the LLM
+    sense helper's prompt, never a token-overlap gate."""
     all_forms = {canonical.strip().lower(), *(f.strip().lower() for f in forms if f.strip())}
     memory = store.upsert_memory(
         user_id=user_id,
         canonical=canonical,
         forms=all_forms,
         confidence=DICTIONARY_ADD_CONFIDENCE,
-        context_cues=_cues_from_context(context),
+        teach_text=context,
     )
     store.add_observation(
         Observation(
@@ -100,8 +84,8 @@ def correction(
 ) -> list[CorrectionOutcome]:
     """Word-align formatted vs final. Only pairs that pass the grapheme gate
     become memories. Optional `asr` is stored as evidence on the observation
-    row, never mined for candidates."""
-    formatted_tokens = tokenize_sentence(formatted)
+    row, never mined for candidates. `final` is stored as `teach_text` —
+    evidence for the LLM sense helper's prompt, never a gate."""
     outcomes: list[CorrectionOutcome] = []
 
     for word_correction in diff_words(formatted, final):
@@ -125,7 +109,6 @@ def correction(
         canonical = strip_punct(word_correction.final_word)
         observed_form = normalize_word(word_correction.formatted_word)
         canonical_form = normalize_word(canonical)
-        cues = content_window(formatted_tokens, word_correction.index)
 
         existing = store.get_memory_by_canonical(user_id, canonical)
         prior_corrections = store.count_observations(user_id, canonical, "correction")
@@ -136,7 +119,7 @@ def correction(
             canonical=canonical,
             forms={observed_form, canonical_form},
             confidence=confidence,
-            context_cues=cues,
+            teach_text=final,
         )
         store.add_observation(
             Observation(

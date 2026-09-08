@@ -6,7 +6,6 @@ from typing import Iterator
 import pytest
 
 from kivi_memory.learner.align import (
-    content_window,
     diff_words,
     is_grapheme_similar,
     passes_grapheme_gate,
@@ -25,7 +24,12 @@ def test_dictionary_add_confidence_is_1(store: MemoryStore) -> None:
     memory = dictionary_add(store, "demo", "Kivi", ["kiwi", "Kiwi"])
     assert memory.confidence == 1.0
     assert set(memory.forms) >= {"kivi", "kiwi"}
-    assert memory.context_cues == ()
+    assert memory.teach_text is None
+
+
+def test_dictionary_add_context_is_stored_as_teach_text_only(store: MemoryStore) -> None:
+    memory = dictionary_add(store, "demo", "Groww", ["grow"], context="I moved my SIP to Groww.")
+    assert memory.teach_text == "I moved my SIP to Groww."
 
 
 def test_repeated_dictionary_add_same_canonical_merges_forms(store: MemoryStore) -> None:
@@ -51,7 +55,7 @@ def test_correction_learns_pdf_example_both_words(store: MemoryStore) -> None:
     assert learned["Kivi"].memory.confidence == 0.85
 
 
-def test_correction_derives_context_cues_matching_plan_example(store: MemoryStore) -> None:
+def test_correction_stores_final_sentence_as_teach_text(store: MemoryStore) -> None:
     correction(
         store,
         "demo",
@@ -60,7 +64,7 @@ def test_correction_derives_context_cues_matching_plan_example(store: MemoryStor
     )
     kivi = store.get_memory_by_canonical("demo", "Kivi")
     assert kivi is not None
-    assert set(kivi.context_cues) == {"sarvam", "review", "service"}
+    assert kivi.teach_text == "Ask Aaditya to review the Sarvam Kivi service."
 
 
 def test_correction_rejects_content_edit_friday_thursday(store: MemoryStore) -> None:
@@ -135,9 +139,3 @@ def test_diff_words_finds_only_equal_length_replace_spans() -> None:
     )
     pairs = {(c.formatted_word, c.final_word) for c in corrections}
     assert pairs == {("Aditya", "Aaditya"), ("Kiwi", "Kivi")}
-
-
-def test_content_window_matches_plan_worked_example() -> None:
-    tokens = "Ask Aditya to review the Sarvam Kiwi service.".split()
-    cues = content_window(tokens, index=6)  # "Kiwi"
-    assert cues == {"sarvam", "review", "service"}

@@ -33,7 +33,7 @@ def command_bench(ink: Ink) -> str:
         ("observe", "put a spelling in the notebook"),
         ("memories", "open what you have kept"),
         ("run", "try a new line — see if memory speaks"),
-        ("eval", "score the notebook against fixtures"),
+        ("eval", "score the notebook — hit precision and recall"),
         ("reset", "clear the page  ·  --seed to refill"),
     ]
     out = ["", ink.label("  commands"), ""]

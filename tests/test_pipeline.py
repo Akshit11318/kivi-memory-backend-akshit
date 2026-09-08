@@ -121,7 +121,13 @@ def test_possessive_clitic_rewrites_base_and_keeps_suffix(store: MemoryStore) ->
     assert trace.memory_aware == "Check Kivi's throughput."
 
 
-def test_context_apply_on_work_sentence_abstain_on_grocery(store: MemoryStore) -> None:
+def test_ungated_default_applies_kiwi_in_grocery_sentence_without_a_key(
+    store: MemoryStore, monkeypatch
+) -> None:
+    """No cue gate, no key: sense disambiguation is the LLM helper's job, not a
+    fallback. Documented in README, not hidden. See tests/test_llm_helper.py
+    for the mocked-key behavior this documents the absence of."""
+    monkeypatch.delenv("KIVI_LLM_API_KEY", raising=False)
     correction(
         store,
         "demo",
@@ -129,20 +135,31 @@ def test_context_apply_on_work_sentence_abstain_on_grocery(store: MemoryStore) -
         final="Ask Aaditya to review the Sarvam Kivi service.",
     )
 
-    work = run(
-        store,
-        "demo",
-        asr="",
-        formatted="Please review the Sarvam Kiwi service today.",
-        profile="exact",
-    )
-    kivi_decision = next(d for d in work.decisions if d.token == "Kiwi")
-    assert kivi_decision.decision == "APPLY"
-
     grocery = run(store, "demo", asr="", formatted="Remind me to buy kiwi tomorrow.", profile="exact")
     kiwi_decision = next(d for d in grocery.decisions if d.token == "kiwi")
-    assert kiwi_decision.decision == "ABSTAIN"
-    assert kiwi_decision.reason == "context_mismatch"
+    assert kiwi_decision.decision == "APPLY"
+    assert kiwi_decision.helper == "ungated"
+    assert grocery.memory_aware == "Remind me to buy Kivi tomorrow."
+
+
+def test_matched_via_reports_exact_when_surface_already_stored(store: MemoryStore) -> None:
+    dictionary_add(store, "demo", "Aaditya", ["aditya"])
+    trace = run(store, "demo", asr="", formatted="Ask Aditya now.", profile="auto")
+    decision = next(d for d in trace.decisions if d.token == "Aditya")
+    assert decision.matched_via == "exact"
+
+
+def test_matched_via_reports_phonetic_under_auto_when_exact_misses(store: MemoryStore) -> None:
+    dictionary_add(store, "demo", "Grafana", ["grafana"])
+    trace = run(store, "demo", asr="", formatted="Please restart the graffana pod.", profile="auto")
+    decision = next(d for d in trace.decisions if d.token == "graffana")
+    assert decision.matched_via == "phonetic"
+
+
+def test_matched_via_none_when_no_candidates(store: MemoryStore) -> None:
+    trace = run(store, "demo", asr="", formatted="Ship it on Friday.", profile="auto")
+    decision = next(d for d in trace.decisions if d.token == "Friday")
+    assert decision.matched_via is None
 
 
 def test_sentence_final_word_correction_still_applies_later(store: MemoryStore) -> None:

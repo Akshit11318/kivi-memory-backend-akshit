@@ -31,6 +31,25 @@ class MemoryStore:
     def migrate(self) -> None:
         with self._conn:
             self._conn.executescript(SCHEMA_PATH.read_text())
+            self._add_column_if_missing("memories", "teach_text", "TEXT")
+            self._drop_column_if_present("memories", "context_cues")
+
+    def _table_columns(self, table: str) -> set[str]:
+        return {row["name"] for row in self._conn.execute(f"PRAGMA table_info({table})")}
+
+    def _add_column_if_missing(self, table: str, column: str, decl: str) -> None:
+        if column not in self._table_columns(table):
+            self._conn.execute(f"ALTER TABLE {table} ADD COLUMN {column} {decl}")
+
+    def _drop_column_if_present(self, table: str, column: str) -> None:
+        """Best-effort: DROP COLUMN needs SQLite 3.35+. Older SQLite leaves the
+        column in place, unused — the live code never reads it either way."""
+        if column not in self._table_columns(table):
+            return
+        try:
+            self._conn.execute(f"ALTER TABLE {table} DROP COLUMN {column}")
+        except sqlite3.OperationalError:
+            pass
 
     def close(self) -> None:
         self._conn.close()
@@ -96,33 +115,33 @@ class MemoryStore:
         canonical: str,
         forms: Iterable[str],
         confidence: float,
-        context_cues: Iterable[str] = (),
+        teach_text: str | None = None,
     ) -> Memory:
-        """Same (user_id, canonical) -> merge: union forms and cues, replace confidence.
+        """Same (user_id, canonical) -> merge: union forms, replace confidence.
 
         Caller (the learner) computes the confidence to write — this method does
-        not apply the 0.85/+0.05/cap-1.0 policy itself. Cues only ever grow by
-        union; a dictionary_add passing an empty `context_cues` never clears
-        cues a prior correction already unioned in.
+        not apply the 0.85/+0.05/cap-1.0 policy itself. `teach_text` is evidence
+        for the LLM sense helper's prompt only, never a gate: a later call that
+        passes None keeps whatever teach_text is already stored; a later call
+        that passes a sentence replaces it with the newer evidence.
         """
         now = utc_now()
         deduped_forms = tuple(dict.fromkeys(forms))
         existing = self.get_memory_by_canonical(user_id, canonical)
         with self._conn:
             if existing is None:
-                merged_cues = tuple(dict.fromkeys(context_cues))
                 cursor = self._conn.execute(
-                    "INSERT INTO memories(user_id, canonical, confidence, context_cues, created_at, updated_at) "
+                    "INSERT INTO memories(user_id, canonical, confidence, teach_text, created_at, updated_at) "
                     "VALUES (?, ?, ?, ?, ?, ?)",
-                    (user_id, canonical, confidence, json.dumps(list(merged_cues)), now, now),
+                    (user_id, canonical, confidence, teach_text, now, now),
                 )
                 memory_id = cursor.lastrowid
             else:
                 memory_id = existing.id
-                merged_cues = tuple(dict.fromkeys((*existing.context_cues, *context_cues)))
+                merged_teach_text = teach_text if teach_text is not None else existing.teach_text
                 self._conn.execute(
-                    "UPDATE memories SET confidence = ?, context_cues = ?, updated_at = ? WHERE id = ?",
-                    (confidence, json.dumps(list(merged_cues)), now, memory_id),
+                    "UPDATE memories SET confidence = ?, teach_text = ?, updated_at = ? WHERE id = ?",
+                    (confidence, merged_teach_text, now, memory_id),
                 )
             for form in deduped_forms:
                 self._conn.execute(
@@ -187,7 +206,7 @@ class MemoryStore:
             confidence=row["confidence"],
             created_at=row["created_at"],
             updated_at=row["updated_at"],
-            context_cues=tuple(json.loads(row["context_cues"])) if row["context_cues"] else (),
+            teach_text=row["teach_text"],
         )
 
     def _row_to_observation(self, row: sqlite3.Row) -> Observation:
