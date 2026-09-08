@@ -393,7 +393,7 @@ flowchart TB
 | `retrieve/`                   | `exact` \| `phonetic`                            |
 | `pipeline/`                   | wire + ASR↔formatted align + retrieve cascade    |
 | `decide/conservative.py`      | cheap doors (no candidate / conflict / low confidence / already canonical) |
-| `decide/llm_helper.py`        | last vote — LLM APPLY/ABSTAIN, or ungated        |
+| `decide/llm_helper.py`        | last vote — batched 0-100 sense score blended with confidence, or ungated |
 | `produce/`                    | `passthrough` \| `rewrite`                       |
 | `trace/`                      | inspectable run record                           |
 | `eval_runner.py`               | CSV fixtures → hit precision/recall               |
@@ -460,4 +460,6 @@ uv run kivi observe --source correction --asr "…" --formatted "…" --final "�
 uv run kivi run --asr "…" --formatted "…"
 uv run kivi eval
 uv run kivi reset
+uv run python scripts/e2e_demo.py            # train + test + latency + annotations, one command
+uv run python scripts/stress_test/run_stress_test.py   # 10,500-word partially-taught corpus, full metrics
 ```

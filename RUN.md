@@ -168,7 +168,10 @@ uv run kivi observe --source dictionary_add --canonical Groww --forms grow --con
 `run --json` prints the full inspectable trace, including `matched_via`
 (`exact` | `phonetic` | `null`), `helper` (`llm` | `ungated` | `null`), and
 `llm_score` (the raw 0-100 sense score the LLM returned, only set when
-`helper == "llm"`) per token.
+`helper == "llm"`) per token. `prompt_tokens`/`completion_tokens` appear on
+both the token that made the real HTTP call (the first in its batch) and
+the top-level trace (summed across the whole run) — useful for estimating
+real API cost; see `scripts/stress_test/` for a worked example.
 
 ### 7.1 Demos that run with no key
 
@@ -346,7 +349,7 @@ uv run python scripts/e2e_demo.py
 
 Trains 7 fresh memories (product/fruit homograph, brand/verb homograph,
 personal-name respelling, phonetic-only brand, a conflicting-canonical pair,
-and one deliberate learner refusal), then runs 8 long, unique paragraphs
+and one deliberate learner refusal), then runs 9 long, unique paragraphs
 against `kivi --profile auto run --json` — none of them are reused from
 `eval/dataset/` or the demos above. For every test it prints the input, the
 memory-aware output, and a full per-token annotation table (`decision`,
@@ -356,14 +359,38 @@ summed total. Isolated SQLite at `data/e2e_demo.sqlite`, wiped and
 retaught from scratch on every run — never touches `data/kivi.sqlite`.
 
 Run it once with no key and once with `KIVI_LLM_API_KEY` set to see the
-ungated-vs-gated difference directly (same 8 sentences, same code path).
+ungated-vs-gated difference directly (same 9 sentences, same code path).
+
+## 8.2 Stress test (10,500+ words, partially taught, full metrics)
+
+```
+uv run python scripts/stress_test/run_stress_test.py               # ungated, free
+KIVI_LLM_API_KEY=... uv run python scripts/stress_test/run_stress_test.py            # gated, real cost
+KIVI_LLM_API_KEY=... uv run python scripts/stress_test/run_stress_test.py --limit 20 # smoke test first
+```
+
+A larger, synthetic, deliberately confusing corpus (183 paragraphs, 58
+vocabulary items across name respellings / brand-vs-common-word homographs
+/ phonetic-only terms), with only 60% of that vocabulary taught before the
+corpus runs — see `scripts/stress_test/README.md` for the full design and
+measured numbers (ungated: 240/240 expected hits but 141 false positives
+from homograph misfires, precision 0.630; gated with Claude Haiku on a
+sample: 0 false positives, real measured cost per paragraph). Reports
+hits (TP/FP/FN, precision/recall), latency percentiles, model calls, token
+usage, and an estimated cost. `KIVI_LLM_API_KEY` set in `.env` is picked up
+even if you `unset` it in your shell for one command — pass
+`KIVI_LLM_API_KEY=` inline, or clear the value in `.env`, to force an
+ungated run.
 
 ## 9. Where results are written
 
-- `eval/results/latest.json`
-- `eval/results/latest.md`
+- `eval/results/latest.json` / `.md` — `kivi eval`, part of the submission
+- `scripts/stress_test/results/latest.json` / `.md` — the stress test's
+  committed snapshot is the free ungated baseline; a gated re-run
+  overwrites it locally with non-deterministic (real API) numbers, so
+  don't commit a gated run over it
 
-Those files are part of the submission. Re-running eval overwrites them.
+Re-running either overwrites its own files.
 
 ## 10. Reset
 
