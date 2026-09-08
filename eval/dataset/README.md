@@ -37,6 +37,23 @@ assert a decision the run never attempted. With a key set, `kivi eval` makes
 real HTTP calls for these rows (unlike `pytest`, which mocks
 `decide.llm_helper._post_chat_completion` and never hits the network).
 
+**The committed `eval/results/latest.{json,md}` is the no-key (ungated)
+snapshot** — deterministic, reproducible, and what's graded. It's not the
+only thing that changes with a key: once `KIVI_LLM_API_KEY` is set, *every*
+row whose token clears the cheap doors asks the LLM, not just the 4
+`requires_llm` rows — decide has no way to tell "obviously fine" from
+"ambiguous" without asking. Rows without a `teach_text` and with an
+ordinary-looking token (`Aditya`, `archive`, `film`, `grow`) give the model
+very little to go on, and a free/small model's judgment on those is
+genuinely inconsistent run to run, even at temperature 0 — we saw
+`google/gemma-4-26b-a4b-it:free` flip between APPLY and ABSTAIN on the same
+`Groww`/`grow` pair across two live runs. That's the model, not the
+orchestration: `tests/test_llm_helper.py` mocks the HTTP call and asserts
+the exact "must-work" scenarios deterministically. Running `kivi eval` with
+a real key is a live integration smoke test, not a second source of truth —
+expect it to disagree with the no-key snapshot on rows outside the 4
+`requires_llm` ones.
+
 ## Case intent, by family
 
 - **alignment** (`akshit_paragraph`, `akshit_contraction`) — `SequenceMatcher`

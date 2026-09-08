@@ -275,8 +275,20 @@ no key is set. Exit status is non-zero on any string mismatch or run
 error.
 
 With no key: `31` rows run (`4` SKIPPED), `25/25` expected hits, 0 FP/FN,
-precision 1.00, recall 1.00. Set `KIVI_LLM_API_KEY` first to also run the
-4 `requires_llm` rows.
+precision 1.00, recall 1.00. **This no-key run is the committed, graded
+snapshot** — deterministic and reproducible.
+
+Setting `KIVI_LLM_API_KEY` also runs the 4 `requires_llm` rows, but it
+changes *every* row's decide path, not just those 4 — any token that clears
+the cheap doors now asks the live model instead of falling through to
+ungated APPLY. A free/small model's judgment on an ordinary-looking token
+with no `teach_text` (e.g. `grow`, `archive`, `film`) is genuinely
+inconsistent run to run, so expect `kivi eval` with a key to disagree with
+the no-key snapshot on rows outside the 4 `requires_llm` ones — that is
+live-model variance, not a code regression. See
+[eval/dataset/README.md](eval/dataset/README.md#requires_llm). The
+deterministic proof of the 4 must-work scenarios is
+`tests/test_llm_helper.py`, which mocks the HTTP call.
 
 ## 9. Where results are written
 
