@@ -298,6 +298,26 @@ live-model variance, not a code regression. See
 deterministic proof of the 4 must-work scenarios is
 `tests/test_llm_helper.py`, which mocks the HTTP call.
 
+## 8.1 End-to-end script (train + test + latency + annotations, one command)
+
+```
+uv run python scripts/e2e_demo.py
+```
+
+Trains 7 fresh memories (product/fruit homograph, brand/verb homograph,
+personal-name respelling, phonetic-only brand, a conflicting-canonical pair,
+and one deliberate learner refusal), then runs 8 long, unique paragraphs
+against `kivi --profile auto run --json` — none of them are reused from
+`eval/dataset/` or the demos above. For every test it prints the input, the
+memory-aware output, and a full per-token annotation table (`decision`,
+`reason`, `matched_via`, `helper`, `model`, and the LLM call's own
+`llm_latency_ms`), plus a run-level `latency_ms`/`model_calls` and a final
+summed total. Isolated SQLite at `data/e2e_demo.sqlite`, wiped and
+retaught from scratch on every run — never touches `data/kivi.sqlite`.
+
+Run it once with no key and once with `KIVI_LLM_API_KEY` set to see the
+ungated-vs-gated difference directly (same 8 sentences, same code path).
+
 ## 9. Where results are written
 
 - `eval/results/latest.json`
