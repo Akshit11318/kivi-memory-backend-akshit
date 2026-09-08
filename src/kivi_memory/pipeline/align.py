@@ -97,3 +97,18 @@ def align_formatted_to_asr(asr_tokens_norm: list[str], formatted_core_norm: list
 
 def stitch(tokens: list[DecomposedToken], cores: list[str]) -> str:
     return " ".join(tok.prefix + core + tok.possessive + tok.suffix for tok, core in zip(tokens, cores))
+
+
+def mark_occurrence(tokens: list[DecomposedToken], index: int) -> str:
+    """Reconstruct the sentence with only the token at `index` bracketed.
+
+    Same word, different sense, twice in one sentence ("moved it from grow
+    as profits didnt grow") is otherwise invisible to the LLM helper: a bare
+    token string plus the full sentence can't tell it which occurrence is
+    under judgment, so both calls get an identical prompt and it answers
+    both the same way. Marking the exact occurrence fixes that without
+    changing the one-call-per-token shape.
+    """
+    parts = [tok.raw for tok in tokens]
+    parts[index] = f"[[{parts[index]}]]"
+    return " ".join(parts)

@@ -58,6 +58,7 @@ class TokenDecision:
     helper: str | None = None  # "llm" | "ungated" | None (a cheap door closed first)
     model: str | None = None  # model id, only set when helper == "llm"
     llm_latency_ms: float | None = None  # only set when helper == "llm"
+    llm_score: float | None = None  # raw 0-100 sense score, only set when helper == "llm"
 
 
 @dataclass(frozen=True)

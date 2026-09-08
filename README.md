@@ -168,7 +168,7 @@ flowchart TD
   D -->|yes| E{token already is the canonical?}
   E -->|yes| AC[ABSTAIN  already_canonical]
   E -->|no| Helper{KIVI_LLM_API_KEY set?}
-  Helper -->|yes| LLM[LLM: APPLY or ABSTAIN + reason]
+  Helper -->|yes| LLM[LLM: score 0-100 -> blend with confidence -> APPLY or ABSTAIN]
   Helper -->|no, or timeout, or parse fail| Ungated[APPLY  helper=ungated]
 ```
 
@@ -178,20 +178,51 @@ for one either.
 ### LLM sense helper — last vote, no cue fallback
 
 The model does not find names and does not write SQLite. Once exactly one
-candidate memory survives the cheap doors, it answers one question:
-**REPLACE this token in this sentence, or ABSTAIN.**
+candidate memory survives the cheap doors, it answers one question about
+**one marked occurrence** of the token: how confident are you, 0-100, that
+this occurrence is the same personal/product spelling as the stored
+canonical?
 
-Prompted with only: the current formatted sentence, the token, the stored
-canonical + forms, and `teach_text` if the memory has one. No world
-knowledge instruction: APPLY only for the same personal/product spelling in
-*this* sentence; ABSTAIN for fruit vs brand, common word vs product, a
-different person, or grammar. Temperature 0, ~15s timeout, one call per
-token that reaches this stage.
+The score alone doesn't decide — it's blended with the memory's own
+confidence (evidence this is a real taught spelling at all, independent of
+sense):
+
+```
+combined = memory.confidence * (score / 100)
+APPLY iff combined >= 0.5 (LLM_COMBINED_APPLY_THRESHOLD), else ABSTAIN
+```
+
+Weak evidence on either axis pulls the decision down — a shaky first
+correction (confidence 0.85) needs a more confident score than a
+`dictionary_add` (confidence 1.0) to cross the same threshold. `llm_score`
+is recorded on every `TokenDecision` so the raw number is inspectable in
+`run --json`, not just the final APPLY/ABSTAIN.
+
+**Occurrence marking.** The same word can appear twice in one sentence with
+two different senses — *"move the stocks and SIPs from grow as the profits
+didn't grow last FY"* is `grow`(brand) then `grow`(verb). A bare token
+string plus the full sentence can't tell the model which occurrence is
+under judgment, so both calls would get an identical prompt and answer the
+same way. Each call instead sends the sentence with only the occurrence
+being judged wrapped in `[[ ]]` (`pipeline.align.mark_occurrence`), so the
+two calls read `...from [[grow]] as...` and `...didnt [[grow]] last...`
+respectively and can reach independent verdicts. This doesn't fully close
+the gap — the model still has to correctly *reason* about each marked
+occurrence, and a small free model can still get one of the two wrong (see
+`tests/test_llm_helper.py` for the passing regression test that only checks
+the calls are independent, not that every hard case resolves correctly).
+
+Prompted with only: the sentence with the judged occurrence marked, the
+token, the stored canonical + forms, and `teach_text` if the memory has
+one. No world knowledge instruction: score high for the same
+personal/product spelling in *this* sentence; score low for fruit vs brand,
+common word vs product, a different person, or grammar. Temperature 0,
+~15s timeout, one call per token that reaches this stage.
 
 **No key, a timeout, or an unparseable response all fall through to the
-same ungated APPLY** (`helper = "ungated"`, `reason = "ungated"`). This is
-not a bug to patch later — it is the documented default. It means, with no
-key:
+same ungated APPLY** (`helper = "ungated"`, `reason = "ungated"`,
+`llm_score = null`). This is not a bug to patch later — it is the
+documented default. It means, with no key:
 
 - `Groww`/`grow` rewrites `"The plants will grow faster in the sun."` to
   `"...will Groww faster..."` — wrong, and expected.

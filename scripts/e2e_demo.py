@@ -8,7 +8,8 @@ through `kivi --profile auto run --json` and prints, for every test:
   - the memory-aware output (the "third transcript")
   - the full per-token annotation trace for every token that matched a
     memory: decision, reason, matched_via (exact|phonetic), helper
-    (llm|ungated|null), model, and the LLM call's own latency
+    (llm|ungated|null), the LLM's raw 0-100 sense score, model, and the
+    LLM call's own latency
   - the run's total latency_ms and model_calls
 
 Isolated SQLite at data/e2e_demo.sqlite -- never touches your live notebook
@@ -154,6 +155,11 @@ TESTS: list[tuple[str, str, str]] = [
         "afternoon, and attendance is optional for remote employees who are "
         "traveling this week.",
     ),
+    (
+        "Same word, two senses, one sentence -- brand then ordinary verb",
+        "",
+        "Move the stocks and SIPs from grow as the profits didnt grow last FY.",
+    ),
 ]
 
 
@@ -215,12 +221,14 @@ def run_tests() -> None:
         if annotated:
             print("annotations (tokens that matched a memory):")
             for d in annotated:
+                score = d["llm_score"]
                 print(
                     f"  [{d['index']:>2}] {_fmt(repr(d['token']), 16)} "
                     f"decision={_fmt(d['decision'], 8)} "
                     f"reason={_fmt(d['reason'], 26)[:26]} "
                     f"matched_via={_fmt(d['matched_via'], 9)} "
                     f"helper={_fmt(d['helper'], 8)} "
+                    f"score={_fmt(score, 5)} "
                     f"model={_fmt(d['model'], 26)} "
                     f"llm_latency={_fmt_ms(d['llm_latency_ms'])}"
                 )

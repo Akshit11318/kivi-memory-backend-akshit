@@ -145,8 +145,9 @@ uv run kivi observe --source dictionary_add --canonical Groww --forms grow --con
 ```
 
 `run --json` prints the full inspectable trace, including `matched_via`
-(`exact` | `phonetic` | `null`) and `helper` (`llm` | `ungated` | `null`)
-per token.
+(`exact` | `phonetic` | `null`), `helper` (`llm` | `ungated` | `null`), and
+`llm_score` (the raw 0-100 sense score the LLM returned, only set when
+`helper == "llm"`) per token.
 
 ### 7.1 Demos that run with no key
 

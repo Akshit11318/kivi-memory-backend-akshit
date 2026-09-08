@@ -12,7 +12,7 @@ from kivi_memory.decide.conservative import cheap_gate
 from kivi_memory.decide.llm_helper import decide_with_helper
 from kivi_memory.domain.models import Memory, RunTrace, TokenDecision
 from kivi_memory.learner.align import normalize_word
-from kivi_memory.pipeline.align import align_formatted_to_asr, match_keys, tokenize
+from kivi_memory.pipeline.align import align_formatted_to_asr, mark_occurrence, match_keys, tokenize
 from kivi_memory.produce import passthrough, rewrite
 from kivi_memory.retrieve import exact, phonetic
 from kivi_memory.store.db import MemoryStore
@@ -77,15 +77,18 @@ def run(store: MemoryStore, user_id: str, asr: str, formatted: str, profile: str
         helper = None
         model = None
         llm_latency_ms = None
+        llm_score = None
 
         if gate.decision is not None:
             decision, reason, memory = gate.decision, gate.reason, None
         else:
             memory = gate.memory
             assert memory is not None
-            result = decide_with_helper(formatted, token.core, memory)
+            marked_sentence = mark_occurrence(formatted_tokens, index)
+            result = decide_with_helper(marked_sentence, token.core, memory)
             decision, reason = result.decision, result.reason
             helper, model, llm_latency_ms = result.helper, result.model, result.latency_ms
+            llm_score = result.score
             total_model_calls += result.model_calls
 
         canonical = None
@@ -108,6 +111,7 @@ def run(store: MemoryStore, user_id: str, asr: str, formatted: str, profile: str
                 helper=helper,
                 model=model,
                 llm_latency_ms=llm_latency_ms,
+                llm_score=llm_score,
             )
         )
 

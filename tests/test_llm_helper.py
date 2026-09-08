@@ -38,7 +38,7 @@ def test_llm_abstains_on_fruit_sense(store: MemoryStore, monkeypatch) -> None:
         final="Please review the Sarvam Kivi rollout.",
     )
 
-    with patch(_PATCH_TARGET, return_value='{"decision": "ABSTAIN", "reason": "fruit_vs_brand"}'):
+    with patch(_PATCH_TARGET, return_value='{"score": 5, "reason": "fruit_vs_brand"}'):
         trace = run(
             store,
             "demo",
@@ -52,6 +52,7 @@ def test_llm_abstains_on_fruit_sense(store: MemoryStore, monkeypatch) -> None:
     assert decision.decision == "ABSTAIN"
     assert decision.helper == "llm"
     assert decision.reason == "fruit_vs_brand"
+    assert decision.llm_score == 5
     assert trace.model_calls == 1
 
 
@@ -69,7 +70,7 @@ def test_llm_applies_on_staging_sense_with_no_shared_neighbor_words(
         final="Please review the Sarvam Kivi rollout.",
     )
 
-    with patch(_PATCH_TARGET, return_value='{"decision": "APPLY", "reason": "same_product"}'):
+    with patch(_PATCH_TARGET, return_value='{"score": 95, "reason": "same_product"}'):
         trace = run(
             store,
             "demo",
@@ -83,13 +84,14 @@ def test_llm_applies_on_staging_sense_with_no_shared_neighbor_words(
     assert decision.decision == "APPLY"
     assert decision.canonical == "Kivi"
     assert decision.helper == "llm"
+    assert decision.llm_score == 95
 
 
 def test_llm_abstains_on_groww_grow_with_no_teach_text(store: MemoryStore, monkeypatch) -> None:
     monkeypatch.setenv("KIVI_LLM_API_KEY", "test-key")
     dictionary_add(store, "demo", "Groww", ["grow"])
 
-    with patch(_PATCH_TARGET, return_value='{"decision": "ABSTAIN", "reason": "common_word"}'):
+    with patch(_PATCH_TARGET, return_value='{"score": 5, "reason": "common_word"}'):
         trace = run(
             store, "demo", asr="", formatted="The plants will grow faster in the sun.", profile="auto"
         )
@@ -161,6 +163,69 @@ def test_conflicting_canonicals_abstains_without_ever_calling_the_llm(
     assert decision.reason == "conflicting_canonicals"
     assert decision.helper is None
     assert trace.model_calls == 0
+
+
+def test_same_word_twice_different_sense_in_one_sentence_gets_independent_verdicts(
+    store: MemoryStore, monkeypatch
+) -> None:
+    """"move the stocks and sips from grow as the profits didnt grow last fy" --
+    the first "grow" is the brand (APPLY), the second is the ordinary verb
+    (ABSTAIN). Both calls get the same bare token string "grow" and the same
+    sentence; only the [[ ]] marker around the occurrence under judgment lets
+    the helper tell them apart. Confirms the marking fix for the exact bug
+    found manually: without it, both calls see an identical prompt and the
+    LLM gives the same verdict to both."""
+    monkeypatch.setenv("KIVI_LLM_API_KEY", "test-key")
+    dictionary_add(
+        store, "demo", "Groww", ["grow"], context="He opened a mutual fund SIP on Groww last month."
+    )
+
+    def fake_call(base_url, api_key, model, prompt):
+        if "from [[grow]] as" in prompt:
+            return '{"score": 95, "reason": "brand: moved funds from it"}'
+        if "didnt [[grow]] last" in prompt:
+            return '{"score": 5, "reason": "ordinary verb: profits growing"}'
+        raise AssertionError(f"prompt did not mark either expected occurrence:\n{prompt}")
+
+    with patch(_PATCH_TARGET, side_effect=fake_call):
+        trace = run(
+            store,
+            "demo",
+            asr="",
+            formatted="move the stocks and sips from grow as the profits didnt grow last fy",
+            profile="auto",
+        )
+
+    assert trace.memory_aware == (
+        "move the stocks and sips from Groww as the profits didnt grow last fy"
+    )
+    grow_decisions = [d for d in trace.decisions if d.token == "grow"]
+    assert len(grow_decisions) == 2
+    assert grow_decisions[0].decision == "APPLY"
+    assert grow_decisions[1].decision == "ABSTAIN"
+    assert trace.model_calls == 2
+
+
+def test_score_is_blended_with_memory_confidence_not_used_alone(store: MemoryStore, monkeypatch) -> None:
+    """A mid-range score (60) is enough to APPLY for a confidence-1.0
+    dictionary_add (combined = 1.0 * 0.60 = 0.60 >= 0.5) but not enough for a
+    confidence-0.85 first correction (combined = 0.85 * 0.60 = 0.51 -- still
+    over by a hair, so use a lower score to show the abstain side)."""
+    monkeypatch.setenv("KIVI_LLM_API_KEY", "test-key")
+    dictionary_add(store, "demo", "Groww", ["grow"])
+
+    with patch(_PATCH_TARGET, return_value='{"score": 60, "reason": "leaning brand"}'):
+        trace = run(store, "demo", asr="", formatted="I moved my SIP to grow.", profile="auto")
+    decision = next(d for d in trace.decisions if d.token == "grow")
+    assert decision.decision == "APPLY"  # 1.0 * 0.60 = 0.60 >= 0.5
+    assert decision.llm_score == 60
+
+    correction(store, "demo", formatted="Ask Aditya now.", final="Ask Aaditya now.")
+    with patch(_PATCH_TARGET, return_value='{"score": 55, "reason": "leaning apply, low confidence"}'):
+        trace = run(store, "demo", asr="", formatted="Tell Aditya later.", profile="auto")
+    decision = next(d for d in trace.decisions if d.token == "Aditya")
+    assert decision.decision == "ABSTAIN"  # 0.85 * 0.55 = 0.4675 < 0.5
+    assert decision.llm_score == 55
 
 
 def test_karan_karen_is_a_documented_limitation_not_hidden(store: MemoryStore) -> None:
