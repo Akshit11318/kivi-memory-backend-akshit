@@ -235,9 +235,26 @@ documented default. It means, with no key:
 sense-gating when no key is configured — see
 [eval/dataset/README.md](eval/dataset/README.md).
 
+**Batched, not one call per occurrence.** A word repeated in one sentence
+gets one LLM call for all its occurrences, not one call each — the
+occurrences are numbered (`[[#1: grow]]`, `[[#2: grow]]`, ...) in the
+sentence text and the model returns one score per number. This rests on a
+real pattern from word-sense-disambiguation research, "one sense per
+discourse" (Gale/Church/Yarowsky 1992) — a repeated word usually keeps its
+sense — but the model *verifies* it per occurrence in that one call rather
+than us assuming it: *"move the stocks and SIPs from grow as the profits
+didn't grow last FY"* still gets `grow`(brand, APPLY) and `grow`(verb,
+ABSTAIN) from the same call. A malformed response or a returned count that
+doesn't match the number of marked occurrences falls through to ungated
+APPLY for the whole batch, same as any other parse failure.
+
 Provider: any OpenAI-compatible chat completions host — default is
-[Groq](https://console.groq.com) (`openai/gpt-oss-20b`, free tier), nothing
-Groq-specific in the code. One module (`decide/llm_helper.py`), stdlib
+[Anthropic Claude Haiku](https://console.anthropic.com)
+(`claude-haiku-4-5-20251001`), nothing provider-specific in the code. Paid,
+not free, but measurably more accurate on sense-disambiguation than the
+free models we measured (Groq's `openai/gpt-oss-20b`/`-120b`, OpenRouter's
+free tier) — see RUN.md for the comparison and a free fallback if you don't
+have an Anthropic key. One module (`decide/llm_helper.py`), stdlib
 `urllib` only — no new HTTP dependency, and the eval CSV runner calls the
 same module rather than duplicating the request.
 

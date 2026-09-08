@@ -38,7 +38,10 @@ def test_llm_abstains_on_fruit_sense(store: MemoryStore, monkeypatch) -> None:
         final="Please review the Sarvam Kivi rollout.",
     )
 
-    with patch(_PATCH_TARGET, return_value='{"score": 5, "reason": "fruit_vs_brand"}'):
+    with patch(
+        _PATCH_TARGET,
+        return_value='{"occurrences": [{"occurrence": 1, "score": 5, "reason": "fruit_vs_brand"}]}',
+    ):
         trace = run(
             store,
             "demo",
@@ -70,7 +73,10 @@ def test_llm_applies_on_staging_sense_with_no_shared_neighbor_words(
         final="Please review the Sarvam Kivi rollout.",
     )
 
-    with patch(_PATCH_TARGET, return_value='{"score": 95, "reason": "same_product"}'):
+    with patch(
+        _PATCH_TARGET,
+        return_value='{"occurrences": [{"occurrence": 1, "score": 95, "reason": "same_product"}]}',
+    ):
         trace = run(
             store,
             "demo",
@@ -91,7 +97,10 @@ def test_llm_abstains_on_groww_grow_with_no_teach_text(store: MemoryStore, monke
     monkeypatch.setenv("KIVI_LLM_API_KEY", "test-key")
     dictionary_add(store, "demo", "Groww", ["grow"])
 
-    with patch(_PATCH_TARGET, return_value='{"score": 5, "reason": "common_word"}'):
+    with patch(
+        _PATCH_TARGET,
+        return_value='{"occurrences": [{"occurrence": 1, "score": 5, "reason": "common_word"}]}',
+    ):
         trace = run(
             store, "demo", asr="", formatted="The plants will grow faster in the sun.", profile="auto"
         )
@@ -170,24 +179,27 @@ def test_same_word_twice_different_sense_in_one_sentence_gets_independent_verdic
 ) -> None:
     """"move the stocks and sips from grow as the profits didnt grow last fy" --
     the first "grow" is the brand (APPLY), the second is the ordinary verb
-    (ABSTAIN). Both calls get the same bare token string "grow" and the same
-    sentence; only the [[ ]] marker around the occurrence under judgment lets
-    the helper tell them apart. Confirms the marking fix for the exact bug
-    found manually: without it, both calls see an identical prompt and the
-    LLM gives the same verdict to both."""
+    (ABSTAIN). Both occurrences are scored in ONE batched call (model_calls
+    == 1, not 2); the [[#1: ...]]/[[#2: ...]] numbering is what lets the
+    response tell them apart. Confirms the fix for the exact bug found
+    manually: before numbered marking, a single-occurrence prompt sent
+    twice was identical both times and got the identical verdict both
+    times."""
     monkeypatch.setenv("KIVI_LLM_API_KEY", "test-key")
     dictionary_add(
         store, "demo", "Groww", ["grow"], context="He opened a mutual fund SIP on Groww last month."
     )
 
     def fake_call(base_url, api_key, model, prompt):
-        if "from [[grow]] as" in prompt:
-            return '{"score": 95, "reason": "brand: moved funds from it"}'
-        if "didnt [[grow]] last" in prompt:
-            return '{"score": 5, "reason": "ordinary verb: profits growing"}'
-        raise AssertionError(f"prompt did not mark either expected occurrence:\n{prompt}")
+        assert "[[#1: grow]]" in prompt and "[[#2: grow]]" in prompt
+        return (
+            '{"occurrences": ['
+            '{"occurrence": 1, "score": 95, "reason": "brand: moved funds from it"}, '
+            '{"occurrence": 2, "score": 5, "reason": "ordinary verb: profits growing"}'
+            "]}"
+        )
 
-    with patch(_PATCH_TARGET, side_effect=fake_call):
+    with patch(_PATCH_TARGET, side_effect=fake_call) as mock_call:
         trace = run(
             store,
             "demo",
@@ -196,6 +208,7 @@ def test_same_word_twice_different_sense_in_one_sentence_gets_independent_verdic
             profile="auto",
         )
 
+    assert mock_call.call_count == 1
     assert trace.memory_aware == (
         "move the stocks and sips from Groww as the profits didnt grow last fy"
     )
@@ -203,7 +216,34 @@ def test_same_word_twice_different_sense_in_one_sentence_gets_independent_verdic
     assert len(grow_decisions) == 2
     assert grow_decisions[0].decision == "APPLY"
     assert grow_decisions[1].decision == "ABSTAIN"
-    assert trace.model_calls == 2
+    assert trace.model_calls == 1  # one HTTP call scored both occurrences
+
+
+def test_batch_falls_through_to_ungated_on_occurrence_count_mismatch(
+    store: MemoryStore, monkeypatch
+) -> None:
+    """The model must return exactly one scored item per marked occurrence.
+    Returning the wrong count is treated like any other malformed response
+    -- ungated APPLY for every occurrence in the batch, not a crash."""
+    monkeypatch.setenv("KIVI_LLM_API_KEY", "test-key")
+    dictionary_add(store, "demo", "Groww", ["grow"])
+
+    with patch(
+        _PATCH_TARGET,
+        return_value='{"occurrences": [{"occurrence": 1, "score": 5, "reason": "only one"}]}',
+    ):
+        trace = run(
+            store,
+            "demo",
+            asr="",
+            formatted="Watch it grow, then let it grow some more.",
+            profile="auto",
+        )
+
+    grow_decisions = [d for d in trace.decisions if d.token == "grow"]
+    assert len(grow_decisions) == 2
+    assert all(d.decision == "APPLY" and d.helper == "ungated" for d in grow_decisions)
+    assert trace.model_calls == 1
 
 
 def test_score_is_blended_with_memory_confidence_not_used_alone(store: MemoryStore, monkeypatch) -> None:
@@ -214,14 +254,22 @@ def test_score_is_blended_with_memory_confidence_not_used_alone(store: MemorySto
     monkeypatch.setenv("KIVI_LLM_API_KEY", "test-key")
     dictionary_add(store, "demo", "Groww", ["grow"])
 
-    with patch(_PATCH_TARGET, return_value='{"score": 60, "reason": "leaning brand"}'):
+    with patch(
+        _PATCH_TARGET,
+        return_value='{"occurrences": [{"occurrence": 1, "score": 60, "reason": "leaning brand"}]}',
+    ):
         trace = run(store, "demo", asr="", formatted="I moved my SIP to grow.", profile="auto")
     decision = next(d for d in trace.decisions if d.token == "grow")
     assert decision.decision == "APPLY"  # 1.0 * 0.60 = 0.60 >= 0.5
     assert decision.llm_score == 60
 
     correction(store, "demo", formatted="Ask Aditya now.", final="Ask Aaditya now.")
-    with patch(_PATCH_TARGET, return_value='{"score": 55, "reason": "leaning apply, low confidence"}'):
+    with patch(
+        _PATCH_TARGET,
+        return_value=(
+            '{"occurrences": [{"occurrence": 1, "score": 55, "reason": "leaning apply, low confidence"}]}'
+        ),
+    ):
         trace = run(store, "demo", asr="", formatted="Tell Aditya later.", profile="auto")
     decision = next(d for d in trace.decisions if d.token == "Aditya")
     assert decision.decision == "ABSTAIN"  # 0.85 * 0.55 = 0.4675 < 0.5

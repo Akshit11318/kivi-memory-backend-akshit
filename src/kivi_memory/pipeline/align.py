@@ -99,16 +99,21 @@ def stitch(tokens: list[DecomposedToken], cores: list[str]) -> str:
     return " ".join(tok.prefix + core + tok.possessive + tok.suffix for tok, core in zip(tokens, cores))
 
 
-def mark_occurrence(tokens: list[DecomposedToken], index: int) -> str:
-    """Reconstruct the sentence with only the token at `index` bracketed.
+def mark_occurrences(tokens: list[DecomposedToken], indices: list[int]) -> str:
+    """Reconstruct the sentence with each token at `indices` bracketed and
+    numbered in order: `[[#1: word]]`, `[[#2: word]]`, ...
 
     Same word, different sense, twice in one sentence ("moved it from grow
     as profits didnt grow") is otherwise invisible to the LLM helper: a bare
     token string plus the full sentence can't tell it which occurrence is
-    under judgment, so both calls get an identical prompt and it answers
-    both the same way. Marking the exact occurrence fixes that without
-    changing the one-call-per-token shape.
+    which, so an unmarked or singly-marked prompt either can't judge them
+    independently or forces one call per occurrence. Numbering every
+    occurrence of one memory's token in the sentence lets one batched call
+    score all of them at once — "one sense per discourse" as a hypothesis
+    the model verifies per occurrence, not an assumption we make for it.
+    `indices` with one entry degenerates to a single `[[#1: word]]` marker.
     """
     parts = [tok.raw for tok in tokens]
-    parts[index] = f"[[{parts[index]}]]"
+    for order, index in enumerate(indices, start=1):
+        parts[index] = f"[[#{order}: {parts[index]}]]"
     return " ".join(parts)

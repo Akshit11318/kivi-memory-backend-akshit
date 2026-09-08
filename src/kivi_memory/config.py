@@ -54,13 +54,15 @@ SEEDED_BELOW_THRESHOLD = 0.60
 LLM_API_KEY_ENV = "KIVI_LLM_API_KEY"
 LLM_BASE_URL_ENV = "KIVI_LLM_BASE_URL"
 LLM_MODEL_ENV = "KIVI_LLM_MODEL"
-DEFAULT_LLM_BASE_URL = "https://api.groq.com/openai/v1"
-DEFAULT_LLM_MODEL = "openai/gpt-oss-20b"
+DEFAULT_LLM_BASE_URL = "https://api.anthropic.com/v1"
+DEFAULT_LLM_MODEL = "claude-haiku-4-5-20251001"
 LLM_TIMEOUT_SECONDS = 15.0
 LLM_TEMPERATURE = 0
-# The LLM scores sense-match 0-100 for the single marked occurrence. That
-# score is blended with the memory's own confidence (evidence this is a real
-# taught spelling at all, independent of sense) as a product -- weak
-# evidence on either axis pulls the combined value down. combined =
-# memory.confidence * (score / 100); APPLY iff combined >= this threshold.
+# The LLM scores sense-match 0-100 per occurrence (a repeated token in one
+# sentence is batched into one call, not one call per occurrence -- see
+# decide/llm_helper.py). Each score is blended with the memory's own
+# confidence (evidence this is a real taught spelling at all, independent of
+# sense) as a product -- weak evidence on either axis pulls the combined
+# value down. combined = memory.confidence * (score / 100); APPLY iff
+# combined >= this threshold.
 LLM_COMBINED_APPLY_THRESHOLD = 0.5

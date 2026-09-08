@@ -44,10 +44,17 @@ row whose token clears the cheap doors asks the LLM, not just the 4
 `requires_llm` rows — decide has no way to tell "obviously fine" from
 "ambiguous" without asking. Rows without a `teach_text` and with an
 ordinary-looking token (`Aditya`, `archive`, `film`, `grow`) give the model
-very little to go on, and a free/small model's judgment on those is
-genuinely inconsistent run to run, even at temperature 0 — we saw
+very little to go on, and this is genuinely inconsistent across models and
+runs, even at temperature 0 — not just a free/small-model problem. We saw
 `google/gemma-4-26b-a4b-it:free` flip between APPLY and ABSTAIN on the same
-`Groww`/`grow` pair across two live runs. That's the model, not the
+`Groww`/`grow` pair across two live runs, and separately `claude-haiku-4-5`
+(the current default, meaningfully more accurate overall) ABSTAIN on 5 of
+these same-category rows in one live run. One of those was actually an
+improvement, not a miss: `karan_karen_limitation` is written expecting the
+*documented* ungated-default misfire (`Karen` wrongly rewritten to
+`Karan`), and Haiku correctly ABSTAINed instead — a stronger model can be
+appropriately cautious about identity where a weaker one isn't, which the
+row's fixed expectation doesn't account for. That's model judgment, not the
 orchestration: `tests/test_llm_helper.py` mocks the HTTP call and asserts
 the exact "must-work" scenarios deterministically. Running `kivi eval` with
 a real key is a live integration smoke test, not a second source of truth —

@@ -254,7 +254,7 @@ def main() -> None:
         DB_PATH.unlink()
 
     has_key = bool(os.environ.get("KIVI_LLM_API_KEY"))
-    model = os.environ.get("KIVI_LLM_MODEL", "openai/gpt-oss-20b")
+    model = os.environ.get("KIVI_LLM_MODEL", "claude-haiku-4-5-20251001")
     print("=" * 100)
     print("KIVI END-TO-END DEMO — training then testing, via the real `kivi` CLI")
     print(f"mode:  {'GATED  (KIVI_LLM_API_KEY set, model=' + model + ')' if has_key else 'UNGATED (no KIVI_LLM_API_KEY)'}")

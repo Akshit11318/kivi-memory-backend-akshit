@@ -16,15 +16,36 @@ survives — see README "LLM sense helper".
 | Variable            | Default                                            | Purpose                                  |
 | -------------------- | --------------------------------------------------- | ------------------------------------------ |
 | `KIVI_LLM_API_KEY`    | unset                                                | enables the LLM sense helper (last vote for APPLY vs ABSTAIN) |
-| `KIVI_LLM_BASE_URL`   | `https://api.groq.com/openai/v1`                     | OpenAI-compatible chat completions host  |
-| `KIVI_LLM_MODEL`      | `openai/gpt-oss-20b`                                 | model id                                  |
+| `KIVI_LLM_BASE_URL`   | `https://api.anthropic.com/v1`                       | OpenAI-compatible chat completions host  |
+| `KIVI_LLM_MODEL`      | `claude-haiku-4-5-20251001`                          | model id                                  |
 
-Default provider is [Groq](https://console.groq.com) (free tier, fast,
-OpenAI-compatible). Any OpenAI-compatible chat completions host works —
-`decide/llm_helper.py` has no Groq-specific code — just point
-`KIVI_LLM_BASE_URL`/`KIVI_LLM_MODEL` elsewhere (e.g. OpenRouter; check
-[openrouter.ai/models](https://openrouter.ai/models) for a currently-free
-model id, since free-tier slugs get deprecated).
+Default provider is Anthropic (`console.anthropic.com`), via its
+OpenAI-compatible endpoint — no Anthropic SDK, no provider-specific code,
+same `_post_chat_completion` as every other host. `decide/llm_helper.py`
+has zero Anthropic-specific code — just point `KIVI_LLM_BASE_URL` /
+`KIVI_LLM_MODEL` elsewhere for a different provider, e.g. free-tier Groq:
+
+```
+KIVI_LLM_BASE_URL=https://api.groq.com/openai/v1
+KIVI_LLM_MODEL=openai/gpt-oss-20b
+```
+
+**Why Haiku over a free model.** Measured against the same scenarios
+(fruit vs brand, zero-shared-vocabulary sense checks, and the hardest case
+— the same word twice with two different senses in one sentence), on real
+live calls:
+
+| Provider / model                          | Cost | Required scenarios | Hard same-sentence case |
+| ------------------------------------------- | ---- | ------------------- | ------------------------- |
+| Anthropic `claude-haiku-4-5-20251001`       | paid | 7/7                 | correct, both occurrences  |
+| Groq `openai/gpt-oss-20b`                   | free | 4/4                 | 1 of 2 occurrences correct |
+| Groq `openai/gpt-oss-120b`                  | free | 4/4                 | same miss as 20b, 6x the size |
+| Groq `qwen/qwen3.8-27b`                     | free | 2/4                 | correct                    |
+| OpenRouter free tier (various)              | free | slug/quality churn — see git history for the deprecations we hit | not reliably tested |
+
+If you don't have an Anthropic key, Groq is a real free option, just a
+lower-accuracy one on genuinely ambiguous cases — the required scenarios
+still pass.
 
 Copy `.env.example` to `.env` and fill in a key to try the gated demos in
 §7.2. Never commit a real key. `config.py` auto-loads `.env` on startup (it
@@ -32,7 +53,7 @@ never overrides a real `export`), so this is enough:
 
 ```
 cp .env.example .env
-# edit .env, set KIVI_LLM_API_KEY=gsk_...
+# edit .env, set KIVI_LLM_API_KEY=sk-ant-...  (or a Groq gsk_... key + the base_url/model above)
 ```
 
 ## 3. Install
@@ -269,6 +290,24 @@ uv run kivi run --formatted "The plants will grow faster in the sun."
 
 Expected: ABSTAIN (`helper: "llm"`). Compare to demo B-style behavior with
 no key, where this would APPLY ungated instead.
+
+**H. Same word, two senses, one sentence — batched into one call.** `grow`
+appears twice: once as the brand (moved funds *from* it), once as the
+ordinary verb (profits didn't grow). Both are scored by a single LLM call,
+not two.
+
+```
+uv run kivi reset
+uv run kivi observe --source dictionary_add --canonical Groww --forms grow,groww \
+  --context "He opened a mutual fund SIP on Groww last month."
+uv run kivi run \
+  --formatted "Move the stocks and SIPs from grow as the profits didnt grow last FY." --json
+```
+
+Expected: `"...from Groww as the profits didnt grow last FY."` — the first
+`grow` (brand) APPLYs, the second (verb) ABSTAINs. In the JSON, both
+`TokenDecision`s have `helper: "llm"`, different `llm_score`s, and the
+top-level `model_calls` is `1`, not `2` — one call scored both occurrences.
 
 ## 8. Evaluation
 
