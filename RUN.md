@@ -17,7 +17,7 @@ survives — see README "LLM sense helper".
 | -------------------- | --------------------------------------------------- | ------------------------------------------ |
 | `KIVI_LLM_API_KEY`    | unset                                                | enables the LLM sense helper (last vote for APPLY vs ABSTAIN) |
 | `KIVI_LLM_BASE_URL`   | `https://openrouter.ai/api/v1`                       | OpenAI-compatible chat completions host  |
-| `KIVI_LLM_MODEL`      | `mistralai/mistral-small-3.2-24b-instruct:free`      | model id                                  |
+| `KIVI_LLM_MODEL`      | `google/gemma-4-26b-a4b-it:free`                     | model id                                  |
 
 Copy `.env.example` to `.env` and fill in a key to try the gated demos in
 §7.2. Never commit a real key.

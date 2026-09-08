@@ -55,6 +55,6 @@ LLM_API_KEY_ENV = "KIVI_LLM_API_KEY"
 LLM_BASE_URL_ENV = "KIVI_LLM_BASE_URL"
 LLM_MODEL_ENV = "KIVI_LLM_MODEL"
 DEFAULT_LLM_BASE_URL = "https://openrouter.ai/api/v1"
-DEFAULT_LLM_MODEL = "mistralai/mistral-small-3.2-24b-instruct:free"
+DEFAULT_LLM_MODEL = "google/gemma-4-26b-a4b-it:free"
 LLM_TIMEOUT_SECONDS = 15.0
 LLM_TEMPERATURE = 0
