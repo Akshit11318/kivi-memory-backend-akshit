@@ -49,6 +49,11 @@ class HelperResult:
 def _build_prompt(sentence: str, token: str, memory: Memory) -> str:
     lines = [
         "You disambiguate ONE word in ONE sentence for a personal spelling notebook.",
+        "A retrieval step already matched this token to the memory below (exact "
+        "surface or phonetic similarity) -- do not re-judge whether the spelling is "
+        "close enough, that part is decided. Your only job is SENSE: is this "
+        "occurrence of the token being used to refer to the same "
+        "person/place/product as the stored canonical, or something else?",
         "",
         f"Sentence: {sentence}",
         f"Token: {token}",
@@ -59,10 +64,12 @@ def _build_prompt(sentence: str, token: str, memory: Memory) -> str:
         lines.append(f"Taught from: {memory.teach_text}")
     lines += [
         "",
-        "APPLY only if this token is the same personal/product spelling in this "
-        "sentence. ABSTAIN for fruit vs brand, common word vs product, a "
-        "different person, or grammar. Use no world knowledge beyond this "
-        "sentence.",
+        "APPLY if this token, in this sentence, is the same personal/product "
+        "spelling as the stored canonical. ABSTAIN only when the sentence itself "
+        "signals a different sense (its ordinary dictionary meaning, e.g. fruit vs "
+        "brand, common word vs product), a different person, or a grammar/homophone "
+        "issue. If nothing in the sentence suggests a different sense, APPLY. Use no "
+        "world knowledge beyond this sentence.",
         "",
         'Reply with JSON only, no prose: {"decision": "APPLY"|"ABSTAIN", "reason": string}',
     ]
@@ -88,6 +95,9 @@ def _post_chat_completion(base_url: str, api_key: str, model: str, prompt: str) 
         headers={
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
+            # Some OpenAI-compatible hosts (e.g. Groq, behind Cloudflare) 403
+            # Python's default "Python-urllib/x.y" user agent as a bot signature.
+            "User-Agent": "kivi-memory/0.1",
         },
     )
     with urllib.request.urlopen(request, timeout=LLM_TIMEOUT_SECONDS) as response:

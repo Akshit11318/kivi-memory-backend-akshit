@@ -16,15 +16,23 @@ survives — see README "LLM sense helper".
 | Variable            | Default                                            | Purpose                                  |
 | -------------------- | --------------------------------------------------- | ------------------------------------------ |
 | `KIVI_LLM_API_KEY`    | unset                                                | enables the LLM sense helper (last vote for APPLY vs ABSTAIN) |
-| `KIVI_LLM_BASE_URL`   | `https://openrouter.ai/api/v1`                       | OpenAI-compatible chat completions host  |
-| `KIVI_LLM_MODEL`      | `google/gemma-4-26b-a4b-it:free`                     | model id                                  |
+| `KIVI_LLM_BASE_URL`   | `https://api.groq.com/openai/v1`                     | OpenAI-compatible chat completions host  |
+| `KIVI_LLM_MODEL`      | `openai/gpt-oss-20b`                                 | model id                                  |
+
+Default provider is [Groq](https://console.groq.com) (free tier, fast,
+OpenAI-compatible). Any OpenAI-compatible chat completions host works —
+`decide/llm_helper.py` has no Groq-specific code — just point
+`KIVI_LLM_BASE_URL`/`KIVI_LLM_MODEL` elsewhere (e.g. OpenRouter; check
+[openrouter.ai/models](https://openrouter.ai/models) for a currently-free
+model id, since free-tier slugs get deprecated).
 
 Copy `.env.example` to `.env` and fill in a key to try the gated demos in
-§7.2. Never commit a real key.
+§7.2. Never commit a real key. `config.py` auto-loads `.env` on startup (it
+never overrides a real `export`), so this is enough:
 
 ```
 cp .env.example .env
-export $(grep -v '^#' .env | xargs)
+# edit .env, set KIVI_LLM_API_KEY=gsk_...
 ```
 
 ## 3. Install

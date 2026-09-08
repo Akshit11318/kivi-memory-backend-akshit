@@ -204,10 +204,11 @@ key:
 sense-gating when no key is configured — see
 [eval/dataset/README.md](eval/dataset/README.md).
 
-Provider: OpenAI-compatible HTTP (OpenRouter-style), one module
-(`decide/llm_helper.py`), stdlib `urllib` only — no new HTTP dependency, and
-the eval CSV runner calls the same module rather than duplicating the
-request.
+Provider: any OpenAI-compatible chat completions host — default is
+[Groq](https://console.groq.com) (`openai/gpt-oss-20b`, free tier), nothing
+Groq-specific in the code. One module (`decide/llm_helper.py`), stdlib
+`urllib` only — no new HTTP dependency, and the eval CSV runner calls the
+same module rather than duplicating the request.
 
 ---
 
