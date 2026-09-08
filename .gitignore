@@ -5,7 +5,10 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 .mypy_cache/
+# Local secrets — never commit. Template is .env.example.
 .env
+.env.local
+.env.*.local
 *.sqlite
 *.sqlite-journal
 *.sqlite-wal

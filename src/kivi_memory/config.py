@@ -1,9 +1,34 @@
 """Profiles, paths, thresholds, LLM sense-helper env names."""
 
+from __future__ import annotations
+
+import os
 from pathlib import Path
 
 PACKAGE_DIR = Path(__file__).resolve().parent
 REPO_ROOT = PACKAGE_DIR.parents[1]
+
+
+def _load_dotenv(path: Path) -> None:
+    """Load KEY=VALUE from path into os.environ if the key is not already set.
+
+    Does not override a real export (pytest monkeypatch, CI, `export`). Missing
+    file is a no-op. No extra dependency.
+    """
+    if not path.is_file():
+        return
+    for raw in path.read_text(encoding="utf-8").splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        key = key.strip()
+        value = value.strip().strip("'").strip('"')
+        if key and key not in os.environ:
+            os.environ[key] = value
+
+
+_load_dotenv(REPO_ROOT / ".env")
 DATA_DIR = REPO_ROOT / "data"
 SEED_PATH = DATA_DIR / "seed" / "observations.json"
 DEFAULT_DB_PATH = DATA_DIR / "kivi.sqlite"
