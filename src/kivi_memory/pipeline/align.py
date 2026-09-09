@@ -103,15 +103,8 @@ def mark_occurrences(tokens: list[DecomposedToken], indices: list[int]) -> str:
     """Reconstruct the sentence with each token at `indices` bracketed and
     numbered in order: `[[#1: word]]`, `[[#2: word]]`, ...
 
-    Same word, different sense, twice in one sentence ("moved it from grow
-    as profits didnt grow") is otherwise invisible to the LLM helper: a bare
-    token string plus the full sentence can't tell it which occurrence is
-    which, so an unmarked or singly-marked prompt either can't judge them
-    independently or forces one call per occurrence. Numbering every
-    occurrence of one memory's token in the sentence lets one batched call
-    score all of them at once — "one sense per discourse" as a hypothesis
-    the model verifies per occurrence, not an assumption we make for it.
-    `indices` with one entry degenerates to a single `[[#1: word]]` marker.
+    Pending tokens (any memory) in one sentence are numbered together so the
+    helper can score the whole line in one HTTP call.
     """
     parts = [tok.raw for tok in tokens]
     for order, index in enumerate(indices, start=1):

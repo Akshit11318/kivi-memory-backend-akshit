@@ -31,6 +31,7 @@ def test_pdf_example_exact_profile_after_two_teaches(store: MemoryStore) -> None
         asr="ask aditya to review the sarvam kiwi service",
         formatted="Ask Aditya to review the Sarvam Kiwi service.",
         profile="exact",
+        decide="ungated",
     )
     assert trace.memory_aware == "Ask Aaditya to review the Sarvam Kivi service."
     assert {d.decision for d in trace.decisions if d.token in ("Aditya", "Kiwi")} == {"APPLY"}
@@ -65,6 +66,7 @@ def test_alignment_required_fixture_gonna_only_touches_aditya(store: MemoryStore
         asr="im gonna ask aditya",
         formatted="I'm going to ask Aditya.",
         profile="exact",
+        decide="ungated",
     )
     assert trace.memory_aware == "I'm going to ask Aaditya."
 
@@ -102,7 +104,7 @@ def test_conflicting_canonicals_abstain(store: MemoryStore) -> None:
 
 def test_confidence_boundary_075_is_apply(store: MemoryStore) -> None:
     store.upsert_memory("demo", "Aaditya", ["aditya"], confidence=0.75)
-    trace = run(store, "demo", asr="", formatted="Ask Aditya now.", profile="exact")
+    trace = run(store, "demo", asr="", formatted="Ask Aditya now.", profile="exact", decide="ungated")
     decision = next(d for d in trace.decisions if d.token == "Aditya")
     assert decision.decision == "APPLY"
 
@@ -117,17 +119,15 @@ def test_below_confidence_boundary_abstains(store: MemoryStore) -> None:
 
 def test_possessive_clitic_rewrites_base_and_keeps_suffix(store: MemoryStore) -> None:
     dictionary_add(store, "demo", "Kivi", ["kiwi"])
-    trace = run(store, "demo", asr="", formatted='Check Kiwi\'s throughput.', profile="exact")
+    trace = run(store, "demo", asr="", formatted='Check Kiwi\'s throughput.', profile="exact", decide="ungated")
     assert trace.memory_aware == "Check Kivi's throughput."
 
 
-def test_ungated_default_applies_kiwi_in_grocery_sentence_without_a_key(
-    store: MemoryStore, monkeypatch
+def test_ungated_decide_applies_kiwi_in_grocery_sentence(
+    store: MemoryStore,
 ) -> None:
-    """No cue gate, no key: sense disambiguation is the LLM helper's job, not a
-    fallback. Documented in README, not hidden. See tests/test_llm_helper.py
-    for the mocked-key behavior this documents the absence of."""
-    monkeypatch.delenv("KIVI_LLM_API_KEY", raising=False)
+    """`--decide ungated` is the latency path: APPLY after cheap doors, no
+    sense check. Fruit vs brand is `--decide llm`'s job. See test_llm_helper."""
     correction(
         store,
         "demo",
@@ -135,23 +135,31 @@ def test_ungated_default_applies_kiwi_in_grocery_sentence_without_a_key(
         final="Ask Aaditya to review the Sarvam Kivi service.",
     )
 
-    grocery = run(store, "demo", asr="", formatted="Remind me to buy kiwi tomorrow.", profile="exact")
+    grocery = run(
+        store,
+        "demo",
+        asr="",
+        formatted="Remind me to buy kiwi tomorrow.",
+        profile="exact",
+        decide="ungated",
+    )
     kiwi_decision = next(d for d in grocery.decisions if d.token == "kiwi")
     assert kiwi_decision.decision == "APPLY"
     assert kiwi_decision.helper == "ungated"
     assert grocery.memory_aware == "Remind me to buy Kivi tomorrow."
+    assert grocery.decide == "ungated"
 
 
 def test_matched_via_reports_exact_when_surface_already_stored(store: MemoryStore) -> None:
     dictionary_add(store, "demo", "Aaditya", ["aditya"])
-    trace = run(store, "demo", asr="", formatted="Ask Aditya now.", profile="auto")
+    trace = run(store, "demo", asr="", formatted="Ask Aditya now.", profile="auto", decide="ungated")
     decision = next(d for d in trace.decisions if d.token == "Aditya")
     assert decision.matched_via == "exact"
 
 
 def test_matched_via_reports_phonetic_under_auto_when_exact_misses(store: MemoryStore) -> None:
     dictionary_add(store, "demo", "Grafana", ["grafana"])
-    trace = run(store, "demo", asr="", formatted="Please restart the graffana pod.", profile="auto")
+    trace = run(store, "demo", asr="", formatted="Please restart the graffana pod.", profile="auto", decide="ungated")
     decision = next(d for d in trace.decisions if d.token == "graffana")
     assert decision.matched_via == "phonetic"
 
@@ -175,6 +183,7 @@ def test_sentence_final_word_correction_still_applies_later(store: MemoryStore) 
         asr="tis is a phaneer sandhwitch",
         formatted="Tis is a phaneer sandwitch.",
         profile="exact",
+        decide="ungated",
     )
     assert trace.memory_aware == "Tis is a paneer sandwich."
 
@@ -187,6 +196,7 @@ def test_multiple_mentions_one_sentence_all_apply(store: MemoryStore) -> None:
         asr="",
         formatted="Aditya asked Aditya to call Aditya.",
         profile="exact",
+        decide="ungated",
     )
     assert trace.memory_aware == "Aaditya asked Aaditya to call Aaditya."
 

@@ -10,11 +10,15 @@ from pathlib import Path
 from kivi_memory.cli.art import banner, command_bench, error_line, not_built
 from kivi_memory.cli.style import Ink, color_enabled
 from kivi_memory.config import (
+    DECIDE_MODES,
     DEFAULT_DB_PATH,
+    DEFAULT_DECIDE,
     DEFAULT_PROFILE,
     DEFAULT_USER_ID,
     PROFILES,
     SEED_PATH,
+    llm_credentials,
+    missing_llm_config_message,
 )
 from kivi_memory.learner import explicit as explicit_learner
 from kivi_memory.pipeline.run import run as run_pipeline
@@ -98,10 +102,25 @@ def _cmd_observe(args: argparse.Namespace) -> int:
         return 2
 
 
+def _needs_llm(args: argparse.Namespace) -> bool:
+    if args.command not in ("run", "eval"):
+        return False
+    if args.command == "run" and args.profile == "off":
+        return False
+    return args.decide == "llm"
+
+
 def _cmd_run(args: argparse.Namespace, ink: Ink) -> int:
     with MemoryStore(Path(args.db)) as store:
         try:
-            trace = run_pipeline(store, args.user_id, args.asr, args.formatted, args.profile)
+            trace = run_pipeline(
+                store,
+                args.user_id,
+                args.asr,
+                args.formatted,
+                args.profile,
+                decide=args.decide,
+            )
         except NotImplementedError as exc:
             print(error_line(ink, str(exc)), file=sys.stderr)
             return 2
@@ -128,7 +147,7 @@ def _cmd_run(args: argparse.Namespace, ink: Ink) -> int:
 def _cmd_eval(args: argparse.Namespace, ink: Ink) -> int:
     from kivi_memory.eval_runner import run_eval, write_report
 
-    results = run_eval()
+    results = run_eval(decide=args.decide)
     report = write_report(results)
     totals = report["summary"]["totals"]
 
@@ -144,6 +163,19 @@ def _cmd_eval(args: argparse.Namespace, ink: Ink) -> int:
         f"model_calls={totals['model_calls']} helper_llm={totals['helper_llm']} "
         f"helper_ungated={totals['helper_ungated']}"
     )
+    print(
+        f"  time_ms: typical={totals['latency_ms_median']:.1f} "
+        f"average={totals['latency_ms_mean']:.1f} "
+        f"p95={totals['latency_ms_p95']:.1f} "
+        f"slowest={totals['latency_ms_max']:.1f} "
+        f"sum={totals['latency_ms']:.1f}"
+    )
+    if totals.get("rows_with_llm_call"):
+        print(
+            f"  llm_ms: typical={totals['llm_latency_ms_mean']:.1f} "
+            f"slowest={totals['llm_latency_ms_max']:.1f} "
+            f"rows={int(totals['rows_with_llm_call'])}"
+        )
     print("wrote eval/results/latest.json and eval/results/latest.md")
     return 1 if (totals["string_mismatches"] or totals["errors"]) else 0
 
@@ -180,6 +212,12 @@ def _parser() -> argparse.ArgumentParser:
         "--profile",
         default=DEFAULT_PROFILE,
         help="off | exact | phonetic | auto (default auto)",
+    )
+    parser.add_argument(
+        "--decide",
+        default=DEFAULT_DECIDE,
+        help="llm | ungated (default llm). llm requires KIVI_LLM_API_KEY and "
+        "KIVI_LLM_MODEL. ungated skips the model so you can measure retrieve latency.",
     )
     parser.add_argument(
         "--plain",
@@ -234,6 +272,20 @@ def main(argv: list[str] | None = None) -> int:
             ),
             file=sys.stderr,
         )
+        return 2
+
+    if args.decide not in DECIDE_MODES:
+        print(
+            error_line(
+                ink,
+                f"unknown decide {args.decide!r}\nuse: {', '.join(DECIDE_MODES)}",
+            ),
+            file=sys.stderr,
+        )
+        return 2
+
+    if _needs_llm(args) and llm_credentials() is None:
+        print(missing_llm_config_message(), file=sys.stderr)
         return 2
 
     if args.command == "observe":

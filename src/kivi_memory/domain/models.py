@@ -71,6 +71,7 @@ class RunTrace:
     formatted: str
     memory_aware: str
     profile: str
+    decide: str
     decisions: tuple[TokenDecision, ...]
     memories_used: tuple[int, ...]
     latency_ms: float

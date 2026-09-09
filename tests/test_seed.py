@@ -53,5 +53,6 @@ def test_seed_reproduces_pdf_example(seeded_store: MemoryStore) -> None:
         asr="ask aditya to review the sarvam kiwi service",
         formatted="Ask Aditya to review the Sarvam Kiwi service.",
         profile="exact",
+        decide="ungated",
     )
     assert trace.memory_aware == "Ask Aaditya to review the Sarvam Kivi service."

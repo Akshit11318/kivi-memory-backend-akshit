@@ -5,7 +5,8 @@ disambiguation for a surviving single candidate is the LLM helper's job
 Order: no candidates -> conflicting canonicals -> low confidence -> already
 canonical. Any of these is a definitive ABSTAIN. If none fire, this returns
 a pending result (decision=None) carrying the single surviving memory —
-the caller hands that to the LLM helper (or, with no key, ungated APPLY).
+the caller hands that to the LLM helper (`--decide llm`) or the ungated
+latency path (`--decide ungated`).
 """
 
 from __future__ import annotations

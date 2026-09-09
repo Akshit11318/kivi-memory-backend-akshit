@@ -17,20 +17,14 @@ at data/kivi.sqlite. Safe to re-run any time; wipes and re-trains from
 scratch on every invocation.
 
 Usage:
-    uv run python scripts/e2e_demo.py
-
-Set KIVI_LLM_API_KEY first (any OpenAI-compatible host, see .env.example)
-to exercise the gated LLM sense helper instead of the ungated default --
-everything else about the run is identical. Compare the two:
-
-    uv run python scripts/e2e_demo.py                    # ungated
-    KIVI_LLM_API_KEY=... uv run python scripts/e2e_demo.py  # gated
+    uv run python scripts/e2e_demo.py --decide ungated   # retrieve latency, no HTTP
+    uv run python scripts/e2e_demo.py --decide llm       # sense check (needs key + model)
 """
 
 from __future__ import annotations
 
+import argparse
 import json
-import os
 import subprocess
 import sys
 import time
@@ -196,15 +190,26 @@ def run_training() -> None:
         print()
 
 
-def run_tests() -> None:
-    print("\n--- TESTING (kivi --profile auto run --json) ---\n")
+def run_tests(decide: str) -> None:
+    print(f"\n--- TESTING (kivi --profile auto --decide {decide} run --json) ---\n")
     total_latency_ms = 0.0
     total_model_calls = 0
     total_wall_ms = 0.0
 
     for i, (label, asr, formatted) in enumerate(TESTS, 1):
         start = time.perf_counter()
-        trace = kivi("--profile", "auto", "run", "--asr", asr, "--formatted", formatted, "--json")
+        trace = kivi(
+            "--profile",
+            "auto",
+            "--decide",
+            decide,
+            "run",
+            "--asr",
+            asr,
+            "--formatted",
+            formatted,
+            "--json",
+        )
         wall_ms = (time.perf_counter() - start) * 1000
 
         print(f"### TEST {i}: {label}")
@@ -250,19 +255,26 @@ def run_tests() -> None:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--decide",
+        default="ungated",
+        choices=["llm", "ungated"],
+        help="ungated = retrieve latency. llm = sense check (needs KIVI_LLM_API_KEY + KIVI_LLM_MODEL)",
+    )
+    args = parser.parse_args()
+
     if DB_PATH.exists():
         DB_PATH.unlink()
 
-    has_key = bool(os.environ.get("KIVI_LLM_API_KEY"))
-    model = os.environ.get("KIVI_LLM_MODEL", "claude-haiku-4-5-20251001")
     print("=" * 100)
     print("KIVI END-TO-END DEMO — training then testing, via the real `kivi` CLI")
-    print(f"mode:  {'GATED  (KIVI_LLM_API_KEY set, model=' + model + ')' if has_key else 'UNGATED (no KIVI_LLM_API_KEY)'}")
+    print(f"mode:  {'GATED (--decide llm)' if args.decide == 'llm' else 'UNGATED (--decide ungated)'}")
     print(f"db:    {DB_PATH.relative_to(REPO_ROOT)}  (isolated demo store, wiped at start of this run)")
     print("=" * 100)
 
     run_training()
-    run_tests()
+    run_tests(args.decide)
 
 
 if __name__ == "__main__":

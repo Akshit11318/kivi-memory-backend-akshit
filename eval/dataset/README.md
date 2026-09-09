@@ -31,35 +31,17 @@ hits aren't scored separately from string equality.
 ## `requires_llm`
 
 A row with `requires_llm=true` asserts the LLM sense helper's judgment
-(e.g. fruit vs brand). It is **SKIPPED**, not scored, when
-`KIVI_LLM_API_KEY` is not set — scoring it against the ungated default would
-assert a decision the run never attempted. With a key set, `kivi eval` makes
-real HTTP calls for these rows (unlike `pytest`, which mocks
+(e.g. fruit vs brand). It is **SKIPPED**, not scored, under
+`--decide ungated` — scoring it against ungated APPLY would assert a
+decision the run never attempted. `kivi eval` (default `--decide llm`)
+requires `KIVI_LLM_API_KEY` and `KIVI_LLM_MODEL` and makes real HTTP calls
+for these rows (unlike `pytest`, which mocks
 `decide.llm_helper._post_chat_completion` and never hits the network).
 
-**The committed `eval/results/latest.{json,md}` is the no-key (ungated)
-snapshot** — deterministic, reproducible, and what's graded. It's not the
-only thing that changes with a key: once `KIVI_LLM_API_KEY` is set, *every*
-row whose token clears the cheap doors asks the LLM, not just the 4
-`requires_llm` rows — decide has no way to tell "obviously fine" from
-"ambiguous" without asking. Rows without a `teach_text` and with an
-ordinary-looking token (`Aditya`, `archive`, `film`, `grow`) give the model
-very little to go on, and this is genuinely inconsistent across models and
-runs, even at temperature 0 — not just a free/small-model problem. We saw
-`google/gemma-4-26b-a4b-it:free` flip between APPLY and ABSTAIN on the same
-`Groww`/`grow` pair across two live runs, and separately `claude-haiku-4-5`
-(the current default, meaningfully more accurate overall) ABSTAIN on 5 of
-these same-category rows in one live run. One of those was actually an
-improvement, not a miss: `karan_karen_limitation` is written expecting the
-*documented* ungated-default misfire (`Karen` wrongly rewritten to
-`Karan`), and Haiku correctly ABSTAINed instead — a stronger model can be
-appropriately cautious about identity where a weaker one isn't, which the
-row's fixed expectation doesn't account for. That's model judgment, not the
-orchestration: `tests/test_llm_helper.py` mocks the HTTP call and asserts
-the exact "must-work" scenarios deterministically. Running `kivi eval` with
-a real key is a live integration smoke test, not a second source of truth —
-expect it to disagree with the no-key snapshot on rows outside the 4
-`requires_llm` ones.
+**The committed `eval/results/latest.{json,md}` is the `--decide ungated`
+snapshot** — deterministic, reproducible, and what's graded. The report
+includes a Time section (median / mean / p95 / max / sum). Headline
+numbers are in README [Metrics](../../README.md#metrics).
 
 ## Case intent, by family
 
@@ -87,7 +69,7 @@ expect it to disagree with the no-key snapshot on rows outside the 4
   gate could never have applied it; the LLM does, from sense alone.
 - **documented_limitation** (`karan_karen_limitation`,
   `sanjay_sanjeev_limitation`) — misfires we did not hide. Both APPLY under
-  the ungated default (no key): a Metaphone collision (`Karan`/`Karen`) and a
+  the ungated path (`--decide ungated`): a Metaphone collision (`Karan`/`Karen`) and a
   grapheme-similar different person (`Sanjay`/`Sanjeev`). Speaker identity is
   out of scope for this system; see README Limitations.
 - **cheap_doors** (`already_canonical`, `word_boundary`) — a token that

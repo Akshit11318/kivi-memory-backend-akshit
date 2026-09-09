@@ -25,12 +25,18 @@ def store(tmp_path: Path) -> Iterator[MemoryStore]:
 
 
 @pytest.fixture(autouse=True)
-def _no_real_key_by_default(monkeypatch):
+def _no_real_llm_by_default(monkeypatch):
     monkeypatch.delenv("KIVI_LLM_API_KEY", raising=False)
+    monkeypatch.delenv("KIVI_LLM_MODEL", raising=False)
 
 
-def test_llm_abstains_on_fruit_sense(store: MemoryStore, monkeypatch) -> None:
+@pytest.fixture
+def llm_env(monkeypatch, _no_real_llm_by_default):
     monkeypatch.setenv("KIVI_LLM_API_KEY", "test-key")
+    monkeypatch.setenv("KIVI_LLM_MODEL", "test-model")
+
+
+def test_llm_abstains_on_fruit_sense(store: MemoryStore, llm_env) -> None:
     correction(
         store,
         "demo",
@@ -65,12 +71,11 @@ def test_llm_abstains_on_fruit_sense(store: MemoryStore, monkeypatch) -> None:
 
 
 def test_llm_applies_on_staging_sense_with_no_shared_neighbor_words(
-    store: MemoryStore, monkeypatch
+    store: MemoryStore, llm_env
 ) -> None:
     """The deleted cue gate needed lexical overlap with the teach sentence.
     "restart", "pod", "staging", "demo" share nothing with "review", "rollout"
     — the LLM still applies because it reasons about sense, not word overlap."""
-    monkeypatch.setenv("KIVI_LLM_API_KEY", "test-key")
     correction(
         store,
         "demo",
@@ -101,8 +106,7 @@ def test_llm_applies_on_staging_sense_with_no_shared_neighbor_words(
     assert decision.llm_score == 95
 
 
-def test_llm_abstains_on_groww_grow_with_no_teach_text(store: MemoryStore, monkeypatch) -> None:
-    monkeypatch.setenv("KIVI_LLM_API_KEY", "test-key")
+def test_llm_abstains_on_groww_grow_with_no_teach_text(store: MemoryStore, llm_env) -> None:
     dictionary_add(store, "demo", "Groww", ["grow"])
 
     with patch(
@@ -122,21 +126,39 @@ def test_llm_abstains_on_groww_grow_with_no_teach_text(store: MemoryStore, monke
     assert decision.helper == "llm"
 
 
-def test_no_key_falls_through_to_ungated_apply_no_exception(store: MemoryStore) -> None:
+def test_llm_decide_without_credentials_abstains_unavailable(store: MemoryStore) -> None:
     dictionary_add(store, "demo", "Groww", ["grow"])
     trace = run(store, "demo", asr="", formatted="The plants will grow faster in the sun.", profile="auto")
+    decision = next(d for d in trace.decisions if d.token == "grow")
+    assert decision.decision == "ABSTAIN"
+    assert decision.helper == "llm"
+    assert decision.reason == "llm_unavailable"
+    assert trace.model_calls == 0
+    assert trace.memory_aware == "The plants will grow faster in the sun."
+
+
+def test_ungated_decide_applies_without_calling_the_model(store: MemoryStore) -> None:
+    dictionary_add(store, "demo", "Groww", ["grow"])
+    trace = run(
+        store,
+        "demo",
+        asr="",
+        formatted="The plants will grow faster in the sun.",
+        profile="auto",
+        decide="ungated",
+    )
     decision = next(d for d in trace.decisions if d.token == "grow")
     assert decision.decision == "APPLY"
     assert decision.helper == "ungated"
     assert decision.reason == "ungated"
     assert decision.model is None
     assert trace.model_calls == 0
+    assert trace.decide == "ungated"
 
 
-def test_llm_timeout_falls_through_to_ungated_apply_not_an_exception(
-    store: MemoryStore, monkeypatch
+def test_llm_timeout_abstains_unavailable_not_an_exception(
+    store: MemoryStore, llm_env
 ) -> None:
-    monkeypatch.setenv("KIVI_LLM_API_KEY", "test-key")
     dictionary_add(store, "demo", "Groww", ["grow"])
 
     with patch(_PATCH_TARGET, side_effect=TimeoutError("timed out")):
@@ -145,16 +167,16 @@ def test_llm_timeout_falls_through_to_ungated_apply_not_an_exception(
         )
 
     decision = next(d for d in trace.decisions if d.token == "grow")
-    assert decision.decision == "APPLY"
-    assert decision.helper == "ungated"
-    # A call was attempted (the key was set) even though it failed.
+    assert decision.decision == "ABSTAIN"
+    assert decision.helper == "llm"
+    assert decision.reason == "llm_unavailable"
+    # A call was attempted (credentials were set) even though it failed.
     assert trace.model_calls == 1
 
 
-def test_llm_unparseable_response_falls_through_to_ungated_apply(
-    store: MemoryStore, monkeypatch
+def test_llm_unparseable_response_abstains_unavailable(
+    store: MemoryStore, llm_env
 ) -> None:
-    monkeypatch.setenv("KIVI_LLM_API_KEY", "test-key")
     dictionary_add(store, "demo", "Groww", ["grow"])
 
     with patch(_PATCH_TARGET, return_value=("not json at all", {})):
@@ -163,14 +185,14 @@ def test_llm_unparseable_response_falls_through_to_ungated_apply(
         )
 
     decision = next(d for d in trace.decisions if d.token == "grow")
-    assert decision.decision == "APPLY"
-    assert decision.helper == "ungated"
+    assert decision.decision == "ABSTAIN"
+    assert decision.helper == "llm"
+    assert decision.reason == "llm_unavailable"
 
 
 def test_conflicting_canonicals_abstains_without_ever_calling_the_llm(
-    store: MemoryStore, monkeypatch
+    store: MemoryStore, llm_env
 ) -> None:
-    monkeypatch.setenv("KIVI_LLM_API_KEY", "test-key")
     store.upsert_memory("demo", "Aaditya", ["aditya"], confidence=0.9)
     store.upsert_memory("demo", "Adithya", ["aditya"], confidence=0.9)
 
@@ -186,7 +208,7 @@ def test_conflicting_canonicals_abstains_without_ever_calling_the_llm(
 
 
 def test_same_word_twice_different_sense_in_one_sentence_gets_independent_verdicts(
-    store: MemoryStore, monkeypatch
+    store: MemoryStore, llm_env
 ) -> None:
     """"move the stocks and sips from grow as the profits didnt grow last fy" --
     the first "grow" is the brand (APPLY), the second is the ordinary verb
@@ -196,7 +218,6 @@ def test_same_word_twice_different_sense_in_one_sentence_gets_independent_verdic
     manually: before numbered marking, a single-occurrence prompt sent
     twice was identical both times and got the identical verdict both
     times."""
-    monkeypatch.setenv("KIVI_LLM_API_KEY", "test-key")
     dictionary_add(
         store, "demo", "Groww", ["grow"], context="He opened a mutual fund SIP on Groww last month."
     )
@@ -235,13 +256,44 @@ def test_same_word_twice_different_sense_in_one_sentence_gets_independent_verdic
     assert grow_decisions[1].prompt_tokens is None
 
 
-def test_batch_falls_through_to_ungated_on_occurrence_count_mismatch(
-    store: MemoryStore, monkeypatch
+def test_two_distinct_memories_in_one_sentence_are_one_http_call(
+    store: MemoryStore, llm_env
+) -> None:
+    dictionary_add(store, "demo", "Kivi", ["kiwi"])
+    dictionary_add(store, "demo", "Grafana", ["grafana", "graffana"])
+
+    def fake_call(base_url, api_key, model, prompt):
+        assert "[[#1:" in prompt and "[[#2:" in prompt
+        assert "Kivi" in prompt and "Grafana" in prompt
+        content = (
+            '{"occurrences": ['
+            '{"occurrence": 1, "score": 95, "reason": "product"}, '
+            '{"occurrence": 2, "score": 95, "reason": "product"}'
+            "]}"
+        )
+        return content, {"prompt_tokens": 200, "completion_tokens": 20}
+
+    with patch(_PATCH_TARGET, side_effect=fake_call) as mock_call:
+        trace = run(
+            store,
+            "demo",
+            asr="",
+            formatted="Restart the kiwi and graffana pods before the demo.",
+            profile="auto",
+        )
+
+    assert mock_call.call_count == 1
+    assert trace.model_calls == 1
+    assert "Kivi" in trace.memory_aware
+    assert "Grafana" in trace.memory_aware
+
+
+def test_batch_abstains_unavailable_on_occurrence_count_mismatch(
+    store: MemoryStore, llm_env
 ) -> None:
     """The model must return exactly one scored item per marked occurrence.
     Returning the wrong count is treated like any other malformed response
-    -- ungated APPLY for every occurrence in the batch, not a crash."""
-    monkeypatch.setenv("KIVI_LLM_API_KEY", "test-key")
+    -- ABSTAIN llm_unavailable for every occurrence in the batch, not a crash."""
     dictionary_add(store, "demo", "Groww", ["grow"])
 
     with patch(
@@ -261,16 +313,15 @@ def test_batch_falls_through_to_ungated_on_occurrence_count_mismatch(
 
     grow_decisions = [d for d in trace.decisions if d.token == "grow"]
     assert len(grow_decisions) == 2
-    assert all(d.decision == "APPLY" and d.helper == "ungated" for d in grow_decisions)
+    assert all(d.decision == "ABSTAIN" and d.reason == "llm_unavailable" for d in grow_decisions)
     assert trace.model_calls == 1
 
 
-def test_score_is_blended_with_memory_confidence_not_used_alone(store: MemoryStore, monkeypatch) -> None:
+def test_score_is_blended_with_memory_confidence_not_used_alone(store: MemoryStore, llm_env) -> None:
     """A mid-range score (60) is enough to APPLY for a confidence-1.0
     dictionary_add (combined = 1.0 * 0.60 = 0.60 >= 0.5) but not enough for a
     confidence-0.85 first correction (combined = 0.85 * 0.60 = 0.51 -- still
     over by a hair, so use a lower score to show the abstain side)."""
-    monkeypatch.setenv("KIVI_LLM_API_KEY", "test-key")
     dictionary_add(store, "demo", "Groww", ["grow"])
 
     with patch(
@@ -300,10 +351,17 @@ def test_score_is_blended_with_memory_confidence_not_used_alone(store: MemorySto
 
 
 def test_karan_karen_is_a_documented_limitation_not_hidden(store: MemoryStore) -> None:
-    """We do not claim the LLM (or the ungated default) solves speaker
-    identity: same Metaphone key, no key configured -> it still misfires."""
+    """`--decide ungated` still misfires on speaker identity: same Metaphone
+    key, Karen rewritten to Karan. The LLM path is not claimed to solve this."""
     dictionary_add(store, "demo", "Karan", ["karan"])
-    trace = run(store, "demo", asr="", formatted="Karen joined the call today.", profile="phonetic")
+    trace = run(
+        store,
+        "demo",
+        asr="",
+        formatted="Karen joined the call today.",
+        profile="phonetic",
+        decide="ungated",
+    )
     decision = next(d for d in trace.decisions if d.token == "Karen")
     assert decision.decision == "APPLY"
     assert decision.canonical == "Karan"

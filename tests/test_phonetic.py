@@ -23,7 +23,12 @@ def test_phonetic_finds_kiwi_when_only_kivi_stored_exact_misses(store: MemorySto
     assert exact_trace.memory_aware == "Please check the kiwi service."
 
     phonetic_trace = run(
-        store, "demo", asr="", formatted="Please check the kiwi service.", profile="phonetic"
+        store,
+        "demo",
+        asr="",
+        formatted="Please check the kiwi service.",
+        profile="phonetic",
+        decide="ungated",
     )
     assert phonetic_trace.memory_aware == "Please check the Kivi service."
 
@@ -44,5 +49,7 @@ def test_phonetic_does_not_collide_kavi_covey(store: MemoryStore) -> None:
 
 def test_phonetic_still_handles_ordinary_exact_matches(store: MemoryStore) -> None:
     store.upsert_memory("demo", "Aaditya", ["aditya"], confidence=0.9)
-    trace = run(store, "demo", asr="", formatted="Ask Aditya now.", profile="phonetic")
+    trace = run(
+        store, "demo", asr="", formatted="Ask Aditya now.", profile="phonetic", decide="ungated"
+    )
     assert trace.memory_aware == "Ask Aaditya now."

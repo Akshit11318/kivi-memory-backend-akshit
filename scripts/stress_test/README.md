@@ -19,22 +19,21 @@ senses, missed untaught-vocabulary no-ops) are measurable at scale.
   - `vocab_manifest.json` — which vocabulary was taught vs. left untaught
 - `run_stress_test.py` — replays `teaches.json` into an isolated SQLite
   (`stress.sqlite`, gitignored), runs every paragraph through the real
-  `kivi --profile auto run --json` CLI, and reports every metric: hits
-  (TP/FP/FN, precision/recall), corrections applied, latency
-  (sum/mean/median/p95/max/wall clock), model calls, token usage
-  (prompt/completion), and an estimated cost.
-- `results/latest.{json,md}` — the committed **ungated** (no key, free,
-  deterministic) baseline. Regenerate with `run_stress_test.py` any time;
-  a **gated** run with a real key produces different, non-deterministic
-  numbers and is intentionally not committed — run it yourself.
+  `kivi --profile auto --decide … run --json` CLI, and writes a report in
+  plain terms: last vote (sense check vs skip model), rewrites (found /
+  extra / missed), time, HTTP calls, and estimated cost.
+- `results/latest.{json,md}` — summary metrics. `latest.cases.csv` is the
+  paragraph table (formatted / expected / kivi / what changed). The committed
+  snapshot is **`--decide ungated`**. A **sense-check** run (`--decide llm`)
+  overwrites these locally and is not committed.
 
 ## Running it
 
 ```
 uv run python scripts/stress_test/generate_corpus.py   # regenerate the corpus (optional, already committed)
-uv run python scripts/stress_test/run_stress_test.py               # ungated, free, deterministic
-KIVI_LLM_API_KEY=... uv run python scripts/stress_test/run_stress_test.py            # gated, real cost
-KIVI_LLM_API_KEY=... uv run python scripts/stress_test/run_stress_test.py --limit 20 # smoke test a subset first
+uv run python scripts/stress_test/run_stress_test.py --limit 10              # ungated latency
+uv run python scripts/stress_test/run_stress_test.py --decide ungated         # full ungated
+uv run python scripts/stress_test/run_stress_test.py --decide llm --limit 10  # gated, needs key+model
 ```
 
 ## What to expect
@@ -49,15 +48,14 @@ chocolate chip"). Measured: **240/240 expected hits found (recall
 paragraphs.
 
 **Gated** (smoke-tested on the first 20 paragraphs with a real Claude
-Haiku key): precision recovers sharply once the LLM sense-check is in
-the loop — **27 TP, 0 FP, 2 FN → precision 1.000, recall 0.931** on that
-subset, at a real, measured cost of **~$0.046 for 20 paragraphs**
-(`prompt_tokens=18094, completion_tokens=5509`), projecting to roughly
-**$0.42 and ~15 minutes wall clock for the full 183-paragraph corpus**
-sequentially. Multiple *distinct* ambiguous terms in one paragraph make
-sequential calls (only *repeats of the same term* are batched — see
-`decide/llm_helper.py`), which is why per-paragraph latency varies a lot
-(observed mean ~4.7s, max ~8.8s on that subset).
+Haiku key): precision recovers once the sense check is in the loop —
+**27 TP, 0 FP, 2 FN → precision 1.000, recall 0.931** on that subset, at
+a measured **~$0.046** (`prompt_tokens=18094, completion_tokens=5509`).
+Current code is **one HTTP call per paragraph** that still has a
+survivor (all memories in that string, together) — not one call per
+distinct term. A full 183-paragraph gated run is at most 183 calls, not
+one per word. Do not overwrite the committed ungated snapshot with a
+gated run.
 
 `PRICING_PER_MILLION_TOKENS` in `run_stress_test.py` is a rough estimate
 — verify against current provider pricing before treating the $ figure

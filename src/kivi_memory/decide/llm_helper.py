@@ -1,52 +1,39 @@
-"""LLM sense helper — the last vote for a single surviving memory.
+"""LLM sense helper — last vote for every surviving token in one sentence.
 
-Not a memory: it does not find names and it does not write SQLite. Given
-one candidate memory and every occurrence of its token in one sentence
-(marked and numbered — see pipeline.align.mark_occurrences), it scores
-0-100 per occurrence how confident it is that occurrence is the same sense
-as the stored canonical. One call per (memory, sentence), not one call per
-occurrence: "one sense per discourse" (Gale/Church/Yarowsky) is a real
-pattern — a repeated word usually keeps its sense — but it's a hypothesis
-the model verifies per occurrence in one pass, not an assumption we make
-for it. A genuine intra-sentence sense switch ("moved funds from grow as
-profits didnt grow") still gets two different scores from the one call.
+Not a memory: it does not find names and does not write SQLite. Retrieval and
+the cheap doors have already run. Whatever is still pending in this sentence
+is scored in **one** HTTP call (all memories, all repeats), not one call per
+memory. Repeats of the same word keep independent scores via [[#N: ...]]
+markers (see pipeline.align.mark_occurrences).
 
-Each score is blended with the memory's own confidence — the score alone
-can't tell a shaky respelling from a rock-solid one, and the memory's
-confidence alone can't tell sense — so neither signal decides alone:
+Each score is blended with that occurrence's memory confidence:
 
     combined = memory.confidence * (score / 100)
     APPLY iff combined >= LLM_COMBINED_APPLY_THRESHOLD, else ABSTAIN
 
-It is never called unless every cheap door in decide/conservative.py already
-passed. No cue fallback: missing key, timeout, or an unparseable/malformed
-response all fall through to the same ungated APPLY for every occurrence in
-the batch (helper="ungated") — see config.py and README for why this is
-intentional, not a bug: without a key, a homograph like Groww/grow or
-kiwi/Kivi WILL rewrite in every sentence.
+`--decide llm` (default) requires KIVI_LLM_API_KEY and KIVI_LLM_MODEL.
+Timeout or a malformed response → ABSTAIN llm_unavailable, not a silent
+rewrite. `--decide ungated` skips the HTTP call (latency ablation).
 """
 
 from __future__ import annotations
 
 import json
-import os
 import time
 import urllib.request
 from dataclasses import dataclass
 
 from kivi_memory.config import (
-    DEFAULT_LLM_BASE_URL,
-    DEFAULT_LLM_MODEL,
-    LLM_API_KEY_ENV,
-    LLM_BASE_URL_ENV,
     LLM_COMBINED_APPLY_THRESHOLD,
-    LLM_MODEL_ENV,
+    LLM_MAX_TOKENS,
     LLM_TEMPERATURE,
     LLM_TIMEOUT_SECONDS,
+    llm_credentials,
 )
 from kivi_memory.domain.models import Memory
 
 _UNGATED_REASON = "ungated"
+_UNAVAILABLE_REASON = "llm_unavailable"
 _LLM_APPLY_REASON = "llm_ok"
 _LLM_ABSTAIN_DEFAULT_REASON = "sense_mismatch"
 
@@ -58,70 +45,78 @@ class HelperResult:
     helper: str  # "llm" | "ungated"
     model: str | None
     latency_ms: float
-    model_calls: int  # 1 on exactly one HelperResult per batch, 0 on the rest
-    score: float | None = None  # raw 0-100 LLM sense score; None when helper == "ungated"
-    prompt_tokens: int | None = None  # usage from the one HTTP call, on that same result only
+    model_calls: int  # 1 on exactly one HelperResult per sentence call, 0 on the rest
+    score: float | None = None
+    prompt_tokens: int | None = None
     completion_tokens: int | None = None
 
 
-def _build_prompt(marked_sentence: str, token: str, memory: Memory, count: int) -> str:
+def _build_prompt(marked_sentence: str, items: list[tuple[str, Memory]]) -> str:
+    count = len(items)
     lines = [
-        f"You score {count} occurrence(s) of the same word in one sentence for a "
-        "personal spelling notebook.",
-        "Each occurrence to judge is wrapped and numbered: [[#1: word]], [[#2: word]], "
-        "etc. Score every occurrence independently -- a repeated word usually keeps the "
-        "same sense throughout a sentence, but it can switch partway through. Do not "
-        "assume they all match just because they're the same word; verify each one "
-        "against its own local context.",
-        "A retrieval step already matched this token to the memory below (exact surface "
-        "or phonetic similarity) -- do not re-judge whether the spelling is close enough, "
-        "that part is decided. Your only job is SENSE, per occurrence.",
+        f"You score {count} marked occurrence(s) in one sentence for a personal spelling notebook.",
+        "Each occurrence is wrapped and numbered: [[#1: word]], [[#2: word]], etc.",
+        "They may be different words and different stored memories. Score each number "
+        "independently against ITS OWN stored canonical. A repeated word can switch sense "
+        "partway through; do not assume all marks of the same spelling share a verdict.",
+        "Retrieval already matched spelling. Do not re-judge edit distance. Your only job "
+        "is SENSE, per occurrence.",
         "",
         f"Sentence: {marked_sentence}",
-        f"Token: {token}",
-        f"Stored canonical: {memory.canonical}",
-        f"Stored forms: {', '.join(memory.forms)}",
+        "",
+        "Memories, one per occurrence number:",
     ]
-    if memory.teach_text:
-        lines.append(f"Taught from: {memory.teach_text}")
+    for i, (token, memory) in enumerate(items, start=1):
+        lines.append(f"#{i} token={token!r} canonical={memory.canonical!r} forms={list(memory.forms)}")
+        if memory.teach_text:
+            lines.append(f"    taught from: {memory.teach_text}")
     lines += [
         "",
         "For each occurrence, score 0-100 how confident you are that it is the same "
-        "personal/product spelling as the stored canonical, used in the same sense. "
-        "100 = certainly the same sense. 0 = certainly a different sense (its ordinary "
-        "dictionary meaning, e.g. fruit vs brand, common word vs product), a different "
-        "person, or a grammar/homophone issue. Use no world knowledge beyond this "
-        "sentence.",
+        "personal/product spelling as THAT occurrence's stored canonical, in the same sense. "
+        "100 = certainly the same sense. 0 = certainly a different sense (ordinary dictionary "
+        "meaning, fruit vs brand, common word vs product), a different person, or grammar. "
+        "Use no world knowledge beyond this sentence.",
         "",
         'Reply with JSON only, no prose: {"occurrences": '
         '[{"occurrence": <1-based int>, "score": <integer 0-100>, "reason": string}, ...]}'
-        f" with exactly {count} item(s), one per occurrence number, in any order.",
+        f" with exactly {count} item(s), one per occurrence number.",
     ]
     return "\n".join(lines)
 
 
+def _completions_url(base_url: str) -> str:
+    """OpenAI-compatible hosts want .../v1 + /chat/completions.
+
+    If the env already includes /chat/completions (a common copy-paste from
+    curl docs), do not append it again.
+    """
+    url = base_url.rstrip("/")
+    if url.endswith("/chat/completions"):
+        return url
+    return url + "/chat/completions"
+
+
 def _post_chat_completion(base_url: str, api_key: str, model: str, prompt: str) -> tuple[str, dict]:
-    """One OpenAI-compatible chat completion call. Returns the assistant's raw
-    text content and the provider's `usage` dict (prompt_tokens/completion_tokens,
-    or {} if the provider omits it). Isolated here so tests mock this one seam
-    instead of urllib, and so the eval CSV runner never needs its own HTTP client."""
-    url = base_url.rstrip("/") + "/chat/completions"
-    payload = json.dumps(
-        {
-            "model": model,
-            "temperature": LLM_TEMPERATURE,
-            "messages": [{"role": "user", "content": prompt}],
-        }
-    ).encode("utf-8")
+    """One OpenAI-compatible chat completion call. Returns assistant text and usage."""
+    body = {
+        "model": model,
+        "temperature": LLM_TEMPERATURE,
+        "max_tokens": LLM_MAX_TOKENS,
+        "messages": [{"role": "user", "content": prompt}],
+    }
+    # GLM-5.3-flash is thinking-only (cannot disable). Older GLM accepts
+    # reasoning_effort=none so it does not spend seconds on a hidden chain.
+    if "glm-5p3" not in model.lower():
+        body["reasoning_effort"] = "none"
+    payload = json.dumps(body).encode("utf-8")
     request = urllib.request.Request(
-        url,
+        _completions_url(base_url),
         data=payload,
         method="POST",
         headers={
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
-            # Some OpenAI-compatible hosts (e.g. Groq, behind Cloudflare) 403
-            # Python's default "Python-urllib/x.y" user agent as a bot signature.
             "User-Agent": "kivi-memory/0.1",
         },
     )
@@ -131,10 +126,6 @@ def _post_chat_completion(base_url: str, api_key: str, model: str, prompt: str) 
 
 
 def _parse_batch(content: str, count: int) -> list[tuple[float, str]]:
-    """Parse `{"occurrences": [{"occurrence": N, "score": ..., "reason": ...}, ...]}`,
-    tolerating a ```json fence. Returns scores/reasons ordered 1..count.
-    Raises if the count doesn't match or an occurrence number is missing --
-    the caller treats that the same as any other malformed response."""
     text = content.strip()
     if text.startswith("```"):
         text = text.strip("`")
@@ -155,22 +146,52 @@ def _parse_batch(content: str, count: int) -> list[tuple[float, str]]:
     return [by_order[i] for i in range(1, count + 1)]
 
 
-def decide_with_helper(
-    marked_sentence: str, token_core: str, memory: Memory, count: int
-) -> list[HelperResult]:
-    """The last vote for one memory's `count` occurrence(s) in one sentence,
-    scored together in a single call. Every cheap door in
-    decide/conservative.py has already passed for each occurrence by the
-    time this is called. `marked_sentence` has every occurrence numbered
-    `[[#N: ...]]` (see pipeline.align.mark_occurrences). Returns exactly
-    `count` results, ordered 1..count."""
-    api_key = os.environ.get(LLM_API_KEY_ENV)
-    if not api_key:
-        return [HelperResult("APPLY", _UNGATED_REASON, "ungated", None, 0.0, 0) for _ in range(count)]
+def _ungated(count: int) -> list[HelperResult]:
+    return [
+        HelperResult("APPLY", _UNGATED_REASON, "ungated", None, 0.0, 0) for _ in range(count)
+    ]
 
-    model = os.environ.get(LLM_MODEL_ENV) or DEFAULT_LLM_MODEL
-    base_url = os.environ.get(LLM_BASE_URL_ENV) or DEFAULT_LLM_BASE_URL
-    prompt = _build_prompt(marked_sentence, token_core, memory, count)
+
+def _unavailable(
+    count: int, model: str | None, latency_ms: float, attempted: bool
+) -> list[HelperResult]:
+    return [
+        HelperResult(
+            "ABSTAIN",
+            _UNAVAILABLE_REASON,
+            "llm",
+            model,
+            latency_ms,
+            1 if attempted and i == 0 else 0,
+        )
+        for i in range(count)
+    ]
+
+
+def decide_sentence(
+    marked_sentence: str,
+    items: list[tuple[str, Memory]],
+    decide: str = "llm",
+) -> list[HelperResult]:
+    """Score every pending occurrence in this sentence in one call.
+
+    `items[i]` is occurrence i+1 (token_core, memory). Returns len(items) results.
+    `decide="ungated"` skips the model (latency path). `decide="llm"` requires
+    key + model; a missing config, timeout, or bad JSON ABSTAINs.
+    """
+    count = len(items)
+    if count == 0:
+        return []
+
+    if decide == "ungated":
+        return _ungated(count)
+
+    creds = llm_credentials()
+    if creds is None:
+        return _unavailable(count, None, 0.0, attempted=False)
+
+    api_key, base_url, model = creds
+    prompt = _build_prompt(marked_sentence, items)
 
     start = time.perf_counter()
     try:
@@ -180,14 +201,9 @@ def decide_with_helper(
         prompt_tokens = usage.get("prompt_tokens")
         completion_tokens = usage.get("completion_tokens")
         results = []
-        for i, (score, reason) in enumerate(scored):
+        for i, ((token, memory), (score, reason)) in enumerate(zip(items, scored)):
+            del token  # listed in the prompt; blend uses this occurrence's memory
             combined = memory.confidence * (score / 100.0)
-            # One HTTP call total for the whole batch -- attribute its call
-            # count and token usage to the first result only, so summing
-            # across a RunTrace's decisions counts the real call once.
-            model_calls = 1 if i == 0 else 0
-            call_prompt_tokens = prompt_tokens if i == 0 else None
-            call_completion_tokens = completion_tokens if i == 0 else None
             decision = "APPLY" if combined >= LLM_COMBINED_APPLY_THRESHOLD else "ABSTAIN"
             default_reason = _LLM_APPLY_REASON if decision == "APPLY" else _LLM_ABSTAIN_DEFAULT_REASON
             results.append(
@@ -197,19 +213,13 @@ def decide_with_helper(
                     "llm",
                     model,
                     latency_ms,
-                    model_calls,
+                    1 if i == 0 else 0,
                     score,
-                    call_prompt_tokens,
-                    call_completion_tokens,
+                    prompt_tokens if i == 0 else None,
+                    completion_tokens if i == 0 else None,
                 )
             )
         return results
     except Exception:
-        # Timeout, network error, non-2xx, or a malformed/mismatched-count
-        # response. No cue fallback -- fall through to the same ungated
-        # APPLY, for every occurrence in the batch, as having no key.
         latency_ms = (time.perf_counter() - start) * 1000
-        return [
-            HelperResult("APPLY", _UNGATED_REASON, "ungated", model, latency_ms, 1 if i == 0 else 0)
-            for i in range(count)
-        ]
+        return _unavailable(count, model, latency_ms, attempted=True)

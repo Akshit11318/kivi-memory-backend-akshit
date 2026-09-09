@@ -5,28 +5,31 @@ the formatted line asserted by a case; actual_hit is a system APPLY. TP/FP/FN
 and precision/recall are computed per profile (the `profile` column on each
 case row) and overall.
 
-A case with `requires_llm=true` is SKIPPED, not scored, when no
-KIVI_LLM_API_KEY is set — scoring it against ungated behavior would assert
-something the run never attempted (see decide/llm_helper.py).
+A case with `requires_llm=true` is SKIPPED, not scored, when `--decide
+ungated` is used — scoring it against ungated APPLY would assert a sense
+check the run never attempted (see decide/llm_helper.py). `--decide llm`
+(the default) requires KIVI_LLM_API_KEY and KIVI_LLM_MODEL.
 """
 
 from __future__ import annotations
 
 import csv
 import json
-import os
 import tempfile
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
+from statistics import mean, median
 from typing import Any
 
 from kivi_memory.config import (
+    DECIDE_MODES,
+    DEFAULT_DECIDE,
     DEFAULT_USER_ID,
     EVAL_DATASET_DIR,
     EVAL_RESULTS_DIR,
-    LLM_API_KEY_ENV,
     PROFILES,
+    llm_credentials,
 )
 from kivi_memory.learner import explicit as explicit_learner
 from kivi_memory.pipeline.run import run
@@ -49,6 +52,7 @@ class RowResult:
     fp: int = 0
     fn: int = 0
     latency_ms: float = 0.0
+    llm_latency_ms: float = 0.0
     model_calls: int = 0
     helper_llm: int = 0
     helper_ungated: int = 0
@@ -104,16 +108,30 @@ def _apply_teach(store: MemoryStore, teach_row: dict[str, Any], default_user_id:
 
 
 def run_case_row(
-    case: dict[str, Any], teaches_by_case: dict[str, list[dict[str, Any]]]
+    case: dict[str, Any],
+    teaches_by_case: dict[str, list[dict[str, Any]]],
+    decide: str = DEFAULT_DECIDE,
 ) -> RowResult:
     case_id = case["id"]
     family = case.get("family", "")
     profile = case["profile"]
 
+    if decide not in DECIDE_MODES:
+        return RowResult(case_id, family, profile, "ERROR", note=f"unknown decide {decide!r}")
+
     requires_llm = _is_true(case.get("requires_llm"))
-    has_key = bool(os.environ.get(LLM_API_KEY_ENV))
-    if requires_llm and not has_key:
-        return RowResult(case_id, family, profile, "SKIPPED", note="requires_llm, no KIVI_LLM_API_KEY")
+    if decide == "ungated" and requires_llm:
+        return RowResult(
+            case_id, family, profile, "SKIPPED", note="requires_llm, --decide ungated"
+        )
+    if decide == "llm" and llm_credentials() is None:
+        return RowResult(
+            case_id,
+            family,
+            profile,
+            "ERROR",
+            note="missing KIVI_LLM_API_KEY or KIVI_LLM_MODEL",
+        )
 
     if profile not in PROFILES:
         return RowResult(case_id, family, profile, "ERROR", note=f"unknown profile {profile!r}")
@@ -129,7 +147,14 @@ def run_case_row(
                 _apply_teach(store, teach_row, user_id)
 
             try:
-                trace = run(store, user_id, case.get("asr", ""), case["formatted"], profile)
+                trace = run(
+                    store,
+                    user_id,
+                    case.get("asr", ""),
+                    case["formatted"],
+                    profile,
+                    decide=decide,
+                )
             except Exception as exc:  # defensive: eval must never hang or crash on one bad row
                 return RowResult(case_id, family, profile, "ERROR", note=f"{type(exc).__name__}: {exc}")
 
@@ -143,6 +168,7 @@ def run_case_row(
             fp = sum((actual - expected).values())
             fn = sum((expected - actual).values())
             string_match = expected_memory_aware is None or trace.memory_aware == expected_memory_aware
+            llm_ms = max((d.llm_latency_ms or 0.0) for d in trace.decisions) if trace.decisions else 0.0
 
             return RowResult(
                 id=case_id,
@@ -156,6 +182,7 @@ def run_case_row(
                 fp=fp,
                 fn=fn,
                 latency_ms=trace.latency_ms,
+                llm_latency_ms=llm_ms,
                 model_calls=trace.model_calls,
                 helper_llm=sum(1 for d in trace.decisions if d.helper == "llm"),
                 helper_ungated=sum(1 for d in trace.decisions if d.helper == "ungated"),
@@ -165,10 +192,12 @@ def run_case_row(
 
 
 def run_eval(
-    cases_path: Path = CASES_PATH, teaches_path: Path = TEACHES_PATH
+    cases_path: Path = CASES_PATH,
+    teaches_path: Path = TEACHES_PATH,
+    decide: str = DEFAULT_DECIDE,
 ) -> list[RowResult]:
     teaches_by_case = load_teaches(teaches_path)
-    return [run_case_row(case, teaches_by_case) for case in load_cases(cases_path)]
+    return [run_case_row(case, teaches_by_case, decide=decide) for case in load_cases(cases_path)]
 
 
 def _empty_profile_row() -> dict[str, Any]:
@@ -181,15 +210,44 @@ def _empty_profile_row() -> dict[str, Any]:
         "fp": 0,
         "fn": 0,
         "latency_ms": 0.0,
+        "llm_latency_ms": 0.0,
         "model_calls": 0,
         "helper_llm": 0,
         "helper_ungated": 0,
     }
 
 
+def _percentile(values: list[float], p: float) -> float:
+    if not values:
+        return 0.0
+    ordered = sorted(values)
+    k = (len(ordered) - 1) * p
+    f, c = int(k), min(int(k) + 1, len(ordered) - 1)
+    if f == c:
+        return ordered[f]
+    return ordered[f] + (k - f) * (ordered[c] - ordered[f])
+
+
+def _timing_block(latencies: list[float], llm_latencies: list[float]) -> dict[str, float]:
+    llm_only = [ms for ms in llm_latencies if ms > 0]
+    return {
+        "latency_ms_mean": mean(latencies) if latencies else 0.0,
+        "latency_ms_median": median(latencies) if latencies else 0.0,
+        "latency_ms_p95": _percentile(latencies, 0.95),
+        "latency_ms_max": max(latencies) if latencies else 0.0,
+        "llm_latency_ms_mean": mean(llm_only) if llm_only else 0.0,
+        "llm_latency_ms_max": max(llm_only) if llm_only else 0.0,
+        "rows_with_llm_call": float(len(llm_only)),
+    }
+
+
 def summarize(results: list[RowResult]) -> dict[str, Any]:
     by_profile: dict[str, dict[str, Any]] = {}
     totals = _empty_profile_row()
+    latencies_by_profile: dict[str, list[float]] = {}
+    llm_by_profile: dict[str, list[float]] = {}
+    all_latencies: list[float] = []
+    all_llm: list[float] = []
 
     for r in results:
         row = by_profile.setdefault(r.profile, _empty_profile_row())
@@ -204,19 +262,36 @@ def summarize(results: list[RowResult]) -> dict[str, Any]:
 
         row["ran"] += 1
         totals["ran"] += 1
-        for key in ("tp", "fp", "fn", "latency_ms", "model_calls", "helper_llm", "helper_ungated"):
+        for key in (
+            "tp",
+            "fp",
+            "fn",
+            "latency_ms",
+            "llm_latency_ms",
+            "model_calls",
+            "helper_llm",
+            "helper_ungated",
+        ):
             value = getattr(r, key)
             row[key] += value
             totals[key] += value
         if r.string_match is False:
             row["string_mismatches"] += 1
             totals["string_mismatches"] += 1
+        latencies_by_profile.setdefault(r.profile, []).append(r.latency_ms)
+        llm_by_profile.setdefault(r.profile, []).append(r.llm_latency_ms)
+        all_latencies.append(r.latency_ms)
+        all_llm.append(r.llm_latency_ms)
 
     for row in (*by_profile.values(), totals):
         row["expected_hits"] = row["tp"] + row["fn"]
         row["actual_hits"] = row["tp"] + row["fp"]
         row["precision"] = row["tp"] / (row["tp"] + row["fp"]) if (row["tp"] + row["fp"]) else 1.0
         row["recall"] = row["tp"] / (row["tp"] + row["fn"]) if (row["tp"] + row["fn"]) else 1.0
+
+    for profile, row in by_profile.items():
+        row.update(_timing_block(latencies_by_profile.get(profile, []), llm_by_profile.get(profile, [])))
+    totals.update(_timing_block(all_latencies, all_llm))
 
     return {"by_profile": by_profile, "totals": totals}
 
@@ -236,6 +311,7 @@ def _to_json(results: list[RowResult]) -> dict[str, Any]:
                 "fp": r.fp,
                 "fn": r.fn,
                 "latency_ms": r.latency_ms,
+                "llm_latency_ms": r.llm_latency_ms,
                 "model_calls": r.model_calls,
                 "helper_llm": r.helper_llm,
                 "helper_ungated": r.helper_ungated,
@@ -267,7 +343,8 @@ def _to_markdown(report: dict[str, Any]) -> str:
     )
     lines.append("")
     lines.append(
-        f"{totals['ran']} rows ran, {totals['skipped']} skipped (requires_llm, no key), "
+        f"{totals['ran']} rows ran, {totals['skipped']} skipped "
+        f"(requires_llm under --decide ungated), "
         f"{totals['errors']} errored, {totals['string_mismatches']} string mismatch(es)."
     )
     lines.append("")
@@ -282,6 +359,19 @@ def _to_markdown(report: dict[str, Any]) -> str:
     for profile, row in summary["by_profile"].items():
         lines.append(_fmt_row(profile, row))
     lines.append(_fmt_row("**total**", totals))
+    lines.append("")
+    lines.append("## Time")
+    lines.append("")
+    lines.append("| | ms |")
+    lines.append("| --- | ---: |")
+    lines.append(f"| typical row (median) | {totals['latency_ms_median']:.1f} |")
+    lines.append(f"| average row | {totals['latency_ms_mean']:.1f} |")
+    lines.append(f"| p95 row | {totals['latency_ms_p95']:.1f} |")
+    lines.append(f"| slowest row | {totals['latency_ms_max']:.1f} |")
+    lines.append(f"| sum of pipeline times | {totals['latency_ms']:.1f} |")
+    if totals.get("rows_with_llm_call"):
+        lines.append(f"| typical model HTTP call | {totals['llm_latency_ms_mean']:.1f} |")
+        lines.append(f"| slowest model HTTP call | {totals['llm_latency_ms_max']:.1f} |")
     lines.append("")
 
     failures = [
